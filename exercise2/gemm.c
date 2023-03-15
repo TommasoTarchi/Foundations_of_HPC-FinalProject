@@ -56,7 +56,7 @@
 #endif
 
 #ifdef MAKE_STAT
-#define N_SAMP 10
+#define N_SAMP 20
 #endif
 
 
