@@ -2,9 +2,9 @@
 #SBATCH --no-requeue
 #SBATCH --job-name="cores_scal"
 #SBATCH --get-user-env
-#SBATCH --partition=EPYC
+#SBATCH --partition=THIN
 #SBATCH -N 1
-#SBATCH -n 128
+#SBATCH -n 24
 #SBATCH --exclusive
 #SBATCH --time=02:00:00
 #SBATCH --output="report.out"
@@ -12,7 +12,7 @@
 
 echo LOADING NEEDED MODULES...
 echo
-module load architecture/AMD
+module load architecture/Intel
 module load mkl
 module load openBLAS/0.3.21-omp
 export LD_LIBRARY_PATH=/u/dssc/ttarch00/myblis/lib:$LD_LIBRARY_PATH
@@ -33,67 +33,66 @@ echo
 echo GATHERING RESULTS...
 echo
 size=10000
-node=EPYC
+node=THIN
 topo=close
 
+### setting cores' topology
 export OMP_PLACES=cores
 export OMP_PROC_BIND=$topo
 
-
 ### overwriting old datafiles and setting up new ones
-###echo "node:        ${node}" > mkl_f.out
-###echo "library:     MKL" >> mkl_f.out
-###echo "precision:   float" >> mkl_f.out
-###echo >> mkl_f.out
-###echo "#cores     mat_size     time        GFLOPS" >> mkl_f.out
+echo "#node:        ${node}" > mkl_f.csv
+echo "#library:     MKL" >> mkl_f.csv
+echo "#precision:   float" >> mkl_f.csv
+echo >> mkl_f.csv
+echo "n_cores     mat_size     time        GFLOPS" >> mkl_f.csv
 
-###echo "node:        ${node}" > oblas_f.out
-###echo "library:     openBLAS" >> oblas_f.out
-###echo "precision:   float" >> oblas_f.out
-###echo >> oblas_f.out
-###echo "#cores     mat_size     time        GFLOPS" >> oblas_f.out
+echo "#node:        ${node}" > oblas_f.csv
+echo "#library:     openBLAS" >> oblas_f.csv
+echo "#precision:   float" >> oblas_f.csv
+echo >> oblas_f.csv
+echo "cores     mat_size     time        GFLOPS" >> oblas_f.csv
 
-echo "node:        ${node}" > blis_f.out
-echo "library:     BLIS" >> blis_f.out
-echo "precision:   float" >> blis_f.out
-echo >> blis_f.out
-echo "#cores     mat_size     time        GFLOPS" >> blis_f.out
+echo "#node:        ${node}" > blis_f.csv
+echo "#library:     BLIS" >> blis_f.csv
+echo "#precision:   float" >> blis_f.csv
+echo >> blis_f.csv
+echo "cores     mat_size     time        GFLOPS" >> blis_f.csv
 
-echo "node:        ${node}" > mkl_d.out
-echo "library:     MKL" >> mkl_d.out
-echo "precision:   double" >> mkl_d.out
-echo >> mkl_d.out
-echo "#cores     mat_size     time        GFLOPS" >> mkl_d.out
+echo "#node:        ${node}" > mkl_d.csv
+echo "#library:     MKL" >> mkl_d.csv
+echo "#precision:   double" >> mkl_d.csv
+echo >> mkl_d.csv
+echo "cores     mat_size     time        GFLOPS" >> mkl_d.csv
 
-echo "node:        ${node}" > oblas_d.out
-echo "library:     openBLAS" >> oblas_d.out
-echo "precision:   double" >> oblas_d.out
-echo >> oblas_d.out
-echo "#cores     mat_size     time        GFLOPS" >> oblas_d.out
+echo "#node:        ${node}" > oblas_d.csv
+echo "#library:     openBLAS" >> oblas_d.csv
+echo "#precision:   double" >> oblas_d.csv
+echo >> oblas_d.csv
+echo "cores     mat_size     time        GFLOPS" >> oblas_d.csv
 
-echo "node:        ${node}" > blis_d.out
-echo "library:  BLIS" >> blis_d.out
-echo "precision:   double" >> blis_d.out
-echo >> blis_d.out
-echo "#cores     mat_size     time        GFLOPS" >> blis_d.out
+echo "#node:        ${node}" > blis_d.csv
+echo "#library:     BLIS" >> blis_d.csv
+echo "#precision:   double" >> blis_d.csv
+echo >> blis_d.csv
+echo "cores     mat_size     time        GFLOPS" >> blis_d.csv
 
-for ncores in $(seq 2 2 128)
+### performing measures
+for ncores in $(seq 1 1 24)
 do
-	export MKL_NUM_THREADS=$ncores
-	export OPENBLAS_NUM_THREADS=$ncores
-	export BLIS_NUM_THREADS=$ncores
+	export OMP_NUM_THREADS=$ncores
 
-	###echo -n "${ncores}       " >> mkl_f.out
+	###echo -n "${ncores}       " >> mkl_f.csv
 	###./gemm_mkl_f.x $size $size $size
-	###echo -n "${ncores}       "  >> oblas_f.out
+	###echo -n "${ncores}       "  >> oblas_f.csv
 	###./gemm_oblas_f.x $size $size $size
-	echo -n "${ncores}       "  >> blis_f.out
+	echo -n "${ncores}       "  >> blis_f.csv
 	./gemm_blis_f.x $size $size $size
-	###echo -n "${ncores}       " >> mkl_d.out
+	###echo -n "${ncores}       " >> mkl_d.csv
 	###./gemm_mkl_d.x $size $size $size
-	###echo -n "${ncores}       "  >> oblas_d.out
+	###echo -n "${ncores}       "  >> oblas_d.csv
 	###./gemm_oblas_d.x $size $size $size
-	###echo -n "${ncores}       "  >> blis_d.out
+	###echo -n "${ncores}       "  >> blis_d.csv
 	###./gemm_blis_d.x $size $size $size
 	echo
 	echo -----------

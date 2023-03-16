@@ -30,13 +30,13 @@
 #define DATATYPE printf(" Using float \n\n");
 #define GEMMCPU cblas_sgemm
 #ifdef MKL
-#define RESULTS "mkl_f.out"
+#define RESULTS "mkl_f.csv"
 #endif
 #ifdef OPENBLAS
-#define RESULTS "oblas_f.out"
+#define RESULTS "oblas_f.csv"
 #endif
 #ifdef BLIS
-#define RESULTS "blis_f.out"
+#define RESULTS "blis_f.csv"
 #endif
 #endif
 
