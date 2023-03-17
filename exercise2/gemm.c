@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 #ifdef MKL 
 #include "mkl_cblas.h"
 #endif
@@ -25,18 +26,19 @@
 #include <time.h>
 #include <unistd.h>
 
+
 #ifdef USE_FLOAT
 #define MYFLOAT float
 #define DATATYPE printf(" Using float \n\n");
 #define GEMMCPU cblas_sgemm
 #ifdef MKL
-#define RESULTS "mkl_f.csv"
+#define DATAFILE "mkl_f.csv"
 #endif
 #ifdef OPENBLAS
-#define RESULTS "oblas_f.csv"
+#define DATAFILE "oblas_f.csv"
 #endif
 #ifdef BLIS
-#define RESULTS "blis_f.csv"
+#define DATAFILE "blis_f.csv"
 #endif
 #endif
 
@@ -45,42 +47,41 @@
 #define DATATYPE printf(" Using double \n\n");
 #define GEMMCPU cblas_dgemm
 #ifdef MKL
-#define RESULTS "mkl_d.out"
+#define DATAFILE "mkl_d.out"
 #endif
 #ifdef OPENBLAS
-#define RESULTS "oblas_d.out"
+#define DATAFILE "oblas_d.out"
 #endif
 #ifdef BLIS
-#define RESULTS "blis_d.out"
+#define DATAFILE "blis_d.out"
 #endif
 #endif
 
-#ifdef MAKE_STAT
-#define N_SAMP 20
-#endif
 
+struct timespec diff(struct timespec start, struct timespec end) {
 
-struct timespec diff(struct timespec start, struct timespec end)
-{
-        struct timespec temp;
-        if ((end.tv_nsec-start.tv_nsec)<0) {
-                temp.tv_sec = end.tv_sec-start.tv_sec-1;
-                temp.tv_nsec = 1000000000+end.tv_nsec-start.tv_nsec;
-        } else {
-                temp.tv_sec = end.tv_sec-start.tv_sec;
-                temp.tv_nsec = end.tv_nsec-start.tv_nsec;
-        }
-        return temp;
+    struct timespec temp;
+    
+    if ((end.tv_nsec-start.tv_nsec)<0) {
+        temp.tv_sec = end.tv_sec-start.tv_sec-1;
+        temp.tv_nsec = 1000000000+end.tv_nsec-start.tv_nsec;
+    } else {
+        temp.tv_sec = end.tv_sec-start.tv_sec;
+        temp.tv_nsec = end.tv_nsec-start.tv_nsec;
+    }
+    
+    return temp;
 }
 
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
+
     MYFLOAT *A, *B, *C;
     int m, n, k, i, j;
     MYFLOAT alpha, beta;
     struct timespec begin, end;
-
+    double elapsed;
+    
     if (argc == 1)
     {
         m = 2000, k = 200, n = 1000;
@@ -105,18 +106,21 @@ int main(int argc, char** argv)
 
     printf (" Initializing data for matrix multiplication C=A*B for matrix \n"
             " A(%ix%i) and matrix B(%ix%i)\n\n", m, k, k, n);
+
     DATATYPE
     alpha = 1.0; beta = 0.0;
+
 
     A = (MYFLOAT *)malloc( m*k*sizeof( MYFLOAT ));
     B = (MYFLOAT *)malloc( k*n*sizeof( MYFLOAT ));
     C = (MYFLOAT *)malloc( m*n*sizeof( MYFLOAT ));
+
     if (A == NULL || B == NULL || C == NULL) {
-      printf( "\n ERROR: Can't allocate memory for matrices. Aborting... \n\n");
-      free(A);
-      free(B);
-      free(C);
-      return 1;
+        printf( "\n ERROR: Can't allocate memory for matrices. Aborting... \n\n");
+        free(A);
+        free(B);
+        free(C);
+        return 1;
     }
 
     for (i = 0; i < (m*k); i++) {
@@ -131,74 +135,50 @@ int main(int argc, char** argv)
         C[i] = 0.0;
     }
 
-    // averaging results and printing to file
-#ifdef MAKE_STAT
-
     sleep(1);
-    double elapsed_tot = 0.0;
-    double gflops = 2.0*m*n*k;
-    double gflops_sec = 0.0;
-    for (i=0; i<N_SAMP; i++) {
-        clock_gettime(CLOCK_MONOTONIC, &begin);
-        GEMMCPU(CblasColMajor, CblasNoTrans, CblasNoTrans,
-                m, n, k, alpha, A, m, B, k, beta, C, m);
-        clock_gettime(CLOCK_MONOTONIC, &end);
-        double elapsed = (double)diff(begin,end).tv_sec + (double)diff(begin,end).tv_nsec / 1000000000.0;
-	elapsed_tot += elapsed;
-        gflops_sec += gflops/elapsed*1.0e-9;
-    }
-    elapsed_tot /= N_SAMP;
-    gflops_sec /= N_SAMP;
-
-    // printing to report.out
-    printf("done\n");
-
-    // printing to data file
-    FILE* results;
-    results = fopen(RESULTS, "a");
-    fprintf(results, "%d\t    %lf s\t   %lf\n", m, n, k, elapsed_tot, gflops_sec);
-    fclose(results);
-
-#else
-    
-    sleep(1);
-    printf (" Computing matrix product using gemm function via CBLAS interface \n");
-    double elapsed;
+    printf(" Computing matrix product using gemm function via CBLAS interface \n");
     clock_gettime(CLOCK_MONOTONIC, &begin);
-    GEMMCPU(CblasColMajor, CblasNoTrans, CblasNoTrans,
-                m, n, k, alpha, A, m, B, k, beta, C, m);
+    GEMMCPU(CblasColMajor, CblasNoTrans, CblasNoTrans, m, n, k, alpha, A, m, B, k, beta, C, m);
     clock_gettime(CLOCK_MONOTONIC, &end);
     elapsed = (double)diff(begin,end).tv_sec + (double)diff(begin,end).tv_nsec / 1000000000.0;
-    double gflops = 2.0*m*n*k;
+    double gflops = 2.0 * m *n*k;
     gflops = gflops/elapsed*1.0e-9;
-    printf ("\n Elapsed time %d.%d s\n\n\n", diff(begin,end).tv_sec, diff(begin,end).tv_nsec );
-    printf("%dx%dx%d\t%lf s\t%lf GFLOPS\n", m, n, k, elapsed, gflops);
 
+#ifdef SAVE_RESULTS
+    FILE* datafile;
+    datafile = fopen(DATAFILE, "a");
+    fprintf(datafile, "%d\t    %lf s\t   %lf\n", m, n, k, elapsed_tot, gflops_sec);
+    fclose(datafile);
+
+    printf("done\n");
+#else 
+    printf("\n Elapsed time %d.%d s\n\n\n", diff(begin,end).tv_sec, diff(begin,end).tv_nsec );
+    printf("%dx%dx%d\t%lf s\t%lf GFLOPS\n", m, n, k, elapsed, gflops);
 #endif
 
 #ifdef PRINT
     printf (" Top left corner of matrix A: \n");
     for (i=0; i<min(m,6); i++) {
-      for (j=0; j<min(k,6); j++) {
-        printf ("%12.0f", A[j+i*k]);
-      }
-      printf ("\n");
+        for (j=0; j<min(k,6); j++) {
+            printf ("%12.0f", A[j+i*k]);
+        }
+        printf ("\n");
     }
 
     printf ("\n Top left corner of matrix B: \n");
     for (i=0; i<min(k,6); i++) {
-      for (j=0; j<min(n,6); j++) {
-        printf ("%12.0f", B[j+i*n]);
-      }
-      printf ("\n");
+        for (j=0; j<min(n,6); j++) {
+            printf ("%12.0f", B[j+i*n]);
+        }
+        printf ("\n");
     }
     
     printf ("\n Top left corner of matrix C: \n");
     for (i=0; i<min(m,6); i++) {
-      for (j=0; j<min(n,6); j++) {
-        printf ("%12.5G", C[j+i*n]);
-      }
-      printf ("\n");
+        for (j=0; j<min(n,6); j++) {
+            printf ("%12.5G", C[j+i*n]);
+        }
+        printf ("\n");
     }
 #endif
 
@@ -208,3 +188,4 @@ int main(int argc, char** argv)
 
     return 0;
 }
+
