@@ -12,7 +12,11 @@ BLISROOT=/u/dssc/ttarch00/myblis
 float: ${data}/gemm_mkl_f.x ${data}/gemm_oblas_f.x ${data}/gemm_blis_f.x
 
 ${data}/gemm_mkl_f.x: gemm.c
+<<<<<<< HEAD
 	gcc -DUSE_FLOAT -DMKL $^ -m64 -I${MKLROOT}/include $(MKL)  -o $@ -DSAVE_RESULTS
+=======
+	gcc -DUSE_FLOAT -DMKL $^ -m64 -I${MKLROOT}/include $(MKL)  -o $@
+>>>>>>> refs/remotes/origin/master
 
 ${data}/gemm_oblas_f.x: gemm.c
 	gcc -DUSE_FLOAT -DOPENBLAS $^ -m64 -I${OPENBLASROOT}/include -L/${OPENBLASROOT}/lib -lopenblas -lpthread -o $@ -fopenmp -DMAKE_STAT
