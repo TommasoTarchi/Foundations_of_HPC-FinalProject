@@ -47,13 +47,13 @@
 #define DATATYPE printf(" Using double \n\n");
 #define GEMMCPU cblas_dgemm
 #ifdef MKL
-#define DATAFILE "mkl_d.out"
+#define DATAFILE "mkl_d.csv"
 #endif
 #ifdef OPENBLAS
-#define DATAFILE "oblas_d.out"
+#define DATAFILE "oblas_d.csv"
 #endif
 #ifdef BLIS
-#define DATAFILE "blis_d.out"
+#define DATAFILE "blis_d.csv"
 #endif
 #endif
 
@@ -147,7 +147,7 @@ int main(int argc, char** argv) {
 #ifdef SAVE_RESULTS
     FILE* datafile;
     datafile = fopen(DATAFILE, "a");
-    fprintf(datafile, "%d\t    %lf s\t   %lf\n", m, n, k, elapsed_tot, gflops_sec);
+    fprintf(datafile, "%d\t    %lf s\t   %lf\n", m, n, k, elapsed, gflops);
     fclose(datafile);
 
     printf("done\n");
