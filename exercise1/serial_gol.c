@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
                 break;
             
             default:
-                printf("argument -%c not known\n\n-- we suggest to rerun the program with the right arguments\n\n", c);
+                printf("\nargument -%c not known\n\n", c);
                 break;
 
         }
@@ -79,45 +79,178 @@ int main(int argc, char **argv) {
     const int n_cells = k*k;
 
 
+
+
+
     /* initializing grid */
     if (action == INIT) {
 
-        if (fname != NULL) {
+        /* assigning default name to file in case none was passed */
+        if (fname == NULL) {
 
-            // add PMG-read
+            printf("-- no output file was passed - initial conditions will be written to %s\n\n", fname_deflt);
 
-        /* if no file name is passed the grid is initialized randomly */
-        } else {
-
-            printf("-- no playground to read was passed - it will be randomly initialized\n\n");
-         
-            srand(time(NULL));
-
-            grid = (BOOL*) malloc(n_cells*sizeof(BOOL));
-
-            double randmax_inv = 1.0/RAND_MAX;
-            for (int i=0; i<n_cells; i++) {
-                /* producing a random number between 0 and 1 */
-                double temp = rand()*randmax_inv;
-                /* producing a random integer among 48 and 49
-                 * (ASCII codes of '0' and '1') */
-                int rand_bool = (int)(temp + 48.5);
-                /* converting random number to char */
-                grid[i] = (BOOL)rand_bool;
-            }
-
+            fname = (char*) malloc(sizeof(fname_deflt));
+            sprintf(fname, "%s", fname_deflt);
         }
+
+         
+        srand(time(NULL));
+
+        grid = (BOOL*) malloc(n_cells*sizeof(BOOL));
+
+        double randmax_inv = 1.0/RAND_MAX;
+        for (int i=0; i<n_cells; i++) {
+            /* producing a random number between 0 and 1 */
+            double temp = rand()*randmax_inv;
+            /* producing a random integer among 48 and 49
+            * (ASCII codes of '0' and '1') */
+            int rand_bool = (int)(temp + 48.5);
+            /* converting random number to char */
+            grid[i] = (BOOL)rand_bool;
+        }
+
+
+        // sostituire con scrittura su PMG
+        if (grid != NULL) {
+            for (int i=0; i<k; i++) {
+                for (int j=0; j<k; j++)
+                    printf("%c  ", grid[i*k+j]);
+                printf("\n");
+            }
+            printf("\n");
+        }
+
+
     }
+
     
 
 
-    if (grid != NULL) {
-        for (int i=0; i<k; i++) {
-            for (int j=0; j<k; j++)
-                printf("%c  ", grid[i*k+j]);
+
+    /* running game of life */
+    if (action == RUN) {
+
+        /* assigning default name to file in case none was passed */
+        if (fname == NULL) {
+
+            printf("-- no file with initial playground was passed - the program will try to read from %s\n\n", fname_deflt);
+
+            fname = (char*) malloc(sizeof(fname_deflt));
+            sprintf(fname, "%s", fname_deflt);
+        }
+
+        // aggiungere lettura da PMG
+        //
+        //
+        //
+        //
+
+
+       
+
+
+//////// just for testing   //////////////////////////////////
+
+
+
+srand(time(NULL));
+
+        grid = (BOOL*) malloc(n_cells*sizeof(BOOL));
+
+        double randmax_inv = 1.0/RAND_MAX;
+        for (int i=0; i<n_cells; i++) {
+            /* producing a random number between 0 and 1 */
+            double temp = rand()*randmax_inv;
+            /* producing a random integer among 48 and 49
+            * (ASCII codes of '0' and '1') */
+            int rand_bool = (int)(temp + 48.5);
+            /* converting random number to char */
+            grid[i] = (BOOL)rand_bool;
+        }
+
+
+       
+        if (grid != NULL) {
+            for (int i=0; i<k; i++) {
+                for (int j=0; j<k; j++)
+                    printf("%c  ", grid[i*k+j]);
+                printf("\n");
+            }
             printf("\n");
         }
+
+
+
+//////////////////////////////////////////////////////////
+
+
+
+
+
+
+        if (e == ORDERED) {
+
+            for (int gen=0; gen<n; gen++) {
+
+                /* iteration on rows */
+                for (int i=1; i<k-1; i++) {
+                    /* iteration on columns */
+                    for (int j=1; j<k-1; j++) {
+
+                        short int count = 0;
+                        for (int a=i-1; a<i+2; a++) {
+                            for (int b=j-1; b<j+2; b++) {
+                                if (grid[a*k+b] == '1') {
+                                    count++;
+                                }
+                            }
+                        }
+
+                        if (grid[i*k+j] == '1')
+                            count--;
+
+                        if (count == 2 || count == 3) {
+                            grid[i*k+j] = '1';
+                        } else {
+                            grid[i*k+j] = '0';
+                        }
+                    }
+                }
+
+            }
+
+        } else if (e == STATIC) {
+
+            printf("static\n");
+
+        }
+
+
+
+
+////////////// just for testing ///////////////////
+
+if (grid != NULL) {
+            for (int i=0; i<k; i++) {
+                for (int j=0; j<k; j++)
+                    printf("%c  ", grid[i*k+j]);
+                printf("\n");
+            }
+            printf("\n");
+        }
+
+    
+//////////////////////////////////////////////////////
+
+
+
     }
+
+
+
+
+
 
 
 
