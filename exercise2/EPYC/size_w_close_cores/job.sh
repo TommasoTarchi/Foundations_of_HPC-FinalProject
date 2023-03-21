@@ -42,12 +42,12 @@ export OMP_PROC_BIND=$alloc
 export OMP_NUM_THREADS=$ncores
 
 ### overwriting old datafiles and setting up new ones
-echo "#node:        ${node}" > mkl_f.csv
-echo "#library:     MKL" >> mkl_f.csv
-echo "#precision:   float" >> mkl_f.csv
-echo "#allocation:  ${alloc}" >> mkl_f.csv
-echo >> mkl_f.csv
-echo "n_cores     mat_size     time        GFLOPS" >> mkl_f.csv
+###echo "#node:        ${node}" > mkl_f.csv
+###echo "#library:     MKL" >> mkl_f.csv
+###echo "#precision:   float" >> mkl_f.csv
+###echo "#allocation:  ${alloc}" >> mkl_f.csv
+###echo >> mkl_f.csv
+###echo "n_cores     mat_size     time        GFLOPS" >> mkl_f.csv
 
 ###echo "#node:        ${node}" > oblas_f.csv
 ###echo "#library:     openBLAS" >> oblas_f.csv
@@ -70,12 +70,12 @@ echo "n_cores     mat_size     time        GFLOPS" >> mkl_f.csv
 ###echo >> mkl_d.csv
 ###echo "cores     mat_size     time        GFLOPS" >> mkl_d.csv
 
-###echo "#node:        ${node}" > oblas_d.csv
-###echo "#library:     openBLAS" >> oblas_d.csv
-###echo "#precision:   double" >> oblas_d.csv
-###echo "#allocation:  ${alloc}" >> oblas_d.csv
-###echo >> oblas_d.csv
-###echo "cores     mat_size     time        GFLOPS" >> oblas_d.csv
+echo "#node:        ${node}" > oblas_d.csv
+echo "#library:     openBLAS" >> oblas_d.csv
+echo "#precision:   double" >> oblas_d.csv
+echo "#allocation:  ${alloc}" >> oblas_d.csv
+echo >> oblas_d.csv
+echo "cores     mat_size     time        GFLOPS" >> oblas_d.csv
 
 ###echo "#node:        ${node}" > blis_d.csv
 ###echo "#library:     BLIS" >> blis_d.csv
@@ -85,20 +85,20 @@ echo "n_cores     mat_size     time        GFLOPS" >> mkl_f.csv
 ###echo "cores     mat_size     time        GFLOPS" >> blis_d.csv
 
 ### performing measures
-for size in $(seq 2000 200 20000)
+for size in $(seq 2000 250 20000)
 do
 	for count in $(seq 1 1 5)
 	do
-		echo -n "${ncores}       " >> mkl_f.csv
-		./gemm_mkl_f.x $size $size $size
+		###echo -n "${ncores}       " >> mkl_f.csv
+		###./gemm_mkl_f.x $size $size $size
 		###echo -n "${ncores}       "  >> oblas_f.csv
 		###./gemm_oblas_f.x $size $size $size
 		###echo -n "${ncores}       "  >> blis_f.csv
 		###./gemm_blis_f.x $size $size $size
 		###echo -n "${ncores}       " >> mkl_d.csv
 		###./gemm_mkl_d.x $size $size $size
-		###echo -n "${ncores}       "  >> oblas_d.csv
-		###./gemm_oblas_d.x $size $size $size
+		echo -n "${ncores}       "  >> oblas_d.csv
+		./gemm_oblas_d.x $size $size $size
 		###echo -n "${ncores}       "  >> blis_d.csv
 		###./gemm_blis_d.x $size $size $size
 		echo

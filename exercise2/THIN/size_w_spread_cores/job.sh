@@ -85,7 +85,7 @@ echo "cores     mat_size     time        GFLOPS" >> oblas_f.csv
 ###echo "cores     mat_size     time        GFLOPS" >> blis_d.csv
 
 ### performing measures
-for size in $(seq 2000 200 20000)
+for size in $(seq 2000 250 20000)
 do
 	for count in $(seq 1 1 5)
 	do
