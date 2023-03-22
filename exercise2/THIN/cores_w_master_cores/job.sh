@@ -90,10 +90,10 @@ do
 	
 	for count in $(seq 1 1 5)
 	do
-		echo -n "${ncores}       " >> mkl_f.csv
-		./gemm_mkl_f.x $size $size $size
-		###echo -n "${ncores}       "  >> oblas_f.csv
-		###./gemm_oblas_f.x $size $size $size
+		###echo -n "${ncores}       " >> mkl_f.csv
+		###./gemm_mkl_f.x $size $size $size
+		echo -n "${ncores}       "  >> oblas_f.csv
+		./gemm_oblas_f.x $size $size $size
 		###echo -n "${ncores}       "  >> blis_f.csv
 		###./gemm_blis_f.x $size $size $size
 		###echo -n "${ncores}       " >> mkl_d.csv

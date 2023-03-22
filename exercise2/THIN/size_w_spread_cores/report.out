@@ -1,0 +1,5508 @@
+LOADING NEEDED MODULES...
+
+Loading mkl version 2022.2.1
+Loading tbb version 2021.7.1
+Loading compiler-rt version 2022.2.1
+
+COMPILING PROGRAMS FOR OPENBLAS, MKL AND BLIS ON TARGET MACHINE...
+
+gcc -DUSE_FLOAT -DMKL gemm.c -m64 -I/opt/area/shared/programs/x86/oneAPI/2022.3.1/mkl/2022.2.1/include -L/opt/area/shared/programs/x86/oneAPI/2022.3.1/mkl/2022.2.1/lib/intel64  -lmkl_intel_lp64 -lmkl_gnu_thread -lmkl_core -lgomp -lpthread -lm -ldl  -o /u/dssc/ttarch00/Foundations_of_HPC-FinalProject/exercise2/THIN/size_w_spread_cores/gemm_mkl_f.x -DSAVE_RESULTS
+gcc -DUSE_FLOAT -DOPENBLAS gemm.c -m64 -I/opt/area/shared/programs/Intel/openBLAS/0.3.21-omp/include -L//opt/area/shared/programs/Intel/openBLAS/0.3.21-omp/lib -lopenblas -lpthread -o /u/dssc/ttarch00/Foundations_of_HPC-FinalProject/exercise2/THIN/size_w_spread_cores/gemm_oblas_f.x -fopenmp -DSAVE_RESULTS
+gcc -DUSE_FLOAT  -DBLIS gemm.c -m64 -I/u/dssc/ttarch00/myblis/include/blis -L//u/dssc/ttarch00/myblis/lib -o /u/dssc/ttarch00/Foundations_of_HPC-FinalProject/exercise2/THIN/size_w_spread_cores/gemm_blis_f.x -lpthread  -lblis -fopenmp -lm -DSAVE_RESULTS
+gcc -DUSE_DOUBLE -DMKL gemm.c -m64 -I/opt/area/shared/programs/x86/oneAPI/2022.3.1/mkl/2022.2.1/include -L/opt/area/shared/programs/x86/oneAPI/2022.3.1/mkl/2022.2.1/lib/intel64  -lmkl_intel_lp64 -lmkl_gnu_thread -lmkl_core -lgomp -lpthread -lm -ldl  -o /u/dssc/ttarch00/Foundations_of_HPC-FinalProject/exercise2/THIN/size_w_spread_cores/gemm_mkl_d.x -DSAVE_RESULTS
+gcc -DUSE_DOUBLE -DOPENBLAS gemm.c -m64 -I/opt/area/shared/programs/Intel/openBLAS/0.3.21-omp/include -L//opt/area/shared/programs/Intel/openBLAS/0.3.21-omp/lib -lopenblas -lpthread -o /u/dssc/ttarch00/Foundations_of_HPC-FinalProject/exercise2/THIN/size_w_spread_cores/gemm_oblas_d.x -fopenmp -DSAVE_RESULTS
+gcc -DUSE_DOUBLE -DBLIS gemm.c -m64 -I/u/dssc/ttarch00/myblis/include/blis -L//u/dssc/ttarch00/myblis/lib -o /u/dssc/ttarch00/Foundations_of_HPC-FinalProject/exercise2/THIN/size_w_spread_cores/gemm_blis_d.x -lpthread  -lblis -fopenmp -lm -DSAVE_RESULTS
+
+--------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------
+
+GATHERING RESULTS...
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2000x2000) and matrix B(2000x2000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2000x2000) and matrix B(2000x2000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2000x2000) and matrix B(2000x2000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2000x2000) and matrix B(2000x2000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2000x2000) and matrix B(2000x2000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2250x2250) and matrix B(2250x2250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2250x2250) and matrix B(2250x2250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2250x2250) and matrix B(2250x2250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2250x2250) and matrix B(2250x2250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2250x2250) and matrix B(2250x2250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2500x2500) and matrix B(2500x2500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2500x2500) and matrix B(2500x2500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2500x2500) and matrix B(2500x2500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2500x2500) and matrix B(2500x2500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2500x2500) and matrix B(2500x2500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2750x2750) and matrix B(2750x2750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2750x2750) and matrix B(2750x2750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2750x2750) and matrix B(2750x2750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2750x2750) and matrix B(2750x2750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(2750x2750) and matrix B(2750x2750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3000x3000) and matrix B(3000x3000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3000x3000) and matrix B(3000x3000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3000x3000) and matrix B(3000x3000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3000x3000) and matrix B(3000x3000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3000x3000) and matrix B(3000x3000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3250x3250) and matrix B(3250x3250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3250x3250) and matrix B(3250x3250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3250x3250) and matrix B(3250x3250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3250x3250) and matrix B(3250x3250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3250x3250) and matrix B(3250x3250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3500x3500) and matrix B(3500x3500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3500x3500) and matrix B(3500x3500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3500x3500) and matrix B(3500x3500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3500x3500) and matrix B(3500x3500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3500x3500) and matrix B(3500x3500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3750x3750) and matrix B(3750x3750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3750x3750) and matrix B(3750x3750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3750x3750) and matrix B(3750x3750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3750x3750) and matrix B(3750x3750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(3750x3750) and matrix B(3750x3750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4000x4000) and matrix B(4000x4000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4000x4000) and matrix B(4000x4000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4000x4000) and matrix B(4000x4000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4000x4000) and matrix B(4000x4000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4000x4000) and matrix B(4000x4000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4250x4250) and matrix B(4250x4250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4250x4250) and matrix B(4250x4250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4250x4250) and matrix B(4250x4250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4250x4250) and matrix B(4250x4250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4250x4250) and matrix B(4250x4250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4500x4500) and matrix B(4500x4500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4500x4500) and matrix B(4500x4500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4500x4500) and matrix B(4500x4500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4500x4500) and matrix B(4500x4500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4500x4500) and matrix B(4500x4500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4750x4750) and matrix B(4750x4750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4750x4750) and matrix B(4750x4750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4750x4750) and matrix B(4750x4750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4750x4750) and matrix B(4750x4750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(4750x4750) and matrix B(4750x4750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5000x5000) and matrix B(5000x5000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5000x5000) and matrix B(5000x5000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5000x5000) and matrix B(5000x5000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5000x5000) and matrix B(5000x5000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5000x5000) and matrix B(5000x5000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5250x5250) and matrix B(5250x5250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5250x5250) and matrix B(5250x5250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5250x5250) and matrix B(5250x5250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5250x5250) and matrix B(5250x5250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5250x5250) and matrix B(5250x5250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5500x5500) and matrix B(5500x5500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5500x5500) and matrix B(5500x5500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5500x5500) and matrix B(5500x5500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5500x5500) and matrix B(5500x5500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5500x5500) and matrix B(5500x5500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5750x5750) and matrix B(5750x5750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5750x5750) and matrix B(5750x5750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5750x5750) and matrix B(5750x5750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5750x5750) and matrix B(5750x5750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(5750x5750) and matrix B(5750x5750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6000x6000) and matrix B(6000x6000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6000x6000) and matrix B(6000x6000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6000x6000) and matrix B(6000x6000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6000x6000) and matrix B(6000x6000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6000x6000) and matrix B(6000x6000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6250x6250) and matrix B(6250x6250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6250x6250) and matrix B(6250x6250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6250x6250) and matrix B(6250x6250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6250x6250) and matrix B(6250x6250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6250x6250) and matrix B(6250x6250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6500x6500) and matrix B(6500x6500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6500x6500) and matrix B(6500x6500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6500x6500) and matrix B(6500x6500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6500x6500) and matrix B(6500x6500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6500x6500) and matrix B(6500x6500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6750x6750) and matrix B(6750x6750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6750x6750) and matrix B(6750x6750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6750x6750) and matrix B(6750x6750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6750x6750) and matrix B(6750x6750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(6750x6750) and matrix B(6750x6750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7000x7000) and matrix B(7000x7000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7000x7000) and matrix B(7000x7000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7000x7000) and matrix B(7000x7000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7000x7000) and matrix B(7000x7000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7000x7000) and matrix B(7000x7000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7250x7250) and matrix B(7250x7250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7250x7250) and matrix B(7250x7250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7250x7250) and matrix B(7250x7250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7250x7250) and matrix B(7250x7250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7250x7250) and matrix B(7250x7250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7500x7500) and matrix B(7500x7500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7500x7500) and matrix B(7500x7500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7500x7500) and matrix B(7500x7500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7500x7500) and matrix B(7500x7500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7500x7500) and matrix B(7500x7500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7750x7750) and matrix B(7750x7750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7750x7750) and matrix B(7750x7750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7750x7750) and matrix B(7750x7750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7750x7750) and matrix B(7750x7750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(7750x7750) and matrix B(7750x7750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8000x8000) and matrix B(8000x8000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8000x8000) and matrix B(8000x8000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8000x8000) and matrix B(8000x8000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8000x8000) and matrix B(8000x8000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8000x8000) and matrix B(8000x8000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8250x8250) and matrix B(8250x8250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8250x8250) and matrix B(8250x8250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8250x8250) and matrix B(8250x8250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8250x8250) and matrix B(8250x8250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8250x8250) and matrix B(8250x8250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8500x8500) and matrix B(8500x8500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8500x8500) and matrix B(8500x8500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8500x8500) and matrix B(8500x8500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8500x8500) and matrix B(8500x8500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8500x8500) and matrix B(8500x8500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8750x8750) and matrix B(8750x8750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8750x8750) and matrix B(8750x8750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8750x8750) and matrix B(8750x8750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8750x8750) and matrix B(8750x8750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(8750x8750) and matrix B(8750x8750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9000x9000) and matrix B(9000x9000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9000x9000) and matrix B(9000x9000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9000x9000) and matrix B(9000x9000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9000x9000) and matrix B(9000x9000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9000x9000) and matrix B(9000x9000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9250x9250) and matrix B(9250x9250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9250x9250) and matrix B(9250x9250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9250x9250) and matrix B(9250x9250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9250x9250) and matrix B(9250x9250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9250x9250) and matrix B(9250x9250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9500x9500) and matrix B(9500x9500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9500x9500) and matrix B(9500x9500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9500x9500) and matrix B(9500x9500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9500x9500) and matrix B(9500x9500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9500x9500) and matrix B(9500x9500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9750x9750) and matrix B(9750x9750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9750x9750) and matrix B(9750x9750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9750x9750) and matrix B(9750x9750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9750x9750) and matrix B(9750x9750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(9750x9750) and matrix B(9750x9750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10000x10000) and matrix B(10000x10000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10000x10000) and matrix B(10000x10000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10000x10000) and matrix B(10000x10000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10000x10000) and matrix B(10000x10000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10000x10000) and matrix B(10000x10000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10250x10250) and matrix B(10250x10250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10250x10250) and matrix B(10250x10250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10250x10250) and matrix B(10250x10250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10250x10250) and matrix B(10250x10250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10250x10250) and matrix B(10250x10250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10500x10500) and matrix B(10500x10500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10500x10500) and matrix B(10500x10500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10500x10500) and matrix B(10500x10500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10500x10500) and matrix B(10500x10500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10500x10500) and matrix B(10500x10500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10750x10750) and matrix B(10750x10750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10750x10750) and matrix B(10750x10750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10750x10750) and matrix B(10750x10750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10750x10750) and matrix B(10750x10750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(10750x10750) and matrix B(10750x10750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11000x11000) and matrix B(11000x11000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11000x11000) and matrix B(11000x11000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11000x11000) and matrix B(11000x11000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11000x11000) and matrix B(11000x11000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11000x11000) and matrix B(11000x11000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11250x11250) and matrix B(11250x11250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11250x11250) and matrix B(11250x11250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11250x11250) and matrix B(11250x11250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11250x11250) and matrix B(11250x11250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11250x11250) and matrix B(11250x11250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11500x11500) and matrix B(11500x11500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11500x11500) and matrix B(11500x11500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11500x11500) and matrix B(11500x11500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11500x11500) and matrix B(11500x11500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11500x11500) and matrix B(11500x11500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11750x11750) and matrix B(11750x11750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11750x11750) and matrix B(11750x11750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11750x11750) and matrix B(11750x11750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11750x11750) and matrix B(11750x11750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(11750x11750) and matrix B(11750x11750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12000x12000) and matrix B(12000x12000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12000x12000) and matrix B(12000x12000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12000x12000) and matrix B(12000x12000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12000x12000) and matrix B(12000x12000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12000x12000) and matrix B(12000x12000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12250x12250) and matrix B(12250x12250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12250x12250) and matrix B(12250x12250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12250x12250) and matrix B(12250x12250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12250x12250) and matrix B(12250x12250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12250x12250) and matrix B(12250x12250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12500x12500) and matrix B(12500x12500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12500x12500) and matrix B(12500x12500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12500x12500) and matrix B(12500x12500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12500x12500) and matrix B(12500x12500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12500x12500) and matrix B(12500x12500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12750x12750) and matrix B(12750x12750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12750x12750) and matrix B(12750x12750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12750x12750) and matrix B(12750x12750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12750x12750) and matrix B(12750x12750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(12750x12750) and matrix B(12750x12750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13000x13000) and matrix B(13000x13000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13000x13000) and matrix B(13000x13000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13000x13000) and matrix B(13000x13000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13000x13000) and matrix B(13000x13000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13000x13000) and matrix B(13000x13000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13250x13250) and matrix B(13250x13250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13250x13250) and matrix B(13250x13250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13250x13250) and matrix B(13250x13250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13250x13250) and matrix B(13250x13250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13250x13250) and matrix B(13250x13250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13500x13500) and matrix B(13500x13500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13500x13500) and matrix B(13500x13500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13500x13500) and matrix B(13500x13500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13500x13500) and matrix B(13500x13500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13500x13500) and matrix B(13500x13500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13750x13750) and matrix B(13750x13750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13750x13750) and matrix B(13750x13750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13750x13750) and matrix B(13750x13750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13750x13750) and matrix B(13750x13750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(13750x13750) and matrix B(13750x13750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14000x14000) and matrix B(14000x14000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14000x14000) and matrix B(14000x14000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14000x14000) and matrix B(14000x14000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14000x14000) and matrix B(14000x14000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14000x14000) and matrix B(14000x14000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14250x14250) and matrix B(14250x14250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14250x14250) and matrix B(14250x14250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14250x14250) and matrix B(14250x14250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14250x14250) and matrix B(14250x14250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14250x14250) and matrix B(14250x14250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14500x14500) and matrix B(14500x14500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14500x14500) and matrix B(14500x14500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14500x14500) and matrix B(14500x14500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14500x14500) and matrix B(14500x14500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14500x14500) and matrix B(14500x14500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14750x14750) and matrix B(14750x14750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14750x14750) and matrix B(14750x14750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14750x14750) and matrix B(14750x14750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14750x14750) and matrix B(14750x14750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(14750x14750) and matrix B(14750x14750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15000x15000) and matrix B(15000x15000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15000x15000) and matrix B(15000x15000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15000x15000) and matrix B(15000x15000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15000x15000) and matrix B(15000x15000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15000x15000) and matrix B(15000x15000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15250x15250) and matrix B(15250x15250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15250x15250) and matrix B(15250x15250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15250x15250) and matrix B(15250x15250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15250x15250) and matrix B(15250x15250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15250x15250) and matrix B(15250x15250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15500x15500) and matrix B(15500x15500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15500x15500) and matrix B(15500x15500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15500x15500) and matrix B(15500x15500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15500x15500) and matrix B(15500x15500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15500x15500) and matrix B(15500x15500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15750x15750) and matrix B(15750x15750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15750x15750) and matrix B(15750x15750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15750x15750) and matrix B(15750x15750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15750x15750) and matrix B(15750x15750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(15750x15750) and matrix B(15750x15750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16000x16000) and matrix B(16000x16000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16000x16000) and matrix B(16000x16000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16000x16000) and matrix B(16000x16000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16000x16000) and matrix B(16000x16000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16000x16000) and matrix B(16000x16000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16250x16250) and matrix B(16250x16250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16250x16250) and matrix B(16250x16250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16250x16250) and matrix B(16250x16250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16250x16250) and matrix B(16250x16250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16250x16250) and matrix B(16250x16250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16500x16500) and matrix B(16500x16500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16500x16500) and matrix B(16500x16500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16500x16500) and matrix B(16500x16500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16500x16500) and matrix B(16500x16500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16500x16500) and matrix B(16500x16500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16750x16750) and matrix B(16750x16750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16750x16750) and matrix B(16750x16750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16750x16750) and matrix B(16750x16750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16750x16750) and matrix B(16750x16750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(16750x16750) and matrix B(16750x16750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17000x17000) and matrix B(17000x17000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17000x17000) and matrix B(17000x17000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17000x17000) and matrix B(17000x17000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17000x17000) and matrix B(17000x17000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17000x17000) and matrix B(17000x17000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17250x17250) and matrix B(17250x17250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17250x17250) and matrix B(17250x17250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17250x17250) and matrix B(17250x17250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17250x17250) and matrix B(17250x17250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17250x17250) and matrix B(17250x17250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17500x17500) and matrix B(17500x17500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17500x17500) and matrix B(17500x17500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17500x17500) and matrix B(17500x17500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17500x17500) and matrix B(17500x17500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17500x17500) and matrix B(17500x17500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17750x17750) and matrix B(17750x17750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17750x17750) and matrix B(17750x17750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17750x17750) and matrix B(17750x17750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17750x17750) and matrix B(17750x17750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(17750x17750) and matrix B(17750x17750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18000x18000) and matrix B(18000x18000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18000x18000) and matrix B(18000x18000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18000x18000) and matrix B(18000x18000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18000x18000) and matrix B(18000x18000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18000x18000) and matrix B(18000x18000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18250x18250) and matrix B(18250x18250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18250x18250) and matrix B(18250x18250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18250x18250) and matrix B(18250x18250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18250x18250) and matrix B(18250x18250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18250x18250) and matrix B(18250x18250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18500x18500) and matrix B(18500x18500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18500x18500) and matrix B(18500x18500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18500x18500) and matrix B(18500x18500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18500x18500) and matrix B(18500x18500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18500x18500) and matrix B(18500x18500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18750x18750) and matrix B(18750x18750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18750x18750) and matrix B(18750x18750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18750x18750) and matrix B(18750x18750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18750x18750) and matrix B(18750x18750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(18750x18750) and matrix B(18750x18750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19000x19000) and matrix B(19000x19000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19000x19000) and matrix B(19000x19000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19000x19000) and matrix B(19000x19000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19000x19000) and matrix B(19000x19000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19000x19000) and matrix B(19000x19000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19250x19250) and matrix B(19250x19250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19250x19250) and matrix B(19250x19250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19250x19250) and matrix B(19250x19250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19250x19250) and matrix B(19250x19250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19250x19250) and matrix B(19250x19250)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19500x19500) and matrix B(19500x19500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19500x19500) and matrix B(19500x19500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19500x19500) and matrix B(19500x19500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19500x19500) and matrix B(19500x19500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19500x19500) and matrix B(19500x19500)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19750x19750) and matrix B(19750x19750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19750x19750) and matrix B(19750x19750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19750x19750) and matrix B(19750x19750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19750x19750) and matrix B(19750x19750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(19750x19750) and matrix B(19750x19750)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(20000x20000) and matrix B(20000x20000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(20000x20000) and matrix B(20000x20000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(20000x20000) and matrix B(20000x20000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(20000x20000) and matrix B(20000x20000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+ This example computes real matrix C=alpha*A*B+beta*C using 
+ BLAS function dgemm, where A, B, and  C are matrices and 
+ alpha and beta are scalars
+
+ Initializing data for matrix multiplication C=A*B for matrix 
+ A(20000x20000) and matrix B(20000x20000)
+
+ Using double 
+
+ Computing matrix product using gemm function via CBLAS interface 
+done
+
+-----------
+
+
+-------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+
+REMOVING COMPILED PROGRAMS AND UNLOADING MODULES...
+
+rm -rf /u/dssc/ttarch00/Foundations_of_HPC-FinalProject/exercise2/THIN/size_w_spread_cores/*.x
+Removing mkl version 2022.2.1
+Use `module list` to view any remaining dependent modules.
+Removing compiler-rt version 2022.2.1
+Use `module list` to view any remaining dependent modules.
+Removing tbb version 2021.7.1
+Use `module list` to view any remaining dependent modules.
