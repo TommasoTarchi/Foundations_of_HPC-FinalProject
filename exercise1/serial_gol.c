@@ -20,7 +20,7 @@
 
 char fname_deflt[] = "game_of_life.pgm";
 
-int   action = 0;
+int   action = ORDERED;
 int   m      = M_DFLT;
 int   k      = K_DFLT;
 int   e      = ORDERED;
@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
                 break;
             
             case 'f':
-                fname = (char*) malloc(sizeof(optarg)+2);
+                fname = (char*) malloc(sizeof(optarg)+1);
                 sprintf(fname, "%s", optarg);
                 break;
             
@@ -122,7 +122,7 @@ int main(int argc, char **argv) {
 
         /* writing down playground */
         const int maxval_color = 1;
-        write_pgm_image(grid, maxval_color, m, k, fname);
+        write_pgm_image(grid, maxval_color, k, m, fname);
 
     }
 
@@ -146,7 +146,9 @@ int main(int argc, char **argv) {
         int maxval_color;
         int x_size;
         int y_size;
+        
         read_pgm_image(&grid, &maxval_color, &x_size, &y_size, fname);        
+        
         const unsigned int n_cells = x_size*y_size;
 
     
@@ -163,12 +165,27 @@ int main(int argc, char **argv) {
         //double randmax_inv = 1.0/RAND_MAX;
         //for (int i=0; i<n_cells; i++) {
             /* producing a random number between 0 and 1 */
-          //  short int rand_bool = (short int) (rand()*randmax_inv+0.5);
+        //    short int rand_bool = (short int) (rand()*randmax_inv+0.5);
             /* converting random number to char */
-            //grid[i] = (BOOL) rand_bool;
+        //    grid[i] = (BOOL) rand_bool;
         //}
 
         ///////////////////////////////////////////////
+
+
+        ///////// just for test (random grid) /////////
+        ///////////////////////////////////////////////
+
+        for (int i=0; i<y_size; i++) {
+            for (int j=0; j<x_size; j++)
+                printf("%c ", grid[i*x_size+j]+48);
+            printf("\n");
+        }
+
+        printf("\n");
+
+        ///////////////////////////////////////////////
+
 
 
         
@@ -187,15 +204,19 @@ int main(int argc, char **argv) {
                 /* updating first row */
                 
                 /* first element of the first row */
-                short int count = 0;
-                if (grid[1] == 1)
-                    count++;
-                for (int b=x_size; b<x_size+2; b++) {
-                    if (grid[b] == 1)
-                        count ++;
-                }
+                char count = 0;
 
-                if (count == 2 || count == 3) {
+                count += grid[1];
+                for (int b=x_size-1; b<x_size+2; b++) {
+                    count += grid[b];
+                }
+                count += grid[2*x_size-1];
+                for (int b=n_cells-x_size; b<n_cells-x_size+2; b++) {
+                    count += grid[b];
+                }
+                count += grid[n_cells-1];
+
+                if (count > 1 && count < 4) {
                     grid[0] = 1;
                 } else {
                     grid[0] = 0;
@@ -205,16 +226,16 @@ int main(int argc, char **argv) {
                 for (int j=1; j<x_size-1; j++) {
 
                     count = 0;
-                    for (int a=0; a<2; a++) {
-                        for (int b=j-1; b<j+2; b++) {
-                            if (grid[a*x_size+b] == 1)
-                                count++;
-                        }
+                    count += grid[j-1];
+                    count += grid[j+1];
+                    for (int b=j-1; b<j+2; b++) {
+                        count += grid[x_size+b];
                     }
-                    if (grid[j] == 1)
-                        count--;
+                    for (int b=n_cells-x_size+j-1; b<n_cells-x_size+j+2; b++) {
+                        count += grid[b];
+                    }
 
-                    if (count == 2 || count == 3) {
+                    if (count > 1 && count < 4) {
                         grid[j] = 1;
                     } else {
                         grid[j] = 0;
@@ -223,14 +244,18 @@ int main(int argc, char **argv) {
 
                 /* last element of the first row */
                 count = 0;
-                if (grid[x_size-2] == 1)
-                    count++;
+                count += grid[0];
+                count += grid[x_size-2];
+                count += grid[x_size];
                 for (int b=2*x_size-2; b<2*x_size; b++) {
-                    if (grid[b] == 1)
-                        count++;
+                    count += grid[b];
+                }
+                count += grid[n_cells-x_size];
+                for (int b=n_cells-2; b<n_cells; b++) {
+                    count += grid[b];
                 }
 
-                if (count == 2 || count == 3) {
+                if (count > 1 && count < 4) {
                     grid[x_size-1] = 1;
                 } else {
                     grid[x_size-1] = 0;
@@ -244,16 +269,19 @@ int main(int argc, char **argv) {
 
                     /* first element of the row */
                     count = 0;
-                    for (int a=i-1; a<i+2; a++) {
-                        for (int b=0; b<2; b++) {
-                            if (grid[a*x_size+b] == 1)
-                                count++;
-                        }
+                    for (int b=(i-1)*x_size; b<(i-1)*x_size+2; b++) {
+                        count += grid[b];
                     }
+                    count += grid[i*x_size-1];
+                    count += grid[i*x_size+1];
+                    for (int b=(i+1)*x_size-1; b<(i+1)*x_size+2; b++) {
+                        count += grid[b];
+                    }
+                    count += grid[(i+2)*x_size-1]; 
                     if (grid[i*x_size] == 1)
                         count--;
 
-                    if (count == 2 || count == 3) {
+                    if (count > 1 && count < 4) {
                         grid[i*x_size] = 1;
                     } else {
                         grid[i*x_size] = 0;
@@ -263,16 +291,16 @@ int main(int argc, char **argv) {
                     for (int j=1; j<x_size-1; j++) {
 
                         count = 0;
-                        for (int a=i-1; a<i+2; a++) {
-                            for (int b=j-1; b<j+2; b++) {
-                                if (grid[a*x_size+b] == 1)
-                                    count++;
-                            }
+                        for (int b=(i-1)*x_size+j-1; b<(i-1)*x_size+j+2; b++) {
+                            count += grid[b];
                         }
-                        if (grid[i*x_size+j] == 1)
-                            count--;
+                        count += grid[i*x_size+j-1];
+                        count += grid[i*x_size+j+1];
+                        for (int b=(i+1)*x_size+j-1; b<(i+1)*x_size+j+2; b++) {
+                            count += grid[b];
+                        }
 
-                        if (count == 2 || count == 3) {
+                        if (count > 1 && count < 4) {
                             grid[i*x_size+j] = 1;
                         } else {
                             grid[i*x_size+j] = 0;
@@ -281,35 +309,40 @@ int main(int argc, char **argv) {
 
                     /* last element of the row */
                     count = 0;
-                    for (int a=i; a<i+3; a++) {
-                        for (int b=-2; b<0; b++) {
-                            if (grid[a*x_size+b] == 1)
-                                count++;
-                        }
+                    count += (i-1)*x_size;
+                    for (int b=i*x_size-2; b<i*x_size+1; b++) {
+                        count += grid[b];
                     }
-                    if (grid[(i+1)*x_size-1] == 1)
-                        count--;
+                    count += grid[(i+1)*x_size-2];
+                    count += grid[(i+1)*x_size];
+                    for (int b=(i+2)*x_size-2; b<(i+2)*x_size; b++) {
+                        count += grid[b];
+                    }
 
-                    if (count == 2 || count == 3) {
+                    if (count > 1 && count < 4) {
                         grid[(i+1)*x_size-1] = 1;
                     } else {
                         grid[(i+1)*x_size-1] = 0;
                     }
                 }
-                
+
 
                 /* updating last row */
                 
                 /* first element of the last row */
                 count = 0;
                 for (int b=(y_size-2)*x_size; b<(y_size-2)*x_size+2; b++) {
-                    if (grid[b] == 1)
-                        count++;
+                    count += grid[b];
                 }
-                if (grid[n_cells-x_size+1] == 1)
-                    count++;
-                
-                if (count == 2 || count == 3) {
+                count += grid[n_cells-x_size-1];
+                count += grid[n_cells-x_size+1];
+                count += grid[n_cells-1];
+                for (int b=0; b<2; b++) {
+                    count += grid[b];
+                }
+                count += grid[x_size-1];
+
+                if (count > 1 && count < 4) {
                     grid[n_cells-x_size] = 1;
                 } else {
                     grid[n_cells-x_size] = 0;
@@ -319,16 +352,16 @@ int main(int argc, char **argv) {
                 for (int j=1; j<x_size-1; j++) {
 
                     count = 0;
-                    for (int a=y_size-2; a<y_size; a++) {
-                        for (int b=j-1; b<j+2; b++) {
-                            if (grid[a*x_size+b] == 1)
-                                count++;
-                        }
+                    for (int b=j-1; b<j+2; b++) {
+                        count += grid[n_cells-2*x_size+b];
                     }
-                    if (grid[n_cells-x_size+j] == 1)
-                        count--;
+                    count += grid[n_cells-x_size+j-1];
+                    count += grid[n_cells-x_size+j+1];
+                    for (int b=j-1; b<j+2; b++) {
+                        count += grid[b];
+                    }
 
-                    if (count == 2 || count == 3) {
+                    if (count > 1 && count < 4) {
                         grid[n_cells-x_size+j] = 1;
                     } else {
                         grid[n_cells-x_size+j] = 0;
@@ -337,29 +370,35 @@ int main(int argc, char **argv) {
 
                 /* last element of the last row */
                 count = 0;
-                for (int b=n_cells-x_size-2; b<n_cells-x_size; b++) {
-                    if (grid[b] == 1)
-                        count++;
+                count += grid[n_cells-2*x_size];
+                for (int b=n_cells-x_size-2; b<n_cells-x_size+1; b++) {
+                    count += grid[b];
                 }
-                if (grid[n_cells-2] == 1)
-                    count++;
+                count += grid[n_cells-2];
+                count += grid[0];
+                for (int b=x_size-2; b<x_size; b++) {
+                    count += grid[b];
+                }
 
-                if (count == 2 || count == 3) {
+                if (count > 1 && count < 4) {
                     grid[n_cells-1] = 1;
                 } else {
                     grid[n_cells-1] = 0;
                 }
-
+           
 
                 /* saving a snapshot of the system */
-                if (gen % s == 0) {
+                if (s != 0) {
 
-                    sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen+1);
+                    if (gen % s == 0) {
 
-                    write_pgm_image(grid, 1, x_size, y_size, snap_name);
+                        sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen+1);
+                        
+                        write_pgm_image(grid, 1, x_size, y_size, snap_name);
+                    }
                 }
-
-            }
+                
+            } 
 
 
 
@@ -379,15 +418,19 @@ int main(int argc, char **argv) {
                 /* updating first row */
                 
                 /* first element of the first row */
-                short int count = 0;
-                if (grid[1] == 1)
-                    count++;
-                for (int b=x_size; b<x_size+2; b++) {
-                    if (grid[b] == 1)
-                        count ++;
-                }
+                char count = 0;
 
-                if (count == 2 || count == 3) {
+                count += grid[1];
+                for (int b=x_size-1; b<x_size+2; b++) {
+                    count += grid[b];
+                }
+                count += grid[2*x_size-1];
+                for (int b=n_cells-x_size; b<n_cells-x_size+2; b++) {
+                    count += grid[b];
+                }
+                count += grid[n_cells-1];
+
+                if (count > 1 && count < 4) {
                     grid_aux[0] = 1;
                 } else {
                     grid_aux[0] = 0;
@@ -397,16 +440,16 @@ int main(int argc, char **argv) {
                 for (int j=1; j<x_size-1; j++) {
 
                     count = 0;
-                    for (int a=0; a<2; a++) {
-                        for (int b=j-1; b<j+2; b++) {
-                            if (grid[a*x_size+b] == 1)
-                                count++;
-                        }
+                    count += grid[j-1];
+                    count += grid[j+1];
+                    for (int b=j-1; b<j+2; b++) {
+                        count += grid[x_size+b];
                     }
-                    if (grid[j] == 1)
-                        count--;
+                    for (int b=n_cells-x_size+j-1; b<n_cells-x_size+j+2; b++) {
+                        count += grid[b];
+                    }
 
-                    if (count == 2 || count == 3) {
+                    if (count > 1 && count < 4) {
                         grid_aux[j] = 1;
                     } else {
                         grid_aux[j] = 0;
@@ -415,14 +458,18 @@ int main(int argc, char **argv) {
 
                 /* last element of the first row */
                 count = 0;
-                if (grid[x_size-2] == 1)
-                    count++;
+                count += grid[0];
+                count += grid[x_size-2];
+                count += grid[x_size];
                 for (int b=2*x_size-2; b<2*x_size; b++) {
-                    if (grid[b] == 1)
-                        count++;
+                    count += grid[b];
+                }
+                count += grid[n_cells-x_size];
+                for (int b=n_cells-2; b<n_cells; b++) {
+                    count += grid[b];
                 }
 
-                if (count == 2 || count == 3) {
+                if (count > 1 && count < 4) {
                     grid_aux[x_size-1] = 1;
                 } else {
                     grid_aux[x_size-1] = 0;
@@ -436,16 +483,19 @@ int main(int argc, char **argv) {
 
                     /* first element of the row */
                     count = 0;
-                    for (int a=i-1; a<i+2; a++) {
-                        for (int b=0; b<2; b++) {
-                            if (grid[a*x_size+b] == 1)
-                                count++;
-                        }
+                    for (int b=(i-1)*x_size; b<(i-1)*x_size+2; b++) {
+                        count += grid[b];
                     }
+                    count += grid[i*x_size-1];
+                    count += grid[i*x_size+1];
+                    for (int b=(i+1)*x_size-1; b<(i+1)*x_size+2; b++) {
+                        count += grid[b];
+                    }
+                    count += grid[(i+2)*x_size-1]; 
                     if (grid[i*x_size] == 1)
                         count--;
 
-                    if (count == 2 || count == 3) {
+                    if (count > 1 && count < 4) {
                         grid_aux[i*x_size] = 1;
                     } else {
                         grid_aux[i*x_size] = 0;
@@ -455,16 +505,16 @@ int main(int argc, char **argv) {
                     for (int j=1; j<x_size-1; j++) {
 
                         count = 0;
-                        for (int a=i-1; a<i+2; a++) {
-                            for (int b=j-1; b<j+2; b++) {
-                                if (grid[a*x_size+b] == 1)
-                                    count++;
-                            }
+                        for (int b=(i-1)*x_size+j-1; b<(i-1)*x_size+j+2; b++) {
+                            count += grid[b];
                         }
-                        if (grid[i*x_size+j] == 1)
-                            count--;
+                        count += grid[i*x_size+j-1];
+                        count += grid[i*x_size+j+1];
+                        for (int b=(i+1)*x_size+j-1; b<(i+1)*x_size+j+2; b++) {
+                            count += grid[b];
+                        }
 
-                        if (count == 2 || count == 3) {
+                        if (count > 1 && count < 4) {
                             grid_aux[i*x_size+j] = 1;
                         } else {
                             grid_aux[i*x_size+j] = 0;
@@ -473,35 +523,40 @@ int main(int argc, char **argv) {
 
                     /* last element of the row */
                     count = 0;
-                    for (int a=i; a<i+3; a++) {
-                        for (int b=-2; b<0; b++) {
-                            if (grid[a*x_size+b] == 1)
-                                count++;
-                        }
+                    count += (i-1)*x_size;
+                    for (int b=i*x_size-2; b<i*x_size+1; b++) {
+                        count += grid[b];
                     }
-                    if (grid[(i+1)*x_size-1] == 1)
-                        count--;
+                    count += grid[(i+1)*x_size-2];
+                    count += grid[(i+1)*x_size];
+                    for (int b=(i+2)*x_size-2; b<(i+2)*x_size; b++) {
+                        count += grid[b];
+                    }
 
-                    if (count == 2 || count == 3) {
+                    if (count > 1 && count < 4) {
                         grid_aux[(i+1)*x_size-1] = 1;
                     } else {
                         grid_aux[(i+1)*x_size-1] = 0;
                     }
                 }
-                
+
 
                 /* updating last row */
                 
                 /* first element of the last row */
                 count = 0;
                 for (int b=(y_size-2)*x_size; b<(y_size-2)*x_size+2; b++) {
-                    if (grid[b] == 1)
-                        count++;
+                    count += grid[b];
                 }
-                if (grid[n_cells-x_size+1] == 1)
-                    count++;
-                
-                if (count == 2 || count == 3) {
+                count += grid[n_cells-x_size-1];
+                count += grid[n_cells-x_size+1];
+                count += grid[n_cells-1];
+                for (int b=0; b<2; b++) {
+                    count += grid[b];
+                }
+                count += grid[x_size-1];
+
+                if (count > 1 && count < 4) {
                     grid_aux[n_cells-x_size] = 1;
                 } else {
                     grid_aux[n_cells-x_size] = 0;
@@ -511,16 +566,16 @@ int main(int argc, char **argv) {
                 for (int j=1; j<x_size-1; j++) {
 
                     count = 0;
-                    for (int a=y_size-2; a<y_size; a++) {
-                        for (int b=j-1; b<j+2; b++) {
-                            if (grid[a*x_size+b] == 1)
-                                count++;
-                        }
+                    for (int b=j-1; b<j+2; b++) {
+                        count += grid[n_cells-2*x_size+b];
                     }
-                    if (grid[n_cells-x_size+j] == 1)
-                        count--;
+                    count += grid[n_cells-x_size+j-1];
+                    count += grid[n_cells-x_size+j+1];
+                    for (int b=j-1; b<j+2; b++) {
+                        count += grid[b];
+                    }
 
-                    if (count == 2 || count == 3) {
+                    if (count > 1 && count < 4) {
                         grid_aux[n_cells-x_size+j] = 1;
                     } else {
                         grid_aux[n_cells-x_size+j] = 0;
@@ -529,19 +584,22 @@ int main(int argc, char **argv) {
 
                 /* last element of the last row */
                 count = 0;
-                for (int b=n_cells-x_size-2; b<n_cells-x_size; b++) {
-                    if (grid[b] == 1)
-                        count++;
+                count += grid[n_cells-2*x_size];
+                for (int b=n_cells-x_size-2; b<n_cells-x_size+1; b++) {
+                    count += grid[b];
                 }
-                if (grid[n_cells-2] == 1)
-                    count++;
+                count += grid[n_cells-2];
+                count += grid[0];
+                for (int b=x_size-2; b<x_size; b++) {
+                    count += grid[b];
+                }
 
-                if (count == 2 || count == 3) {
+                if (count > 1 && count < 4) {
                     grid_aux[n_cells-1] = 1;
                 } else {
                     grid_aux[n_cells-1] = 0;
                 }
-                
+           
 
                 /* switching pointers to grid and grid_aux */
                 temp = grid;
@@ -551,11 +609,14 @@ int main(int argc, char **argv) {
 
 
                 /* saving a snapshot of the system */
-                if (gen % s == 0) {
+                if (s != 0) {
 
-                    sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen+1);
+                    if (gen % s == 0) {
 
-                    write_pgm_image(grid, 1, x_size, y_size, snap_name);
+                        sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen+1);
+                        
+                        write_pgm_image(grid, 1, x_size, y_size, snap_name);
+                    }
                 }
                 
             }
@@ -565,13 +626,21 @@ int main(int argc, char **argv) {
 
         
         free(snap_name);
+
+
+
+        /////////////// just for test /////////////////
+        ///////////////////////////////////////////////
+
+        for (int i=0; i<y_size; i++) {
+            for (int j=0; j<x_size; j++)
+                printf("%c ", grid[i*x_size+j]+48);
+            printf("\n");
+        }
+
+        ///////////////////////////////////////////////
+
     }
-
-
-
-
-
-
 
 
 
