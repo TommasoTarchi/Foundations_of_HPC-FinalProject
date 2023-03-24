@@ -3,9 +3,18 @@
 #include <string.h>
 #include <getopt.h>
 #include <time.h>
- 
 
 
+
+/* time definitions */
+#ifdef TIME
+#define CPU_TIME (clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts), (double) ts.tv_sec + (double) ts.tv_nsec * 1e-9)
+#define ITERATIONS 20
+#endif
+
+
+
+/* 'actual' code definitions */
 #define INIT 1
 #define RUN  2
 
@@ -16,7 +25,6 @@
 #define STATIC  1
 
 #define BOOL char
-
 
 char fname_deflt[] = "game_of_life.pgm";
 
@@ -36,6 +44,14 @@ void read_pgm_image(BOOL**, int*, int*, int*, const char*);
 
 
 int main(int argc, char **argv) {
+
+
+
+/* needed for timing */
+#ifdef TIME
+    struct timespec ts;
+#endif
+
 
 
     /* getting options */
@@ -155,35 +171,33 @@ int main(int argc, char **argv) {
         
         ///////// just for test (random grid) /////////
         ///////////////////////////////////////////////
-
+        //
         //const int x_size = 20;
         //const int y_size = 10;
         //const int n_cells = x_size*y_size;
         //grid = (BOOL*) malloc(n_cells*sizeof(BOOL));
-
+        //
         //srand(time(NULL));
         //double randmax_inv = 1.0/RAND_MAX;
         //for (int i=0; i<n_cells; i++) {
-            /* producing a random number between 0 and 1 */
         //    short int rand_bool = (short int) (rand()*randmax_inv+0.5);
-            /* converting random number to char */
         //    grid[i] = (BOOL) rand_bool;
         //}
-
+        //
         ///////////////////////////////////////////////
 
 
-        ///////// just for test (random grid) /////////
+        //////////////// just for test ////////////////
         ///////////////////////////////////////////////
-
-        for (int i=0; i<y_size; i++) {
-            for (int j=0; j<x_size; j++)
-                printf("%c ", grid[i*x_size+j]+48);
-            printf("\n");
-        }
-
-        printf("\n");
-
+        //
+        //for (int i=0; i<y_size; i++) {
+        //    for (int j=0; j<x_size; j++)
+        //        printf("%c ", grid[i*x_size+j]+48);
+        //    printf("\n");
+        //}
+        //
+        //printf("\n");
+        //
         ///////////////////////////////////////////////
 
 
@@ -196,6 +210,19 @@ int main(int argc, char **argv) {
 
         /* ordered evolution */
         if (e == ORDERED) {
+
+
+
+#ifdef TIME
+    double time=0;
+
+
+    for (int iter=0; iter<ITERATIONS; iter++) {
+
+
+        double t_start = CPU_TIME;
+#endif
+
 
 
             for (int gen=0; gen<n; gen++) {
@@ -402,8 +429,35 @@ int main(int argc, char **argv) {
 
 
 
+#ifdef TIME
+        time += CPU_TIME - t_start;
+
+
+    }
+
+
+    time = time / ITERATIONS;
+
+    printf("elapsed time: %f sec\n\n", time);
+#endif
+
+
+
         /* static evolution */
         } else if (e == STATIC) {
+
+
+
+#ifdef TIME
+    double time=0;
+
+
+    for (int iter=0; iter<ITERATIONS; iter++) {
+
+
+        double t_start = CPU_TIME;
+#endif
+
 
 
             /* auxiliary grid to store cells' status */
@@ -622,22 +676,42 @@ int main(int argc, char **argv) {
             }
 
             free(grid_aux);
+
+
+
+#ifdef TIME
+        time += CPU_TIME - t_start;
+
+
+    }
+
+
+    time = time / ITERATIONS;
+
+    printf("elapsed time: %f sec\n\n", time);
+#endif
+
+
+
         }
 
         
         free(snap_name);
 
 
+        write_pgm_image(grid, 1, x_size, y_size, "snapshots/final_snapshot.pgm");
+
+
 
         /////////////// just for test /////////////////
         ///////////////////////////////////////////////
-
-        for (int i=0; i<y_size; i++) {
-            for (int j=0; j<x_size; j++)
-                printf("%c ", grid[i*x_size+j]+48);
-            printf("\n");
-        }
-
+        //
+        //for (int i=0; i<y_size; i++) {
+        //    for (int j=0; j<x_size; j++)
+        //        printf("%c ", grid[i*x_size+j]+48);
+        //    printf("\n");
+        //}
+        //
         ///////////////////////////////////////////////
 
     }
@@ -656,6 +730,7 @@ int main(int argc, char **argv) {
 
     return 0;
 }
+
 
 
 /* function to write the status of the system to pgm file */
