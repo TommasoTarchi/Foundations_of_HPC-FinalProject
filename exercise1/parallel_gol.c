@@ -39,7 +39,7 @@ char *fname  = NULL;
 
 
 
-void write_pgm_image(BOOL*, const int, int, int, const char*, const char*);
+void write_pgm_image(BOOL*, const int, int, int,int, const char*, const char*);
 void read_pgm_image(BOOL**, int*, int*, int*, const char*);
 
 
@@ -143,7 +143,8 @@ int main(int argc, char **argv) {
         /* initializing grid to random booleans */
         BOOL* my_grid = (BOOL*) malloc(my_n_cells*sizeof(BOOL));
 
-        srand(time(NULL));      //// CORREGGERE PER PROCESSI PARALLELI
+        //srand(time(NULL));      //// CORREGGERE PER PROCESSI PARALLELI
+	srand(my_id+1);
         double randmax_inv = 1.0/RAND_MAX;
         for (int i=0; i<my_n_cells; i++) {
             /* producing a random number between 0 and 1 */
@@ -158,12 +159,15 @@ int main(int argc, char **argv) {
 
         if (my_id == 0) {
 
-            write_pgm_image(my_grid, maxval_color, k, my_m, fname, "w");
+            write_pgm_image(my_grid, maxval_color, k, m, my_m, fname, "w");
             
             int destination = 1;
             int destination_tag = 0;
             char done = 'd';
             MPI_Send(&done, 1, MPI_INT, destination, destination_tag, MPI_COMM_WORLD);
+
+	    printf("done from process %d\n", my_id);
+	    printf("\tmy_m: %d\n\tk: %d\n", my_m, k);
 
         } else {
 
@@ -174,9 +178,12 @@ int main(int argc, char **argv) {
                 char done;
                 MPI_Recv(&done, 1, MPI_INT, source, source_tag, MPI_COMM_WORLD, &status);
 
-                write_pgm_image(my_grid, maxval_color, k, my_m, fname, "a");
-
-                int destination = my_id+1;
+                write_pgm_image(my_grid, maxval_color, k, m, my_m, fname, "a");
+		
+		printf("done from process %d\n", my_id);
+		printf("\tmy_m: %d\n\tk: %d\n", my_m, k);               
+		
+		int destination = my_id+1;
                 int destination_tag = 0;
                 MPI_Send(&done, 1, MPI_INT, destination, destination_tag, MPI_COMM_WORLD);
 
@@ -188,8 +195,11 @@ int main(int argc, char **argv) {
 
                 MPI_Recv(&done, 1, MPI_INT, source, source_tag, MPI_COMM_WORLD, &status);
 
-                write_pgm_image(my_grid, maxval_color, k, my_m, fname, "a");
-            }
+                write_pgm_image(my_grid, maxval_color, k, m, my_m, fname, "a");
+		
+		printf("done from process %d\n", my_id);
+ 	        printf("\tmy_m: %d\n\tk: %d\n", my_m, k);
+	    }
         }
 
 
@@ -219,7 +229,7 @@ int main(int argc, char **argv) {
 
 
 /* function to write the status of the system to pgm file */
-void write_pgm_image(BOOL* image, const int maxval, int xsize, int ysize, const char *image_name, const char* mod) {
+void write_pgm_image(BOOL* image, const int maxval, int xsize, int ysize, int my_ysize, const char *image_name, const char* mod) {
 
     FILE* image_file;
     image_file = fopen(image_name, mod);
@@ -229,11 +239,9 @@ void write_pgm_image(BOOL* image, const int maxval, int xsize, int ysize, const 
         fprintf(image_file, "P5 %d %d\n%d\n", xsize, ysize, maxval);
 
     /* writing */
-    for (int i=0; i<ysize; i++) {
-        for (int i=0; i<xsize; i++)
-            fprintf(image_file, "%c", image[i*xsize+j]);
-        fprintf("\n");
-    }
+    const int end = xsize*my_ysize;
+    for (int i=0; i<end; i++)
+            fprintf(image_file, "%c", image[i]);
 
     fclose(image_file);
 
