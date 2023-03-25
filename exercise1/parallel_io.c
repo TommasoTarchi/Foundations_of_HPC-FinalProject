@@ -180,19 +180,20 @@ int main(int argc, char **argv) {
         MPI_File_open(MPI_COMM_WORLD, fname, MPI_MODE_WRONLY, MPI_INFO_NULL, &f_ptr);
 
         /* computing the offset */
+	int offset;
         if (more_row == 1) {
-            int offset = my_id*my_m*k;
+            offset = my_id*my_m*k;
         } else {
-            int offset = m_rmd + my_id*my_m;
+            offset = m_rmd + my_id*my_m;
         }
 
         /* setting the pointer to file */
-        MPI_File_seek(f_ptr, my_m*k, MPI_SEEK_CUR);
+        MPI_File_seek(f_ptr, offset, MPI_SEEK_CUR);
 
 	MPI_Barrier(MPI_COMM_WORLD);
 
         /* writing playground in parallel */
-        //MPI_File_write(f_ptr, my_grid, my_m*k, MPI_CHAR, status);
+        //MPI_File_write(f_ptr, my_grid, my_m*k, MPI_CHAR, &status);
         MPI_File_write_all(f_ptr, my_grid, my_m*k, MPI_CHAR, &status);
 
         MPI_File_close(&f_ptr);
