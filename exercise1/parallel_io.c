@@ -159,39 +159,43 @@ int main(int argc, char **argv) {
 
 
         /* writing down the playground */
-        MPI_File f_ptr;
-
-        MPI_File_open(MPI_COMM_WORLD, fname, MPI_MODE_WRONLY, MPI_INFO_NULL, f_ptr);
-        
+       
+	/* formatting the header */
         if (my_id == 0) {
+		
+		FILE* image_file;
+		image_file = fopen(fname, "w");
+		const int color_maxval = 1;
+		
+		fprintf(image_file, "P5 %d %d\n%d\n", k, m, color_maxval);
 
-            /* preparing the header */
-            const int size_header = 20;
-            char header[size_header];
-            const int maxval_color = 1;
-            sprintf(header, "P5 %d %d\n%d\n", k, m, maxval_color);
+		fclose(image_file);
+	}
 
-            /* writing the header */
-            MPI_File_seek(f_ptr, 0, MPI_SEEK_SET);
-            MPI_File_write(f_ptr, header, size_header, MPI_CHAR, status);
-        }
+        MPI_File f_ptr;
+	
+	MPI_Barrier(MPI_COMM_WORLD);
 
-        MPI_Barrier(MPI_COMM_WORLD);
+	/* opening the file in parallel */
+        MPI_File_open(MPI_COMM_WORLD, fname, MPI_MODE_APPEND, MPI_INFO_NULL, &f_ptr);
 
         /* computing the offset */
         if (more_row == 1) {
-            int offset = size_header + my_id*my_m*k;
+            int offset = my_id*my_m*k;
         } else {
-            int offset = m*k + size_header - (n_procs-my_id)*my_m;
+            int offset = m_rmd + my_id*my_m;
         }
+
         /* setting the pointer to file */
-        MPI_File_seek(f_ptr, my_m*k, MPI_SEEK_SET);
+        MPI_File_seek(f_ptr, my_m*k, MPI_SEEK_CUR);
+
+	MPI_Barrier(MPI_COMM_WORLD);
 
         /* writing playground in parallel */
         //MPI_File_write(f_ptr, my_grid, my_m*k, MPI_CHAR, status);
-        MPI_File_write_all(f_ptr, my_grid, my_m*k, MPI_CHAR, status);
+        MPI_File_write_all(f_ptr, my_grid, my_m*k, MPI_CHAR, &status);
 
-        MPI_File_close(f_ptr);
+        MPI_File_close(&f_ptr);
 
         free(my_grid);
 
