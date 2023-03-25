@@ -6,10 +6,9 @@
 
 
 
-/* time definitions */
+/* time definition */
 #ifdef TIME
 #define CPU_TIME (clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts), (double) ts.tv_sec + (double) ts.tv_nsec * 1e-9)
-#define ITERATIONS 20
 #endif
 
 
@@ -84,7 +83,7 @@ int main(int argc, char **argv) {
                 break;
             
             case 'f':
-                fname = (char*) malloc(sizeof(optarg)+1);
+                fname = (char*) malloc(30);
                 sprintf(fname, "%s", optarg);
                 break;
             
@@ -212,17 +211,9 @@ int main(int argc, char **argv) {
         if (e == ORDERED) {
 
 
-
 #ifdef TIME
-    double time=0;
-
-
-    for (int iter=0; iter<ITERATIONS; iter++) {
-
-
-        double t_start = CPU_TIME;
+    double t_start = CPU_TIME;
 #endif
-
 
 
             for (int gen=0; gen<n; gen++) {
@@ -428,36 +419,19 @@ int main(int argc, char **argv) {
             } 
 
 
-
 #ifdef TIME
-        time += CPU_TIME - t_start;
-
-
-    }
-
-
-    time = time / ITERATIONS;
-
+    double time = CPU_TIME - t_start;
     printf("elapsed time: %f sec\n\n", time);
 #endif
-
 
 
         /* static evolution */
         } else if (e == STATIC) {
 
 
-
 #ifdef TIME
-    double time=0;
-
-
-    for (int iter=0; iter<ITERATIONS; iter++) {
-
-
-        double t_start = CPU_TIME;
+    double t_start = CPU_TIME;
 #endif
-
 
 
             /* auxiliary grid to store cells' status */
@@ -678,19 +652,10 @@ int main(int argc, char **argv) {
             free(grid_aux);
 
 
-
-#ifdef TIME
-        time += CPU_TIME - t_start;
-
-
-    }
-
-
-    time = time / ITERATIONS;
-
+#ifdef TIME 
+    double time = CPU_TIME - t_start;
     printf("elapsed time: %f sec\n\n", time);
 #endif
-
 
 
         }
@@ -743,7 +708,12 @@ void write_pgm_image(BOOL* image, const int maxval, int xsize, int ysize, const 
     fprintf(image_file, "P5 %d %d\n%d\n", xsize, ysize, maxval);
 
     /* writing */
-    fwrite(image, 1, xsize*ysize, image_file);
+    fwrite(image, 1, xsize*ysize, image_file); 
+    
+    // same result as previous line
+    //for (int i=0; i<ysize; i++)
+    //    for (int j=0; j<xsize; j++)
+    //        fprintf(image_file, "%c", image[i*xsize+j]); 
 
     fclose(image_file);
 
