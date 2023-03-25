@@ -164,10 +164,14 @@ int main(int argc, char **argv) {
         if (my_id == 0) {
 		
 		    FILE* image_file;
-		    image_file = fopen(fname, "w");
+		    //image_file = fopen(fname, "w");
 	    	const int color_maxval = 1;
 		
-		    fprintf(image_file, "P5 %d %d\n%d\n", k, m, color_maxval);
+            char header[30];
+            sprintf(header, "P5 %d %d\n%d\n", k, m, color_maxval);
+            fprintf(image_file, "%s", header);
+
+		    //fprintf(image_file, "P5 %d %d\n%d\n", k, m, color_maxval);
 
 		    fclose(image_file);
 	    }
@@ -177,7 +181,7 @@ int main(int argc, char **argv) {
         MPI_Barrier(MPI_COMM_WORLD);
 
 	    /* opening the file in parallel */
-        MPI_File_open(MPI_COMM_WORLD, fname, MPI_MODE_APPEND, MPI_INFO_NULL, &f_ptr);
+        MPI_File_open(MPI_COMM_WORLD, fname, MPI_MODE_WRONLY, MPI_MODE_APPEND, &f_ptr);
 
         /* computing the offset */ 
         int offset;
