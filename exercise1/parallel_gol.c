@@ -39,6 +39,10 @@ char *fname  = NULL;
 
 
 
+int read_pgm_header(int*, int*, int*, int*, const char*);
+
+
+
 int main(int argc, char **argv) {
 
 
@@ -110,6 +114,7 @@ int main(int argc, char **argv) {
     MPI_Comm_rank(MPI_COMM_WORLD, &my_id);
 
 
+
     
     /* initializing a playground */
     if (action == INIT) {
@@ -132,12 +137,12 @@ int main(int argc, char **argv) {
 
         /* distributing playground's rows to MPI processes */
 
-        unsigned int my_m = m/n_procs;
+        unsigned int my_m = m/n_procs;   // number of rows assigned to the process
         const int m_rmd = m%n_procs;
-        /* remaining rows */
+        /* assigning remaining rows */
         if (my_id < m_rmd)
             my_m++;
-        const int my_n_cells = my_m*k;
+        const int my_n_cells = my_m*k;   // number of cells assigned to the process
 
 
 
@@ -163,7 +168,8 @@ int main(int argc, char **argv) {
 
         /* writing down the playground */
 
-        MPI_File f_handle;  
+        MPI_File f_handle;   // pointer to file
+        int check = 0;   // error checker
        
 	    /* formatting the PGM file */ 
         const int header_size = 30;
@@ -176,11 +182,11 @@ int main(int argc, char **argv) {
 
             /* writing the header */
             int access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY | MPI_MODE_APPEND;
-            MPI_File_open(MPI_COMM_SELF, fname, access_mode, MPI_INFO_NULL, &f_handle);
+            check += MPI_File_open(MPI_COMM_SELF, fname, access_mode, MPI_INFO_NULL, &f_handle);
 
-            MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
+            check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
 
-            MPI_File_close(&f_handle);
+            check += MPI_File_close(&f_handle);
         }
 
         /* needed to make sure that all processes are actually 
@@ -189,7 +195,7 @@ int main(int argc, char **argv) {
 
         /* opening file in parallel */
         int access_mode = MPI_MODE_APPEND | MPI_MODE_WRONLY;
-        MPI_File_open(MPI_COMM_WORLD, fname, access_mode, MPI_INFO_NULL, &f_handle);
+        check += MPI_File_open(MPI_COMM_WORLD, fname, access_mode, MPI_INFO_NULL, &f_handle);
 
         /* computing offsets */
 	    int offset = header_size;
@@ -200,10 +206,13 @@ int main(int argc, char **argv) {
 	    }
 
         /* writing in parallel */
-        MPI_File_write_at_all(f_handle, offset, my_grid, my_m*k, MPI_CHAR, &status);
+        check += MPI_File_write_at_all(f_handle, offset, my_grid, my_m*k, MPI_CHAR, &status);
 
-        MPI_File_close(&f_handle);
+        check += MPI_File_close(&f_handle);
  
+
+        if (my_id == 0 && check != 0)
+            printf("--- AN I/O ERROR OCCURRED AT SOME POINT ---\n\n");
 
         free(my_grid);
 
@@ -212,9 +221,87 @@ int main(int argc, char **argv) {
 
 
 
+    /* running game of life */
+    if (action == RUN) {
 
-///////////// aggiungere dichiarazione di grid quando ACTION==RUN
-///////////// ricordare di aggiungere due righe extra per i processi vicini
+
+        /* assigning default name to file in case none was passed */
+        if (fname == NULL) {
+
+            if (my_id == 0)
+                printf("-- no file with initial playground was passed - the program will try to read from %s\n\n", fname_deflt);
+
+            fname = (char*) malloc(sizeof(fname_deflt));
+            sprintf(fname, "%s", fname_deflt);
+        }
+
+        
+        /* reading initial playground from pmg file */
+
+        int check = 0;   // error checker
+
+        int color_maxval;
+        int x_size;
+        int y_size;
+        int header_size;
+        
+        check += get_parameters_from_pgm(&color_maxval, &x_size, &y_size, &header_size, fname);
+        if (my_id == 0 && check != 0) {
+            printf("-- AN ERROR OCCURRED WHILE READING THE HEADER OF THE PGM FILE --\n\n");
+            check = 0;
+        }
+
+        const unsigned int n_cells = x_size*y_size;   // total number of cells
+
+
+
+        /* string to store the name of the snapshot files */
+        char* snap_name = (char*) malloc(29*sizeof(char));
+
+
+
+        if (e == ORDERED) {
+
+
+            if (my_id == 0)
+                printf("ordered evolution\n");
+
+
+
+        } else if (e == STATIC) {
+
+
+            /* setting process 'personal' varables */
+            unsigned int my_y_size = y_size/n_procs;   // number of rows assigned to the process
+            const int y_size_rmd = y_size%n_procs;
+            /* assigning remaining rows */
+            if (my_id < y_size_rmd)
+                my_y_size++;
+            const int my_n_cells = x_size*my_y_size;   // number of cells assigned to the process
+
+
+            /* getting initial cells' status */ 
+
+            /* we alloc two more lines for the neighbor processes' cells */
+            BOOL* my_grid = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
+
+            
+            ///// TESTARE I RISULTATI PTIMA DI CONTINUARE
+
+
+
+
+
+
+    //////////// USARE COLOR_MAXVAL QUANDO DUMPING
+
+
+            free(my_grid);
+
+        }
+
+
+    }
 
 
 
@@ -227,5 +314,55 @@ int main(int argc, char **argv) {
     }
 
 
+    return 0;
+}
+
+
+
+/* function to get content and length of the header of a pgm file */
+int read_pgm_header(int* maxval, int* xsize, int* ysize, int* header_size, const char* fname) {
+
+
+    FILE* image_file;
+    image_file = fopen(fname, "r"); 
+
+    *xsize = *ysize = *maxval = 0;
+
+    char    MagicN[3];
+    char   *line = NULL;
+    size_t  k, n = 0;
+
+
+    /* getting the Magic Number */
+    k = fscanf(image_file, "%2s%*c", MagicN);
+
+    /* skipping all the comments */
+    k = getline(&line, &n, image_file);
+    while (k > 0 && line[0]=='#')
+        k = getline(&line, &n, image_file);
+
+    /* getting the parameters */
+    if (k > 0) {
+        
+        k = sscanf(line, "%d%*c%d%*c%d%*c", xsize, ysize, maxval);
+        if (k < 3)
+            fscanf(image_file, "%d%*c", maxval);
+    
+    } else {
+
+        fclose(image_file);
+        free(line);
+        return 1;   /* error in reading the header */
+    }
+
+
+    /* getting header size */ 
+    fseek(image_file, 0L, SEEK_END);
+    long int total_size = ftell(image_file);
+    *header_size = image_file - x_size*y_size;
+
+
+    fclose(image_file);
+    free(line);
     return 0;
 }
