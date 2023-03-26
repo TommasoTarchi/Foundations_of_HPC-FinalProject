@@ -138,13 +138,17 @@ int main(int argc, char **argv) {
         /* initializing grid to random booleans */
         BOOL* my_grid = (BOOL*) malloc(my_n_cells*sizeof(BOOL));
 
-        //srand(time(NULL));      //// CORREGGERE PER PROCESSI PARALLELI
-        srand(my_id+1);
-        double randmax_inv = 1.0/RAND_MAX;
+        /* setting the seed (unique for each process) */
+        struct drand48_data rand_gen;
+        long int seed = my_id+1;
+        srand48_r(seed, &rand_gen);
+
         for (int i=0; i<my_n_cells; i++) {
-            /* producing a random number between 0 and 1 */
-            short int rand_bool = (short int) (rand()*randmax_inv+0.5);
-            /* converting random number to char */
+            /* producing a random integer among 0 and 1 */
+            double random_number;
+            drand48_r(&rand_gen, &random_number);
+            short int rand_bool = (short int) (random_number+0.5);
+            /* converting random number to BOOL */
             my_grid[i] = (BOOL) rand_bool;
         }
 
@@ -189,7 +193,7 @@ check = MPI_File_open(MPI_COMM_WORLD, fname, MPI_MODE_APPEND | MPI_MODE_WRONLY, 
 		   offset += m_rmd*k + my_id*my_n_cells;
 	    }
 
-            check = MPI_File_write_at(f_handle, offset, my_grid, my_m*k, MPI_CHAR, &status);
+            check = MPI_File_write_at_all(f_handle, offset, my_grid, my_m*k, MPI_CHAR, &status);
             if (check == MPI_SUCCESS)
                 printf("file written correctly\n");
 
@@ -216,10 +220,9 @@ check = MPI_File_open(MPI_COMM_WORLD, fname, MPI_MODE_APPEND | MPI_MODE_WRONLY, 
 	//	    fprintf(f_ptr, "%c", my_grid[i]);
 	    //fclose(f_ptr);
 
+            MPI_Finalize();
 
 free(my_grid);
-
-        MPI_Finalize();
 
 
     }
