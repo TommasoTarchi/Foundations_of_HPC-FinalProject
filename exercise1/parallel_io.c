@@ -39,11 +39,6 @@ char *fname  = NULL;
 
 
 
-void write_pgm_image(BOOL*, const int, int, int,int, const char*, const char*);
-void read_pgm_image(BOOL**, int*, int*, int*, const char*);
-
-
-
 int main(int argc, char **argv) {
 
 
@@ -124,8 +119,8 @@ int main(int argc, char **argv) {
 
         /* initializing MPI processes */ 
         int my_id, n_procs;
-        MPI_Status status;
         MPI_Init(&argc, &argv);
+        MPI_Status status;
 
         MPI_Comm_size(MPI_COMM_WORLD, &n_procs);
         MPI_Comm_rank(MPI_COMM_WORLD, &my_id);
@@ -159,49 +154,47 @@ int main(int argc, char **argv) {
 
 
         /* writing down the playground */
-       
-	    /* formatting the header */
-        if (my_id == 0) {
-		
-		    FILE* image_file;
-		    //image_file = fopen(fname, "w");
-	    	const int color_maxval = 1;
-		
-            char header[30];
-            sprintf(header, "P5 %d %d\n%d\n", k, m, color_maxval);
-            fprintf(image_file, "%s", header);
-
-		    //fprintf(image_file, "P5 %d %d\n%d\n", k, m, color_maxval);
-
-		    fclose(image_file);
-	    }
 
         MPI_File f_handle;
         int check;
-	
-        MPI_Barrier(MPI_COMM_WORLD);
+       
+	    /* formatting the header */
+        if (my_id == 0) {
 
-	    /* opening the file in parallel */
-        check = MPI_File_open(MPI_COMM_WORLD, fname, MPI_MODE_APPEND, MPI_INFO_NULL, &f_handle);
-        if (check == MPI_SUCCESS)
-            printf("file successfully opened in parallel\n");
+            const int color_maxval = 1;
+		
+            char header[30];
+            sprintf(header, "P5 %d %d\n%d\n", k, m, color_maxval;
 
-        /* computing the offset */ 
-        int offset;
-        if (more_row == 1) {
-            offset = my_id*my_m*k;
-        } else {
-            offset = m_rmd + my_id*my_m;
+            check = MPI_File_open(MPI_COMM_SELF, fname, MPI_MODE_CREATE | MPI_MODE_WRONLY, MPI_INFO_NULL, &f_handle);
+            if (check == MPI_SUCCESS)
+                printf("file opened correctly by master\n");
+
+            check = MPI_File_write_at(f_handle, 0, header, 30, MPI_CHAR, &status);
+            if (check == MPI_SUCCESS)
+                printf("file formatted correctly\n");
+
+            check = MPI_File_close(&f_handle);
+            if (check == MPI_SUCCESS)
+		        printf("file closed correctly by master\n");
+
+
+            check = MPI_File_open(MPI_COMM_SELF, fname, MPI_MODE_APPEND | MPI_MODE_WRONLY, MPI_INFO_NULL, &f_handle);
+            if (check == MPI_SUCCESS)
+		        printf("file reopened correctly by master\n");
+
+            //int offset = my_m*k;
+            int offset = 0
+            check = MPI_File_write_at(f_handle, offset, header, my_m*k, MPI_CHAR, &status);
+            if (check == MPI_SUCCESS)
+                printf("file written correctly\n");
+
+            check = MPI_File_close(&f_handle);
+            if (check == MPI_SUCCESS)
+		        printf("file reclosed correctly by master\n");
+
         }
-
-        MPI_Barrier(MPI_COMM_WORLD);
-
-        /* writing playground in parallel */
-        MPI_File_write_at_all(f_handle, offset, my_grid, my_m*k, MPI_CHAR, &status);
-
-        check = MPI_File_close(&f_handle);
-        if (check == MPI_SUCCESS)
-            printf("file successfully closed in parallel\n");
+	
 
         free(my_grid);
 
@@ -209,41 +202,5 @@ int main(int argc, char **argv) {
 
     }
 
-
-
-
-
-///////////// aggiungere dichiarazione di grid quando ACTION==RUN
-///////////// ricordare di aggiungere due righe extra per i processi vicini
-
-
-
-    if (fname != NULL) {
-        free(fname);
-        fname = NULL;
-    }
-
-
     return 0;
-}
-
-
-/* function to write the status of the system to pgm file */
-void write_pgm_image(BOOL* image, const int maxval, int xsize, int ysize, int my_ysize, const char *image_name, const char* mod) {
-
-    FILE* image_file;
-    image_file = fopen(image_name, mod);
-    
-    /* formatting the header */
-    if (mod == "w") 
-        fprintf(image_file, "P5 %d %d\n%d\n", xsize, ysize, maxval);
-
-    /* writing */
-    const int end = xsize*my_ysize;
-    for (int i=0; i<end; i++)
-            fprintf(image_file, "%c", image[i]);
-
-    fclose(image_file);
-
-    return;
 }
