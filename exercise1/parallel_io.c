@@ -129,13 +129,9 @@ int main(int argc, char **argv) {
         /* getting 'personal' data */ 
         unsigned int my_m = m/n_procs;
         const int m_rmd = m%n_procs;
-        char more_row = 0;
         /* remaining rows */
-        if (my_id < m_rmd) {
+        if (my_id < m_rmd)
             my_m++;
-            more_row = 1;
-        }
-
         const int my_n_cells = my_m*k;
 
 
@@ -159,46 +155,72 @@ int main(int argc, char **argv) {
         int check;
        
 	    /* formatting the header */
+	const int header_size = 30;
         if (my_id == 0) {
 
-            const int color_maxval = 1;
-		
-            char header[30];
-            sprintf(header, "P5 %d %d\n%d\n", k, m, color_maxval;
+            const int color_maxval = 1;	    
+            char header[header_size];
+            sprintf(header, "P5 %d %d\n%d\n", k, m, color_maxval);
 
-            check = MPI_File_open(MPI_COMM_SELF, fname, MPI_MODE_CREATE | MPI_MODE_WRONLY, MPI_INFO_NULL, &f_handle);
+	    int access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY | MPI_MODE_APPEND;
+            check = MPI_File_open(MPI_COMM_SELF, fname, access_mode, MPI_INFO_NULL, &f_handle);
             if (check == MPI_SUCCESS)
                 printf("file opened correctly by master\n");
 
-            check = MPI_File_write_at(f_handle, 0, header, 30, MPI_CHAR, &status);
+            check = MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
             if (check == MPI_SUCCESS)
                 printf("file formatted correctly\n");
 
             check = MPI_File_close(&f_handle);
             if (check == MPI_SUCCESS)
-		        printf("file closed correctly by master\n");
+	        printf("file closed correctly by master\n");
+	}
 
+MPI_Barrier(MPI_COMM_WORLD);
 
-            check = MPI_File_open(MPI_COMM_SELF, fname, MPI_MODE_APPEND | MPI_MODE_WRONLY, MPI_INFO_NULL, &f_handle);
+check = MPI_File_open(MPI_COMM_WORLD, fname, MPI_MODE_APPEND | MPI_MODE_WRONLY, MPI_INFO_NULL, &f_handle);
             if (check == MPI_SUCCESS)
-		        printf("file reopened correctly by master\n");
+		        printf("file reopened correctly\n");
+            
+	    int offset = header_size;
+	    if (my_id < m_rmd) {
+		   offset += my_id*my_n_cells;
+	    } else {
+		   offset += m_rmd*k + my_id*my_n_cells;
+	    }
 
-            //int offset = my_m*k;
-            int offset = 0
-            check = MPI_File_write_at(f_handle, offset, header, my_m*k, MPI_CHAR, &status);
+            check = MPI_File_write_at(f_handle, offset, my_grid, my_m*k, MPI_CHAR, &status);
             if (check == MPI_SUCCESS)
                 printf("file written correctly\n");
 
             check = MPI_File_close(&f_handle);
             if (check == MPI_SUCCESS)
-		        printf("file reclosed correctly by master\n");
-
-        }
+		        printf("file reclosed correctly\n");
 	
 
-        free(my_grid);
+
+
+//for (int i=0; i<my_m; i++) {
+//for (int j=0; j<k; j++) {
+//printf("%c", my_grid[i*my_m+j]+48);
+//}
+//printf("\n");
+//}
+
+	    //FILE* f_ptr;
+	    //f_ptr = fopen(fname, "w");
+	    //fprintf(f_ptr, "%s", header);
+	    //fclose(f_ptr);
+	    //f_ptr = fopen(fname, "a");
+	    //for (int i=0; i<my_n_cells; i++)
+	//	    fprintf(f_ptr, "%c", my_grid[i]);
+	    //fclose(f_ptr);
+
+
+free(my_grid);
 
         MPI_Finalize();
+
 
     }
 
