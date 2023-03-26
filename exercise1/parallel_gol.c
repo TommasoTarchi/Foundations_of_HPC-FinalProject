@@ -1,12 +1,3 @@
-
-
-
-/////////////// MODIFICARE COPIANDO DA PARALLEL_IO
-
-
-
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -109,6 +100,17 @@ int main(int argc, char **argv) {
 
 
 
+    /* setting up MPI and single processes' variables */
+
+    int my_id, n_procs;
+    MPI_Init(&argc, &argv);
+    MPI_Status status;
+    
+    MPI_Comm_size(MPI_COMM_WORLD, &n_procs);
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_id);
+
+
+    
     /* initializing a playground */
     if (action == INIT) {
 
@@ -117,7 +119,8 @@ int main(int argc, char **argv) {
 
         if (fname == NULL) {
 
-            printf("-- no output file was passed - initial conditions will be written to %s\n\n", fname_deflt);
+            if (my_id == 0)
+                printf("-- no output file was passed - initial conditions will be written to %s\n\n", fname_deflt);
 
             fname = (char*) malloc(sizeof(fname_deflt));
             sprintf(fname, "%s", fname_deflt);
@@ -127,16 +130,8 @@ int main(int argc, char **argv) {
 
 
 
-        /* setting up MPI and single processes' variables */
-
-        int my_id, n_procs;
-        MPI_Init(&argc, &argv);
-        MPI_Status status;
-
-        MPI_Comm_size(MPI_COMM_WORLD, &n_procs);
-        MPI_Comm_rank(MPI_COMM_WORLD, &my_id);
-
         /* distributing playground's rows to MPI processes */
+
         unsigned int my_m = m/n_procs;
         const int m_rmd = m%n_procs;
         /* remaining rows */
@@ -209,9 +204,6 @@ int main(int argc, char **argv) {
 
         MPI_File_close(&f_handle);
  
-        
-
-        MPI_Finalize();
 
         free(my_grid);
 
@@ -224,6 +216,9 @@ int main(int argc, char **argv) {
 ///////////// aggiungere dichiarazione di grid quando ACTION==RUN
 ///////////// ricordare di aggiungere due righe extra per i processi vicini
 
+
+
+    MPI_Finalize();
 
 
     if (fname != NULL) {
