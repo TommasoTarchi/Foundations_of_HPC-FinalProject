@@ -176,12 +176,15 @@ int main(int argc, char **argv) {
 		    fclose(image_file);
 	    }
 
-        MPI_File f_ptr;
+        MPI_File f_handle;
+        int check;
 	
         MPI_Barrier(MPI_COMM_WORLD);
 
 	    /* opening the file in parallel */
-        MPI_File_open(MPI_COMM_WORLD, fname, MPI_MODE_WRONLY, MPI_MODE_APPEND, &f_ptr);
+        check = MPI_File_open(MPI_COMM_WORLD, fname, MPI_MODE_APPEND, MPI_INFO_NULL, &f_handle);
+        if (check == MPI_SUCCESS)
+            printf("file successfully opened in parallel\n");
 
         /* computing the offset */ 
         int offset;
@@ -191,16 +194,14 @@ int main(int argc, char **argv) {
             offset = m_rmd + my_id*my_m;
         }
 
-        /* setting the pointer to file */
-        MPI_File_seek(f_ptr, offset, MPI_SEEK_CUR);
-
         MPI_Barrier(MPI_COMM_WORLD);
 
         /* writing playground in parallel */
-        //MPI_File_write(f_ptr, my_grid, my_m*k, MPI_CHAR, &status);
-        MPI_File_write_all(f_ptr, my_grid, my_m*k, MPI_CHAR, &status);
+        MPI_File_write_at_all(f_handle, offset, my_grid, my_m*k, MPI_CHAR, &status);
 
-        MPI_File_close(&f_ptr);
+        check = MPI_File_close(&f_handle);
+        if (check == MPI_SUCCESS)
+            printf("file successfully closed in parallel\n");
 
         free(my_grid);
 
