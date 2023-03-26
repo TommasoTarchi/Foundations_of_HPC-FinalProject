@@ -1,3 +1,12 @@
+
+
+
+/////////////// MODIFICARE COPIANDO DA PARALLEL_IO
+
+
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,11 +45,6 @@ int   e      = ORDERED;
 int   n      = 10000;
 int   s      = 1;
 char *fname  = NULL;
-
-
-
-void write_pgm_image(BOOL*, const int, int, int,int, const char*, const char*);
-void read_pgm_image(BOOL**, int*, int*, int*, const char*);
 
 
 
@@ -110,6 +114,7 @@ int main(int argc, char **argv) {
 
 
         /* assigning default name to file in case none was passed */
+
         if (fname == NULL) {
 
             printf("-- no output file was passed - initial conditions will be written to %s\n\n", fname_deflt);
@@ -119,19 +124,19 @@ int main(int argc, char **argv) {
         }
 
         const unsigned int n_cells = m*k;
-        
 
 
-        /* initializing MPI processes */ 
+
+        /* setting up MPI and single processes' variables */
+
         int my_id, n_procs;
-        MPI_Status status;
         MPI_Init(&argc, &argv);
+        MPI_Status status;
 
         MPI_Comm_size(MPI_COMM_WORLD, &n_procs);
         MPI_Comm_rank(MPI_COMM_WORLD, &my_id);
 
-
-        /* getting 'personal' data */ 
+        /* distributing playground's rows to MPI processes */
         unsigned int my_m = m/n_procs;
         const int m_rmd = m%n_procs;
         /* remaining rows */
@@ -140,72 +145,75 @@ int main(int argc, char **argv) {
         const int my_n_cells = my_m*k;
 
 
+
         /* initializing grid to random booleans */
+
         BOOL* my_grid = (BOOL*) malloc(my_n_cells*sizeof(BOOL));
 
-        //srand(time(NULL));      //// CORREGGERE PER PROCESSI PARALLELI
-	srand(my_id+1);
-        double randmax_inv = 1.0/RAND_MAX;
+        /* setting the seed (unique for each process) */
+        struct drand48_data rand_gen;
+        long int seed = my_id+1;
+        srand48_r(seed, &rand_gen);
+
         for (int i=0; i<my_n_cells; i++) {
-            /* producing a random number between 0 and 1 */
-            short int rand_bool = (short int) (rand()*randmax_inv+0.5);
-            /* converting random number to char */
+            /* producing a random integer among 0 and 1 */
+            double random_number;
+            drand48_r(&rand_gen, &random_number);
+            short int rand_bool = (short int) (random_number+0.5);
+            /* converting random number to BOOL */
             my_grid[i] = (BOOL) rand_bool;
         }
 
 
-        /* writing down the playground */
-        const int maxval_color = 1;
 
+        /* writing down the playground */
+
+        MPI_File f_handle;  
+       
+	    /* formatting the PGM file */ 
+        const int header_size = 30;
         if (my_id == 0) {
 
-            write_pgm_image(my_grid, maxval_color, k, m, my_m, fname, "w");
-            
-            int destination = 1;
-            int destination_tag = 0;
-            char done = 'd';
-            MPI_Send(&done, 1, MPI_INT, destination, destination_tag, MPI_COMM_WORLD);
+            /* setting the header */
+            const int color_maxval = 1;	    
+            char header[header_size];
+            sprintf(header, "P5 %d %d\n%d\n", k, m, color_maxval);
 
-	    printf("done from process %d\n", my_id);
-	    printf("\tmy_m: %d\n\tk: %d\n", my_m, k);
+            /* writing the header */
+            int access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY | MPI_MODE_APPEND;
+            MPI_File_open(MPI_COMM_SELF, fname, access_mode, MPI_INFO_NULL, &f_handle);
 
-        } else {
+            MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
 
-            if(my_id < n_procs-1){
-
-                int source = my_id-1;
-                int source_tag = 0;
-                char done;
-                MPI_Recv(&done, 1, MPI_INT, source, source_tag, MPI_COMM_WORLD, &status);
-
-                write_pgm_image(my_grid, maxval_color, k, m, my_m, fname, "a");
-		
-		printf("done from process %d\n", my_id);
-		printf("\tmy_m: %d\n\tk: %d\n", my_m, k);               
-		
-		int destination = my_id+1;
-                int destination_tag = 0;
-                MPI_Send(&done, 1, MPI_INT, destination, destination_tag, MPI_COMM_WORLD);
-
-            } else {
-
-                int source = my_id-1;
-                int source_tag = 0;
-                char done;
-
-                MPI_Recv(&done, 1, MPI_INT, source, source_tag, MPI_COMM_WORLD, &status);
-
-                write_pgm_image(my_grid, maxval_color, k, m, my_m, fname, "a");
-		
-		printf("done from process %d\n", my_id);
- 	        printf("\tmy_m: %d\n\tk: %d\n", my_m, k);
-	    }
+            MPI_File_close(&f_handle);
         }
 
+        /* needed to make sure that all processes are actually 
+         * wrtiting on an already formatted PGM file */
+        MPI_Barrier(MPI_COMM_WORLD);
 
-        free(my_grid);
+        /* opening file in parallel */
+        int access_mode = MPI_MODE_APPEND | MPI_MODE_WRONLY;
+        MPI_File_open(MPI_COMM_WORLD, fname, access_mode, MPI_INFO_NULL, &f_handle);
+
+        /* computing offsets */
+	    int offset = header_size;
+	    if (my_id < m_rmd) {
+		   offset += my_id*my_n_cells;
+	    } else {
+		   offset += m_rmd*k + my_id*my_n_cells;
+	    }
+
+        /* writing in parallel */
+        MPI_File_write_at_all(f_handle, offset, my_grid, my_m*k, MPI_CHAR, &status);
+
+        MPI_File_close(&f_handle);
+ 
+        
 
         MPI_Finalize();
+
+        free(my_grid);
 
     }
 
@@ -225,25 +233,4 @@ int main(int argc, char **argv) {
 
 
     return 0;
-}
-
-
-/* function to write the status of the system to pgm file */
-void write_pgm_image(BOOL* image, const int maxval, int xsize, int ysize, int my_ysize, const char *image_name, const char* mod) {
-
-    FILE* image_file;
-    image_file = fopen(image_name, mod);
-    
-    /* formatting the header */
-    if (mod == "w") 
-        fprintf(image_file, "P5 %d %d\n%d\n", xsize, ysize, maxval);
-
-    /* writing */
-    const int end = xsize*my_ysize;
-    for (int i=0; i<end; i++)
-            fprintf(image_file, "%c", image[i]);
-
-    fclose(image_file);
-
-    return;
 }
