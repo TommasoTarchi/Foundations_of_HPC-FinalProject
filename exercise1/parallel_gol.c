@@ -39,7 +39,7 @@ char *fname  = NULL;
 
 
 
-int read_pgm_header(int*, int*, int*, int*, const char*);
+int read_pgm_header(int*, unsigned int*, unsigned int*, int*, const char*);
 
 
 
@@ -241,11 +241,11 @@ int main(int argc, char **argv) {
         int check = 0;   // error checker
 
         int color_maxval;
-        int x_size;
-        int y_size;
+        unsigned int x_size;
+        unsigned int y_size;
         int header_size;
         
-        check += get_parameters_from_pgm(&color_maxval, &x_size, &y_size, &header_size, fname);
+        check += read_pgm_header(&color_maxval, &x_size, &y_size, &header_size, fname);
         if (my_id == 0 && check != 0) {
             printf("-- AN ERROR OCCURRED WHILE READING THE HEADER OF THE PGM FILE --\n\n");
             check = 0;
@@ -277,7 +277,7 @@ int main(int argc, char **argv) {
             /* assigning remaining rows */
             if (my_id < y_size_rmd)
                 my_y_size++;
-            const int my_n_cells = x_size*my_y_size;   // number of cells assigned to the process
+            const unsigned int my_n_cells = x_size*my_y_size;   // number of cells assigned to the process
 
 
             /* getting initial cells' status */ 
@@ -285,15 +285,10 @@ int main(int argc, char **argv) {
             /* we alloc two more lines for the neighbor processes' cells */
             BOOL* my_grid = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
 
-            
-            ///// TESTARE I RISULTATI PTIMA DI CONTINUARE
+ 
 
 
-
-
-
-
-    //////////// USARE COLOR_MAXVAL QUANDO DUMPING
+	    //////////// USARE COLOR_MAXVAL QUANDO DUMPING
 
 
             free(my_grid);
@@ -320,7 +315,7 @@ int main(int argc, char **argv) {
 
 
 /* function to get content and length of the header of a pgm file */
-int read_pgm_header(int* maxval, int* xsize, int* ysize, int* header_size, const char* fname) {
+int read_pgm_header(int* maxval, unsigned int* xsize, unsigned int* ysize, int* header_size, const char* fname) {
 
 
     FILE* image_file;
@@ -358,8 +353,8 @@ int read_pgm_header(int* maxval, int* xsize, int* ysize, int* header_size, const
 
     /* getting header size */ 
     fseek(image_file, 0L, SEEK_END);
-    long int total_size = ftell(image_file);
-    *header_size = image_file - x_size*y_size;
+    long unsigned int total_size = ftell(image_file);
+    *header_size = total_size - *xsize*(*ysize);
 
 
     fclose(image_file);
