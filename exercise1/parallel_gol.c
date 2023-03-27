@@ -200,16 +200,15 @@ int main(int argc, char **argv) {
         /* computing offsets */
 	    int offset = header_size;
 	    if (my_id < m_rmd) {
-		   offset += my_id*my_n_cells;
+		    offset += my_id*my_n_cells;
 	    } else {
-		   offset += m_rmd*k + my_id*my_n_cells;
+		    offset += m_rmd*k + my_id*my_n_cells;
 	    }
 
         /* writing in parallel */
         check += MPI_File_write_at_all(f_handle, offset, my_grid, my_m*k, MPI_CHAR, &status);
 
         check += MPI_File_close(&f_handle);
- 
 
         if (my_id == 0 && check != 0)
             printf("--- AN I/O ERROR OCCURRED AT SOME POINT ---\n\n");
@@ -282,15 +281,51 @@ int main(int argc, char **argv) {
 
             /* getting initial cells' status */ 
 
-            /* we alloc two more lines for the neighbor processes' cells */
-            BOOL* my_grid = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
+            /* grid to store process' cells and two more rows for neighbor cells */ 
+            BOOL* above_line = (BOOL*) malloc(x_size*sizeof(BOOL));
+            BOOL* my_grid = (BOOL*) malloc(my_n_cells*sizeof(BOOL));
+            BOOL* below_line = (BOOL*) malloc(x_size*sizeof(BOOL));
+
+
+            MPI_Barrier(MPI_COMM_WORLD);
+
+
+            /* getting cells' initial status */
+
+            MPI_File f_handle;   // pointer to file
+            check = 0;   // error cecker
+
+            /* opening file in parallel */
+            int access_mode = MPI_RDONLY | MPI_MODE_EXCL;
+            check += MPI_File_open(MPI_COMM_WORLD, fname, access_mode, MPI_INFO_NULL, &f_handle);
+
+            /* computing offsets */
+	        int offset = header_size;
+	        if (my_id < m_rmd) {
+		        offset += my_id*my_n_cells;
+	        } else {
+		        offset += m_rmd*k + my_id*my_n_cells;
+	        }
+
+            /* setting the file pointer to offset */
+            check += MPI_File_seek(f_handle, offset, MPI_SEEK_SET);
+
+            /* reading in parallel */
+            check += MPI_File_read_all(f_handle, my_grid, my_n_cells, MPI_CHAR, &status);
+
+            check += MPI_File_close(&f_handle); 
+
+            if (my_id == 0 && check != 0)
+                printf("--- AN I/O ERROR OCCURRED AT SOME POINT ---\n\n");
 
  
+            /* communicating neighbor cells' status to neighbor processes */
 
 
 	    //////////// USARE COLOR_MAXVAL QUANDO DUMPING
 
 
+            free(snap_name);
             free(my_grid);
 
         }
@@ -314,7 +349,8 @@ int main(int argc, char **argv) {
 
 
 
-/* function to get content and length of the header of a pgm file */
+/* function to get content and length of the header of a pgm file (modified version of prof. Tornatore's
+ * function to read from pgm) */
 int read_pgm_header(int* maxval, unsigned int* xsize, unsigned int* ysize, int* header_size, const char* fname) {
 
 
