@@ -705,15 +705,14 @@ void write_pgm_image(BOOL* image, const int maxval, int xsize, int ysize, const 
     image_file = fopen(image_name, "w");
     
     /* formatting the header */
-    fprintf(image_file, "P5 %d %d\n%d\n", xsize, ysize, maxval);
+    fprintf(image_file, "P5 %d %d\n%d\n", xsize, ysize, maxval);   
 
     /* writing */
     fwrite(image, 1, xsize*ysize, image_file); 
     
     // same result as previous line
-    //for (int i=0; i<ysize; i++)
-    //    for (int j=0; j<xsize; j++)
-    //        fprintf(image_file, "%c", image[i*xsize+j]); 
+    //for (int i=0; i<xsize*ysize; i++)
+        //fprintf(image_file, "%c", image[i]); 
 
     fclose(image_file);
 
