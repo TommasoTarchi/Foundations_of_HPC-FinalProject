@@ -8,13 +8,6 @@
 
 
 
-/* time definition */
-#ifdef TIME
-#define CPU_TIME (clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts), (double) ts.tv_sec + (double) ts.tv_nsec * 1e-9)
-#endif
-
-
-
 /* 'actual' code definitions */
 #define INIT 1
 #define RUN  2
@@ -44,12 +37,6 @@ int read_pgm_header(int*, unsigned int*, unsigned int*, int*, const char*);
 
 
 int main(int argc, char **argv) {
-
-
-/* needed for timing */
-#ifdef TIME
-    struct timespec ts;
-#endif
 
 
 
@@ -254,6 +241,7 @@ int main(int argc, char **argv) {
         unsigned int y_size;
         int header_size;
         
+	//////// far eseguire al master e poi diffondere a tutti i processi
         check += read_pgm_header(&color_maxval, &x_size, &y_size, &header_size, fname);
         if (check != 0) {
             printf("-- AN ERROR OCCURRED WHILE READING THE HEADER OF THE PGM FILE --\n\n");
@@ -263,7 +251,7 @@ int main(int argc, char **argv) {
         const unsigned int n_cells = x_size*y_size;   // total number of cells
 
 
-        /* dividing the job among MPI processes */
+        /* distributing work among MPI processes */
 
         /* setting process 'personal' varables */
         unsigned int my_y_size = y_size/n_procs;   // number of rows assigned to the process
@@ -282,16 +270,16 @@ int main(int argc, char **argv) {
         MPI_File f_handle;   // pointer to file
 
         /* opening file in parallel */
-        int access_mode = MPI_RDONLY | MPI_MODE_EXCL;
+	int access_mode = MPI_MODE_RDONLY;
         check += MPI_File_open(MPI_COMM_WORLD, fname, access_mode, MPI_INFO_NULL, &f_handle);
 
         /* computing offsets */
-	    offset = header_size;
-	    if (my_id < m_rmd) {
-		    offset += my_id*my_n_cells;
-	    } else {
-		    offset += m_rmd*k + my_id*my_n_cells;
-	    }
+	int offset = header_size;
+	if (my_id < y_size_rmd) {
+	    offset += my_id*my_n_cells;
+	} else {
+	    offset += y_size_rmd*k + my_id*my_n_cells;
+	}
 
         /* setting the file pointer to offset */
         check += MPI_File_seek(f_handle, offset, MPI_SEEK_SET);
@@ -306,21 +294,11 @@ int main(int argc, char **argv) {
         }
 
         /* setting tags, destinations and sources for future communications among MPI processes */
-            
+	const int prev = (my_id != 0) * (my_id-1) + (my_id == 0) * (n_procs-1);
+        const int succ = (my_id != n_procs-1) * (my_id+1);
         const int tag_send = my_id*10;
-        if (my_id == 0) {
-            const int prev = n_procs-1;
-        } else {
-            const int prev = my_id-1;
-        }
-        if (my_id == n_procs-1) {
-            const int next = 0;
-        } else {
-            const int next = my_id+1;
-        }
-        const int tag_recv_p = prev*10;
-        const int tag_recv_n = next*10;
-
+  	const int tag_recv_p = prev*10;
+        const int tag_recv_s = succ*10;
 
 
         /* string to store the name of the snapshot files */
@@ -349,15 +327,15 @@ int main(int argc, char **argv) {
                 if (my_id % 2 == 0) {
 
                     check += MPI_Send(my_grid, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
-                    check += MPI_Recv(below_line, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD);
+                    check += MPI_Recv(below_line, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
                     check += MPI_Send(my_grid+my_n_cells-x_size, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
-                    check += MPI_Recv(above_line, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD);
+                    check += MPI_Recv(above_line, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
 
                 } else {
                     
-                    check += MPI_Recv(below_line, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD);
+                    check += MPI_Recv(below_line, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
                     check += MPI_Send(my_grid, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
-                    check += MPI_Recv(above_line, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD);
+                    check += MPI_Recv(above_line, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
                     check += MPI_Send(my_grid+my_n_cells-x_size, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
 
                 }
@@ -420,7 +398,7 @@ int main(int argc, char **argv) {
 
                         /* computing offsets */
 	                    offset = header_size;
-	                    if (my_id < m_rmd) {
+	                    if (my_id < y_size_rmd) {
 		                    offset += my_id*my_n_cells;
 	                    } else {
 		                    offset += y_size_rmd*x_size + my_id*my_n_cells;
