@@ -175,7 +175,7 @@ int main(int argc, char **argv) {
         }
 
         if (check != 0) {
-            printf("AN I/O ERROR OCCURRED WHILE WRITING THE HEADER\n\n");
+            printf("--- AN I/O ERROR OCCURRED WHILE WRITING THE HEADER ---\n");
             check = 0;
         }
 
@@ -203,7 +203,7 @@ int main(int argc, char **argv) {
         check += MPI_File_close(&f_handle);
 
         if (check != 0)
-            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE INITIAL PLAYGROUND ---\n\n", my_id);
+            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE INITIAL PLAYGROUND ---\n", my_id);
 
         free(my_grid);
 
@@ -244,7 +244,7 @@ int main(int argc, char **argv) {
 	//////// far eseguire al master e poi diffondere a tutti i processi
         check += read_pgm_header(&color_maxval, &x_size, &y_size, &header_size, fname);
         if (check != 0) {
-            printf("-- AN ERROR OCCURRED WHILE READING THE HEADER OF THE PGM FILE --\n\n");
+            printf("--- AN ERROR OCCURRED WHILE READING THE HEADER OF THE PGM FILE ---\n");
             check = 0;
         }
 
@@ -289,7 +289,7 @@ int main(int argc, char **argv) {
         check += MPI_File_close(&f_handle); 
 
         if (check != 0) {
-            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE READING THE INITIAL PLAYGROUND ---\n\n", my_id);
+            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE READING THE INITIAL PLAYGROUND ---\n", my_id);
             check = 0;
         }
 
@@ -341,7 +341,7 @@ int main(int argc, char **argv) {
                 }
 
                 if (check != 0 && error_control_1 == 0) {
-                    printf("--- AN ERROR ON COMMUNICATION TO OR FROM PROCESS %d OCCURRED ---\n\n", my_id);
+                    printf("--- AN ERROR ON COMMUNICATION TO OR FROM PROCESS %d OCCURRED ---\n", my_id);
                     error_control_1 = 1;   // to avoid a large number of error messages
                     check = 0;
                 }
@@ -380,7 +380,7 @@ int main(int argc, char **argv) {
                             check += MPI_File_close(&f_handle);
                         
                             if (check != 0 && error_control_2 == 0) {
-                                printf("--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE SYSTEM DUMP NUMBER %d ---\n\n", gen/s);
+                                printf("--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE SYSTEM DUMP NUMBER %d ---\n", gen/s);
                                 error_control_2 = 1;   // to avoid a large number of error messages
                                 check = 0; 
                             }
@@ -410,7 +410,7 @@ int main(int argc, char **argv) {
                         check += MPI_File_close(&f_handle);
 
                         if (check != 0 && error_control_3 == 0) {
-                            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE SYSTEM DUMP NUMBER %d ---\n\n", my_id, gen/s);
+                            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE SYSTEM DUMP NUMBER %d ---\n", my_id, gen/s);
                             error_control_3 = 1;   // to avoid a large number of error messages
                             check = 0;
                         }
@@ -421,7 +421,60 @@ int main(int argc, char **argv) {
             }
 
 
-            free(snap_name);
+	    /* writing the final state */
+
+	    sprintf(snap_name, "snapshots/final_state.pgm");
+
+            /* formatting the PGM file */ 
+            if (my_id == 0) {
+
+            	/* setting the header */
+            	char header[header_size];
+            	sprintf(header, "P5 %d %d\n%d\n", y_size, x_size, color_maxval);
+
+            	/* writing the header */
+            	access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY | MPI_MODE_APPEND;
+                check += MPI_File_open(MPI_COMM_SELF, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
+                check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
+                check += MPI_File_close(&f_handle);
+                        
+                if (check != 0 && error_control_2 == 0) {
+                    printf("--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE FINAL STATE OF THE SYSTEM ---\n");
+                    error_control_2 = 1;   // to avoid a large number of error messages
+                    check = 0; 
+                }
+            }
+
+
+            /* needed to make sure that all processes are actually 
+            * wrtiting on an already formatted PGM file */
+            MPI_Barrier(MPI_COMM_WORLD);
+            
+
+            /* opening file in parallel */
+            access_mode = MPI_MODE_APPEND | MPI_MODE_WRONLY;
+            check += MPI_File_open(MPI_COMM_WORLD, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
+
+            /* computing offsets */
+	    offset = header_size;
+	    if (my_id < y_size_rmd) {
+		offset += my_id*my_n_cells;
+	    } else {
+		offset += y_size_rmd*x_size + my_id*my_n_cells;
+	    }
+
+            /* writing in parallel */
+            check += MPI_File_write_at_all(f_handle, offset, my_grid, my_n_cells, MPI_CHAR, &status);
+
+            check += MPI_File_close(&f_handle);
+
+            if (check != 0 && error_control_3 == 0) {
+                printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE FINAL STATE OF THE SYSTEM ---\n", my_id);
+                check = 0;
+	    }
+            
+	    
+	    free(snap_name);
             free(my_grid);
 
         }
@@ -471,7 +524,7 @@ int read_pgm_header(int* maxval, unsigned int* xsize, unsigned int* ysize, int* 
     /* getting the parameters */
     if (k > 0) {
         
-        k = sscanf(line, "%d%*c%d%*c%d%*c", xsize, ysize, maxval);
+        k = sscanf(line, "%d%*c%d%*c%d%*c", ysize, xsize, maxval);
         if (k < 3)
             fscanf(image_file, "%d%*c", maxval);
     
