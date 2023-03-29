@@ -380,7 +380,7 @@ int main(int argc, char **argv) {
                     count = 0;
                     count += my_grid[j-1];
                     count += my_grid[j+1];
-                    for (int b=x_size+j-1; b<x_sizej+2; b++) {
+                    for (int b=x_size+j-1; b<x_size+j+2; b++) {
                         count += my_grid[b];
                     }
                     for (int b=j-1; b<j+2; b++) {
@@ -667,7 +667,7 @@ int main(int argc, char **argv) {
                     count = 0;
                     count += my_grid[j-1];
                     count += my_grid[j+1];
-                    for (int b=x_size+j-1; b<x_sizej+2; b++) {
+                    for (int b=x_size+j-1; b<x_size+j+2; b++) {
                         count += my_grid[b];
                     }
                     for (int b=j-1; b<j+2; b++) {
