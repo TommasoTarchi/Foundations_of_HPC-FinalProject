@@ -282,6 +282,10 @@ int main(int argc, char **argv) {
         BOOL* my_grid = (BOOL*) malloc(my_n_cells*sizeof(BOOL));
         BOOL* below_line = (BOOL*) malloc(x_size*sizeof(BOOL));
 
+       	//BOOL* above_line = (BOOL*) calloc(x_size, sizeof(BOOL));
+        //BOOL* my_grid = (BOOL*) calloc(my_n_cells, sizeof(BOOL));
+        //BOOL* below_line = (BOOL*) calloc(x_size, sizeof(BOOL));
+
 
         MPI_File f_handle;   // pointer to file
 
@@ -296,6 +300,7 @@ int main(int argc, char **argv) {
 	    } else {
 	        offset += y_size_rmd*k + my_id*my_n_cells;
 	    }
+
 
         /* setting the file pointer to offset */
         check += MPI_File_seek(f_handle, offset, MPI_SEEK_SET);
@@ -324,281 +329,8 @@ int main(int argc, char **argv) {
 
         if (e == ORDERED) {
 
- 
-            for (int gen=0; gen<n; gen++) {
 
-
-                /* communicating neighbor cells' status to neighbor processes */ 
-                
-                if (my_id % 2 == 0) {
-
-                    check += MPI_Send(my_grid, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
-                    check += MPI_Recv(below_line, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
-                    check += MPI_Send(my_grid+my_n_cells-x_size, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
-                    check += MPI_Recv(above_line, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
-
-                } else {
-                    
-                    check += MPI_Recv(below_line, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
-                    check += MPI_Send(my_grid, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
-                    check += MPI_Recv(above_line, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
-                    check += MPI_Send(my_grid+my_n_cells-x_size, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
-
-                }
-
-                if (check != 0 && error_control_1 == 0) {
-                    printf("--- AN ERROR ON COMMUNICATION TO OR FROM PROCESS %d OCCURRED ---\n", my_id);
-                    error_control_1 = 1;   // to avoid a large number of error messages
-                    check = 0;
-                }
-
-
-                /* updating first row */
-                
-                /* first element of the first row */
-                char count = 0;
-
-                count += my_grid[1];
-                for (int b=x_size-1; b<x_size+2; b++) {
-                    count += my_grid[b];
-                }
-                count += my_grid[2*x_size-1];
-                for (int b=0; b<2; b++) {
-                    count += above_line[b];
-                }
-                count += above_line[x_size-1];
-
-                if (count == 2 || count == 3) {
-                    my_grid[0] = 1;
-                } else {
-                    my_grid[0] = 0;
-                }
-
-                /* internal elements of the first row */
-                for (int j=1; j<x_size-1; j++) {
-
-                    count = 0;
-                    count += my_grid[j-1];
-                    count += my_grid[j+1];
-                    for (int b=x_size+j-1; b<x_size+j+2; b++) {
-                        count += my_grid[b];
-                    }
-                    for (int b=j-1; b<j+2; b++) {
-                        count += above_line[b];
-                    }
-
-                    if (count == 2 || count == 3) {
-                        my_grid[j] = 1;
-                    } else {
-                        my_grid[j] = 0;
-                    }
-                }
-
-                /* last element of the first row */
-                count = 0;
-                count += my_grid[0];
-                count += my_grid[x_size-2];
-                count += my_grid[x_size];
-                for (int b=2*x_size-2; b<2*x_size; b++) {
-                    count += my_grid[b];
-                }
-                count += above_line[0];
-                for (int b=x_size-2; b<x_size; b++) {
-                    count += above_line[b];
-                }
-
-                if (count == 2 || count == 3) {
-                    my_grid[x_size-1] = 1;
-                } else {
-                    my_grid[x_size-1] = 0;
-                }
-
-
-                /* updating internal cells */ 
-
-                /* iteration on internal rows */
-                for (int i=1; i<my_y_size-1; i++) {
-
-                    /* first element of the row */
-                    count = 0;
-                    for (int b=(i-1)*x_size; b<(i-1)*x_size+2; b++) {
-                        count += my_grid[b];
-                    }
-                    count += my_grid[i*x_size-1];
-                    count += my_grid[i*x_size+1];
-                    for (int b=(i+1)*x_size-1; b<(i+1)*x_size+2; b++) {
-                        count += my_grid[b];
-                    }
-                    count += my_grid[(i+2)*x_size-1]; 
-
-                    if (count == 2 || count == 3) {
-                        my_grid[i*x_size] = 1;
-                    } else {
-                        my_grid[i*x_size] = 0;
-                    }
-
-                    /* iteration on internal columns */
-                    for (int j=1; j<x_size-1; j++) {
-
-                        count = 0;
-                        for (int b=(i-1)*x_size+j-1; b<(i-1)*x_size+j+2; b++) {
-                            count += my_grid[b];
-                        }
-                        count += my_grid[i*x_size+j-1];
-                        count += my_grid[i*x_size+j+1];
-                        for (int b=(i+1)*x_size+j-1; b<(i+1)*x_size+j+2; b++) {
-                            count += my_grid[b];
-                        }
-
-                        if (count == 2 || count == 3) {
-                            my_grid[i*x_size+j] = 1;
-                        } else {
-                            my_grid[i*x_size+j] = 0;
-                        }
-                    }
-
-                    /* last element of the row */
-                    count = 0;
-                    count += my_grid[(i-1)*x_size];
-                    for (int b=i*x_size-2; b<i*x_size+1; b++) {
-                        count += my_grid[b];
-                    }
-                    count += my_grid[(i+1)*x_size-2];
-                    count += my_grid[(i+1)*x_size];
-                    for (int b=(i+2)*x_size-2; b<(i+2)*x_size; b++) {
-                        count += my_grid[b];
-                    }
-
-                    if (count == 2 || count == 3) {
-                        my_grid[(i+1)*x_size-1] = 1;
-                    } else {
-                        my_grid[(i+1)*x_size-1] = 0;
-                    }
-                }
-
-
-                /* updating last row */
-                
-                /* first element of the last row */
-                count = 0;
-                for (int b=(my_y_size-2)*x_size; b<(my_y_size-2)*x_size+2; b++) {
-                    count += my_grid[b];
-                }
-                count += my_grid[my_n_cells-x_size-1];
-                count += my_grid[my_n_cells-x_size+1];
-                count += my_grid[my_n_cells-1];
-                for (int b=0; b<2; b++) {
-                    count += below_line[b];
-                }
-                count += below_line[x_size-1];
-
-                if (count == 2 || count == 3) {
-                    my_grid[my_n_cells-x_size] = 1;
-                } else {
-                    my_grid[my_n_cells-x_size] = 0;
-                }
-
-                /* internal elements of the last row */
-                for (int j=1; j<x_size-1; j++) {
-
-                    count = 0;
-                    for (int b=my_n_cells-2*x_size+j-1; b<my_n_cells-2*x_size+j+2; b++) {
-                        count += my_grid[b];
-                    }
-                    count += my_grid[my_n_cells-x_size+j-1];
-                    count += my_grid[my_n_cells-x_size+j+1];
-                    for (int b=j-1; b<j+2; b++) {
-                        count += below_line[b];
-                    }
-
-                    if (count == 2 || count == 3) {
-                        my_grid[my_n_cells-x_size+j] = 1;
-                    } else {
-                        my_grid[my_n_cells-x_size+j] = 0;
-                    }
-                }
-
-                /* last element of the last row */
-                count = 0;
-                count += my_grid[my_n_cells-2*x_size];
-                for (int b=my_n_cells-x_size-2; b<my_n_cells-x_size+1; b++) {
-                    count += my_grid[b];
-                }
-                count += my_grid[my_n_cells-2];
-                count += below_line[0];
-                for (int b=x_size-2; b<x_size; b++) {
-                    count += below_line[b];
-                }
-
-                if (count == 2 || count == 3) {
-                    my_grid[my_n_cells-1] = 1;
-                } else {
-                    my_grid[my_n_cells-1] = 0;
-                }
-           
-
-                /* writing a dump of the system */
-
-                if (s != 0) {
-
-                    if (gen % s == 0) {
-
-                        sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen+1);
-
-                        /* formatting the PGM file */ 
-                        if (my_id == 0) {
-
-                            /* setting the header */
-                            char header[header_size];
-                            sprintf(header, "P5 %d %d\n%d\n", y_size, x_size, color_maxval);
-
-                            /* writing the header */
-                            access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY;
-                            check += MPI_File_open(MPI_COMM_SELF, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
-                            check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
-                            check += MPI_File_close(&f_handle);
-                        
-                            if (check != 0 && error_control_2 == 0) {
-                                printf("--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE SYSTEM DUMP NUMBER %d ---\n", gen/s);
-                                error_control_2 = 1;   // to avoid a large number of error messages
-                                check = 0; 
-                            }
-                        }
-
-
-                        /* needed to make sure that all processes are actually 
-                        * wrtiting on an already formatted PGM file */
-                        MPI_Barrier(MPI_COMM_WORLD);
-
-                
-                        /* opening file in parallel */
-                        access_mode = MPI_MODE_APPEND | MPI_MODE_WRONLY;
-                        check += MPI_File_open(MPI_COMM_WORLD, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
-
-                        /* computing offsets */
-	                    offset = header_size;
-	                    if (my_id < y_size_rmd) {
-		                    offset += my_id*my_n_cells;
-	                    } else {
-		                    offset += y_size_rmd*x_size + my_id*my_n_cells;
-	                    }
-
-                        /* writing in parallel */
-                        check += MPI_File_write_at_all(f_handle, offset, my_grid, my_n_cells, MPI_CHAR, &status);
-
-                        check += MPI_File_close(&f_handle);
-
-                        if (check != 0 && error_control_3 == 0) {
-                            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE SYSTEM DUMP NUMBER %d ---\n", my_id, gen/s);
-                            error_control_3 = 1;   // to avoid a large number of error messages
-                            check = 0;
-                        }
-
-                    }
-                }
-
-            }
-
+		printf("ordered evolution\n");
 
 
         } else if (e == STATIC) {
@@ -846,7 +578,7 @@ int main(int argc, char **argv) {
 
                             /* setting the header */
                             char header[header_size];
-                            sprintf(header, "P5 %d %d\n%d\n", y_size, x_size, color_maxval);
+                            sprintf(header, "P5 %d %d\n%d\n", x_size, y_size, color_maxval);
 
                             /* writing the header */
                             access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY;
@@ -895,64 +627,66 @@ int main(int argc, char **argv) {
 
             }
 
+	}
 
-	    /* writing the final state */
 
-	    sprintf(snap_name, "snapshots/final_state.pgm");
+	/* writing the final state */
 
-            /* formatting the PGM file */ 
-            if (my_id == 0) {
+	sprintf(snap_name, "snapshots/final_state.pgm");
 
-            	/* setting the header */
-            	char header[header_size];
-            	sprintf(header, "P5 %d %d\n%d\n", y_size, x_size, color_maxval);
+        /* formatting the PGM file */ 
+        if (my_id == 0) {
 
-            	/* writing the header */
-            	access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY;
-                check += MPI_File_open(MPI_COMM_SELF, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
-                check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
+            /* setting the header */
+            char header[header_size];
+            sprintf(header, "P5 %d %d\n%d\n", x_size, y_size, color_maxval);
+
+            /* writing the header */
+            access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY;
+            check += MPI_File_open(MPI_COMM_SELF, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
+            check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
  		        check += MPI_File_close(&f_handle);
 
-                if (check != 0 && error_control_2 == 0) {
-                    printf("--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE FINAL STATE OF THE SYSTEM ---\n");
-                    error_control_2 = 1;   // to avoid a large number of error messages
-                    check = 0; 
-                }
+            if (check != 0 && error_control_2 == 0) {
+                printf("--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE FINAL STATE OF THE SYSTEM ---\n");
+                error_control_2 = 1;   // to avoid a large number of error messages
+                check = 0; 
             }
+        }
 
 
-            /* needed to make sure that all processes are actually 
-            * wrtiting on an already formatted PGM file */
-            MPI_Barrier(MPI_COMM_WORLD);
+        /* needed to make sure that all processes are actually 
+        * wrtiting on an already formatted PGM file */
+        MPI_Barrier(MPI_COMM_WORLD);
             
 
-            /* opening file in parallel */
-            access_mode = MPI_MODE_APPEND | MPI_MODE_WRONLY;
-            check += MPI_File_open(MPI_COMM_WORLD, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
+        /* opening file in parallel */
+        access_mode = MPI_MODE_APPEND | MPI_MODE_WRONLY;
+        check += MPI_File_open(MPI_COMM_WORLD, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
 
-            /* computing offsets */
-	        offset = header_size;
-	        if (my_id < y_size_rmd) {
-		        offset += my_id*my_n_cells;
-	        } else {
-		        offset += y_size_rmd*x_size + my_id*my_n_cells;
-	        }
+        /* computing offsets */
+	offset = header_size;
+	if (my_id < y_size_rmd) {
+	    offset += my_id*my_n_cells;
+	} else {
+	    offset += y_size_rmd*x_size + my_id*my_n_cells;
+	}
 
-            /* writing in parallel */
-            check += MPI_File_write_at_all(f_handle, offset, my_grid, my_n_cells, MPI_CHAR, &status);
+        /* writing in parallel */
+        check += MPI_File_write_at_all(f_handle, offset, my_grid, my_n_cells, MPI_CHAR, &status);
 
-            check += MPI_File_close(&f_handle);
+	check += MPI_File_close(&f_handle);
 
-            if (check != 0 && error_control_3 == 0) {
-                printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE FINAL STATE OF THE SYSTEM ---\n", my_id);
-                check = 0;
-	    }
+	if (check != 0 && error_control_3 == 0) {
+            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE FINAL STATE OF THE SYSTEM ---\n", my_id);
+            check = 0;
+	}
             
 	    
-	    free(snap_name);
+	free(snap_name);
+	free(above_line);
         free(my_grid);
-
-        }
+	free(below_line);
 
 
     }
@@ -999,7 +733,7 @@ int read_pgm_header(unsigned int* head, const char* fname) {
     /* getting the parameters */
     if (k > 0) {
 
-        k = sscanf(line, "%d%*c%d%*c%d%*c", &head[2], &head[1], &head[0]);
+        k = sscanf(line, "%d%*c%d%*c%d%*c", &head[1], &head[2], &head[0]);
         if (k < 3)
             fscanf(image_file, "%d%*c", &head[0]);
     
