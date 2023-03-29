@@ -838,6 +838,7 @@ int main(int argc, char **argv) {
 
                     if (gen % s == 0) {
 
+
                         sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen+1);
 
                         /* formatting the PGM file */ 
