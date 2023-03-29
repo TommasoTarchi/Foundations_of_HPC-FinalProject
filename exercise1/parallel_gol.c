@@ -102,7 +102,6 @@ int main(int argc, char **argv) {
 
 
 
-    
     /* initializing a playground */
     if (action == INIT) {
 
@@ -230,14 +229,16 @@ int main(int argc, char **argv) {
         /* error variables for I/O */
         int check = 0;   // error checker
         short int error_control_1 = 0;   // needed for the for loop
-        short int error_control_2 = 0;
-        short int error_control_3 = 0;
+        short int error_control_2 = 0;   //
+        short int error_control_3 = 0;   //
 
 
         /* reading initial playground from pmg file */
 
         /* reading the header */
-        unsigned int header_content[4];
+        int header_content[4];
+	for (int i=0; i<4; i++)
+	    header_content[i] = 0;
         
         if (my_id == 0) {
 
@@ -250,12 +251,17 @@ int main(int argc, char **argv) {
         }
 
         /* distributing header's information to all processes */
-        int MPI_Bcast(header_content, 4, MPI_INT, 0, MPI_COMM_WORLD);
+        check += MPI_Bcast(header_content, 4, MPI_INT, 0, MPI_COMM_WORLD);
+
+	if (check != 0) {
+	    printf("--- AN ERROR OCCURRED WHILE BROADCASTING HEADER'S INFORMATIONS ON %d PROCESS ---\n", my_id);
+	    check = 0;
+	}
 
         /* 'unpacking' header's information */
         const int color_maxval = header_content[0];
-        const unsigned int x_size = header_content[1];
-        const unsigned int y_size = header_content[2];
+        const int x_size = header_content[1];
+        const int y_size = header_content[2];
         const int header_size = header_content[3];
 
         const unsigned int n_cells = x_size*y_size;   // total number of cells
@@ -360,9 +366,7 @@ int main(int argc, char **argv) {
 
 
 
-
                 /* computing new cells status */ 
-
 
 
 
@@ -370,9 +374,9 @@ int main(int argc, char **argv) {
 
                 /* writing a dump of the system */
 
-                if (gen % s == 0) {
+                if (s != 0) {
 
-                    if (s != 0) {
+                    if (gen % s == 0) {
 
                         sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen+1);
 
@@ -384,7 +388,7 @@ int main(int argc, char **argv) {
                             sprintf(header, "P5 %d %d\n%d\n", y_size, x_size, color_maxval);
 
                             /* writing the header */
-                            access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY | MPI_MODE_APPEND;
+                            access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY;
                             check += MPI_File_open(MPI_COMM_SELF, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
                             check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
                             check += MPI_File_close(&f_handle);
@@ -443,11 +447,11 @@ int main(int argc, char **argv) {
             	sprintf(header, "P5 %d %d\n%d\n", y_size, x_size, color_maxval);
 
             	/* writing the header */
-            	access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY | MPI_MODE_APPEND;
+            	access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY;
                 check += MPI_File_open(MPI_COMM_SELF, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
                 check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
-                check += MPI_File_close(&f_handle);
-                        
+ 		check += MPI_File_close(&f_handle);
+
                 if (check != 0 && error_control_2 == 0) {
                     printf("--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE FINAL STATE OF THE SYSTEM ---\n");
                     error_control_2 = 1;   // to avoid a large number of error messages
@@ -485,7 +489,7 @@ int main(int argc, char **argv) {
             
 	    
 	    free(snap_name);
-        free(my_grid);
+            free(my_grid);
 
         }
 
@@ -516,7 +520,7 @@ int read_pgm_header(unsigned int* head, const char* fname) {
     FILE* image_file;
     image_file = fopen(fname, "r"); 
 
-    head[0] = head[1] = head[2] = 0;
+    head[0] = head[1] = head[2] = head[3] = 0;
 
     char    MagicN[3];
     char   *line = NULL;
@@ -533,10 +537,10 @@ int read_pgm_header(unsigned int* head, const char* fname) {
 
     /* getting the parameters */
     if (k > 0) {
-        
-        k = sscanf(line, "%d%*c%d%*c%d%*c", head[2], head[1], head[0]);
+
+        k = sscanf(line, "%d%*c%d%*c%d%*c", &head[2], &head[1], &head[0]);
         if (k < 3)
-            fscanf(image_file, "%d%*c", head[0]);
+            fscanf(image_file, "%d%*c", &head[0]);
     
     } else {
 
@@ -544,7 +548,6 @@ int read_pgm_header(unsigned int* head, const char* fname) {
         free(line);
         return 1;   /* error in reading the header */
     }
-
 
     /* getting header size */ 
     fseek(image_file, 0L, SEEK_END);
