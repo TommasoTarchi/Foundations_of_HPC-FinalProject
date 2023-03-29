@@ -37,7 +37,7 @@ char *fname  = NULL;
 
 
 
-void write_pgm_image(BOOL*, const int, int, int, const char*); 
+void write_pgm_image(BOOL*, const int, int, int, const char*, int);
 void read_pgm_image(BOOL**, int*, int*, int*, const char*);
 
 
@@ -107,7 +107,6 @@ int main(int argc, char **argv) {
     BOOL* grid = NULL;
 
 
-
     /* initializing a playground */
     if (action == INIT) {
 
@@ -137,7 +136,7 @@ int main(int argc, char **argv) {
 
         /* writing down playground */
         const int maxval_color = 1;
-        write_pgm_image(grid, maxval_color, k, m, fname);
+        write_pgm_image(grid, maxval_color, k, m, fname, 1);
 
     }
 
@@ -200,7 +199,6 @@ int main(int argc, char **argv) {
         ///////////////////////////////////////////////
 
 
-
         
         /* string to store the name of the snapshot files */
         char* snap_name = (char*) malloc(29*sizeof(char));
@@ -234,7 +232,7 @@ int main(int argc, char **argv) {
                 }
                 count += grid[n_cells-1];
 
-                if (count > 1 && count < 4) {
+                if (count == 2 || count == 3) {
                     grid[0] = 1;
                 } else {
                     grid[0] = 0;
@@ -253,7 +251,7 @@ int main(int argc, char **argv) {
                         count += grid[b];
                     }
 
-                    if (count > 1 && count < 4) {
+                    if (count == 2 || count == 3) {
                         grid[j] = 1;
                     } else {
                         grid[j] = 0;
@@ -273,7 +271,7 @@ int main(int argc, char **argv) {
                     count += grid[b];
                 }
 
-                if (count > 1 && count < 4) {
+                if (count == 2 || count == 3) {
                     grid[x_size-1] = 1;
                 } else {
                     grid[x_size-1] = 0;
@@ -299,7 +297,7 @@ int main(int argc, char **argv) {
                     if (grid[i*x_size] == 1)
                         count--;
 
-                    if (count > 1 && count < 4) {
+                    if (count == 2 || count == 3) {
                         grid[i*x_size] = 1;
                     } else {
                         grid[i*x_size] = 0;
@@ -318,7 +316,7 @@ int main(int argc, char **argv) {
                             count += grid[b];
                         }
 
-                        if (count > 1 && count < 4) {
+                        if (count == 2 || count == 3) {
                             grid[i*x_size+j] = 1;
                         } else {
                             grid[i*x_size+j] = 0;
@@ -337,7 +335,7 @@ int main(int argc, char **argv) {
                         count += grid[b];
                     }
 
-                    if (count > 1 && count < 4) {
+                    if (count == 2 || count == 3) {
                         grid[(i+1)*x_size-1] = 1;
                     } else {
                         grid[(i+1)*x_size-1] = 0;
@@ -360,7 +358,7 @@ int main(int argc, char **argv) {
                 }
                 count += grid[x_size-1];
 
-                if (count > 1 && count < 4) {
+                if (count == 2 || count == 3) {
                     grid[n_cells-x_size] = 1;
                 } else {
                     grid[n_cells-x_size] = 0;
@@ -379,7 +377,7 @@ int main(int argc, char **argv) {
                         count += grid[b];
                     }
 
-                    if (count > 1 && count < 4) {
+                    if (count == 2 || count == 3) {
                         grid[n_cells-x_size+j] = 1;
                     } else {
                         grid[n_cells-x_size+j] = 0;
@@ -398,7 +396,7 @@ int main(int argc, char **argv) {
                     count += grid[b];
                 }
 
-                if (count > 1 && count < 4) {
+                if (count == 2 || count == 3) {
                     grid[n_cells-1] = 1;
                 } else {
                     grid[n_cells-1] = 0;
@@ -412,7 +410,7 @@ int main(int argc, char **argv) {
 
                         sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen+1);
                         
-                        write_pgm_image(grid, 1, x_size, y_size, snap_name);
+                        write_pgm_image(grid, 1, x_size, y_size, snap_name, 1);
                     }
                 }
                 
@@ -635,7 +633,7 @@ int main(int argc, char **argv) {
 
                         sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen+1);
                         
-                        write_pgm_image(grid, 1, x_size, y_size, snap_name);
+                        write_pgm_image(grid, 1, x_size, y_size, snap_name, gen);
                     }
                 }
                 
@@ -654,20 +652,7 @@ int main(int argc, char **argv) {
         free(snap_name);
 
 
-        write_pgm_image(grid, 1, x_size, y_size, "snapshots/final_snapshot.pgm");
-
-
-
-        /////////////// just for test /////////////////
-        ///////////////////////////////////////////////
-        //
-        for (int i=0; i<y_size; i++) {
-            for (int j=0; j<x_size; j++)
-                printf("%c ", (grid[i*x_size+j]>>1)+48); 
-            printf("\n");
-        }
-        //
-        ///////////////////////////////////////////////
+        write_pgm_image(grid, 1, x_size, y_size, "snapshots/final_state.pgm", n-1);
 
     }
 
@@ -689,7 +674,7 @@ int main(int argc, char **argv) {
 
 
 /* function to write the status of the system to pgm file */
-void write_pgm_image(BOOL* image, const int maxval, int xsize, int ysize, const char *image_name) {
+void write_pgm_image(BOOL* image, const int maxval, int xsize, int ysize, const char *image_name, int iter) {
 
     FILE* image_file;
     image_file = fopen(image_name, "w");
@@ -697,14 +682,38 @@ void write_pgm_image(BOOL* image, const int maxval, int xsize, int ysize, const 
     /* formatting the header */
     fprintf(image_file, "P5 %d %d\n%d\n", xsize, ysize, maxval);   
 
-    /* writing */
-    fwrite(image, 1, xsize*ysize, image_file); 
-    
-    // same result as previous line
-    //for (int i=0; i<xsize*ysize; i++)
-        //fprintf(image_file, "%c", image[i]); 
+    /* printing first or second bit depending generation */
+    if (iter % 2 == 0) {
+        for (int i=0; i<xsize*ysize; i++)
+            fprintf(image_file, "%c", image[i] >> 1);
+    } else {
+        for (int i=0; i<xsize*ysize; i++)
+            fprintf(image_file, "%c", image[i] & 1);
+    }
 
     fclose(image_file);
+
+
+    /////////////////////////// just for test ///////////////////////////// 
+    //
+    if (iter % 2 == 0) {
+        for (int i=0; i<ysize; i++){
+            for (int j=0; j<xsize; j++)
+                printf("%c ", (image[i*xsize+j] >> 1)+48);
+            printf("\n");
+        }
+    } else {
+        for (int i=0; i<ysize; i++) {
+            for (int j=0; j<xsize; j++)
+                printf("%c ", (image[i*xsize+j] & 1)+48);
+            printf("\n");
+        }
+    }
+
+    printf("\n");
+    //
+    //////////////////////////////////////////////////////////////////////
+
 
     return;
 }

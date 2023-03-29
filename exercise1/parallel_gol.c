@@ -237,8 +237,8 @@ int main(int argc, char **argv) {
 
         /* reading the header */
         int header_content[4];
-	for (int i=0; i<4; i++)
-	    header_content[i] = 0;
+	    for (int i=0; i<4; i++)
+	        header_content[i] = 0;
         
         if (my_id == 0) {
 
@@ -253,10 +253,10 @@ int main(int argc, char **argv) {
         /* distributing header's information to all processes */
         check += MPI_Bcast(header_content, 4, MPI_INT, 0, MPI_COMM_WORLD);
 
-	if (check != 0) {
-	    printf("--- AN ERROR OCCURRED WHILE BROADCASTING HEADER'S INFORMATIONS ON %d PROCESS ---\n", my_id);
-	    check = 0;
-	}
+	    if (check != 0) {
+	        printf("--- AN ERROR OCCURRED WHILE BROADCASTING HEADER'S INFORMATIONS ON %d PROCESS ---\n", my_id);
+	        check = 0;
+	    }
 
         /* 'unpacking' header's information */
         const int color_maxval = header_content[0];
@@ -324,15 +324,292 @@ int main(int argc, char **argv) {
 
         if (e == ORDERED) {
 
+ 
+            for (int gen=0; gen<n; gen++) {
 
-            if (my_id == 0)
-                printf("ordered evolution\n");
+
+                /* communicating neighbor cells' status to neighbor processes */ 
+                
+                if (my_id % 2 == 0) {
+
+                    check += MPI_Send(my_grid, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
+                    check += MPI_Recv(below_line, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+                    check += MPI_Send(my_grid+my_n_cells-x_size, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
+                    check += MPI_Recv(above_line, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
+
+                } else {
+                    
+                    check += MPI_Recv(below_line, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+                    check += MPI_Send(my_grid, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
+                    check += MPI_Recv(above_line, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
+                    check += MPI_Send(my_grid+my_n_cells-x_size, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
+
+                }
+
+                if (check != 0 && error_control_1 == 0) {
+                    printf("--- AN ERROR ON COMMUNICATION TO OR FROM PROCESS %d OCCURRED ---\n", my_id);
+                    error_control_1 = 1;   // to avoid a large number of error messages
+                    check = 0;
+                }
+
+
+                /* updating first row */
+                
+                /* first element of the first row */
+                char count = 0;
+
+                count += my_grid[1];
+                for (int b=x_size-1; b<x_size+2; b++) {
+                    count += my_grid[b];
+                }
+                count += my_grid[2*x_size-1];
+                for (int b=0; b<2; b++) {
+                    count += above_line[b];
+                }
+                count += above_line[x_size-1];
+
+                if (count == 2 || count == 3) {
+                    my_grid[0] = 1;
+                } else {
+                    my_grid[0] = 0;
+                }
+
+                /* internal elements of the first row */
+                for (int j=1; j<x_size-1; j++) {
+
+                    count = 0;
+                    count += my_grid[j-1];
+                    count += my_grid[j+1];
+                    for (int b=x_size+j-1; b<x_sizej+2; b++) {
+                        count += my_grid[b];
+                    }
+                    for (int b=j-1; b<j+2; b++) {
+                        count += above_line[b];
+                    }
+
+                    if (count == 2 || count == 3) {
+                        my_grid[j] = 1;
+                    } else {
+                        my_grid[j] = 0;
+                    }
+                }
+
+                /* last element of the first row */
+                count = 0;
+                count += my_grid[0];
+                count += my_grid[x_size-2];
+                count += my_grid[x_size];
+                for (int b=2*x_size-2; b<2*x_size; b++) {
+                    count += my_grid[b];
+                }
+                count += above_line[0];
+                for (int b=x_size-2; b<x_size; b++) {
+                    count += above_line[b];
+                }
+
+                if (count == 2 || count == 3) {
+                    my_grid[x_size-1] = 1;
+                } else {
+                    my_grid[x_size-1] = 0;
+                }
+
+
+                /* updating internal cells */ 
+
+                /* iteration on internal rows */
+                for (int i=1; i<my_y_size-1; i++) {
+
+                    /* first element of the row */
+                    count = 0;
+                    for (int b=(i-1)*x_size; b<(i-1)*x_size+2; b++) {
+                        count += my_grid[b];
+                    }
+                    count += my_grid[i*x_size-1];
+                    count += my_grid[i*x_size+1];
+                    for (int b=(i+1)*x_size-1; b<(i+1)*x_size+2; b++) {
+                        count += my_grid[b];
+                    }
+                    count += my_grid[(i+2)*x_size-1]; 
+
+                    if (count == 2 || count == 3) {
+                        my_grid[i*x_size] = 1;
+                    } else {
+                        my_grid[i*x_size] = 0;
+                    }
+
+                    /* iteration on internal columns */
+                    for (int j=1; j<x_size-1; j++) {
+
+                        count = 0;
+                        for (int b=(i-1)*x_size+j-1; b<(i-1)*x_size+j+2; b++) {
+                            count += my_grid[b];
+                        }
+                        count += my_grid[i*x_size+j-1];
+                        count += my_grid[i*x_size+j+1];
+                        for (int b=(i+1)*x_size+j-1; b<(i+1)*x_size+j+2; b++) {
+                            count += my_grid[b];
+                        }
+
+                        if (count == 2 || count == 3) {
+                            my_grid[i*x_size+j] = 1;
+                        } else {
+                            my_grid[i*x_size+j] = 0;
+                        }
+                    }
+
+                    /* last element of the row */
+                    count = 0;
+                    count += my_grid[(i-1)*x_size];
+                    for (int b=i*x_size-2; b<i*x_size+1; b++) {
+                        count += my_grid[b];
+                    }
+                    count += my_grid[(i+1)*x_size-2];
+                    count += my_grid[(i+1)*x_size];
+                    for (int b=(i+2)*x_size-2; b<(i+2)*x_size; b++) {
+                        count += my_grid[b];
+                    }
+
+                    if (count == 2 || count == 3) {
+                        my_grid[(i+1)*x_size-1] = 1;
+                    } else {
+                        my_grid[(i+1)*x_size-1] = 0;
+                    }
+                }
+
+
+                /* updating last row */
+                
+                /* first element of the last row */
+                count = 0;
+                for (int b=(my_y_size-2)*x_size; b<(my_y_size-2)*x_size+2; b++) {
+                    count += my_grid[b];
+                }
+                count += my_grid[my_n_cells-x_size-1];
+                count += my_grid[my_n_cells-x_size+1];
+                count += my_grid[my_n_cells-1];
+                for (int b=0; b<2; b++) {
+                    count += below_line[b];
+                }
+                count += below_line[x_size-1];
+
+                if (count == 2 || count == 3) {
+                    my_grid[my_n_cells-x_size] = 1;
+                } else {
+                    my_grid[my_n_cells-x_size] = 0;
+                }
+
+                /* internal elements of the last row */
+                for (int j=1; j<x_size-1; j++) {
+
+                    count = 0;
+                    for (int b=my_n_cells-2*x_size+j-1; b<my_n_cells-2*x_size+j+2; b++) {
+                        count += my_grid[b];
+                    }
+                    count += my_grid[my_n_cells-x_size+j-1];
+                    count += my_grid[my_n_cells-x_size+j+1];
+                    for (int b=j-1; b<j+2; b++) {
+                        count += below_line[b];
+                    }
+
+                    if (count == 2 || count == 3) {
+                        my_grid[my_n_cells-x_size+j] = 1;
+                    } else {
+                        my_grid[my_n_cells-x_size+j] = 0;
+                    }
+                }
+
+                /* last element of the last row */
+                count = 0;
+                count += my_grid[my_n_cells-2*x_size];
+                for (int b=my_n_cells-x_size-2; b<my_n_cells-x_size+1; b++) {
+                    count += my_grid[b];
+                }
+                count += my_grid[my_n_cells-2];
+                count += below_line[0];
+                for (int b=x_size-2; b<x_size; b++) {
+                    count += below_line[b];
+                }
+
+                if (count == 2 || count == 3) {
+                    my_grid[my_n_cells-1] = 1;
+                } else {
+                    my_grid[my_n_cells-1] = 0;
+                }
+           
+
+                /* writing a dump of the system */
+
+                if (s != 0) {
+
+                    if (gen % s == 0) {
+
+                        sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen+1);
+
+                        /* formatting the PGM file */ 
+                        if (my_id == 0) {
+
+                            /* setting the header */
+                            char header[header_size];
+                            sprintf(header, "P5 %d %d\n%d\n", y_size, x_size, color_maxval);
+
+                            /* writing the header */
+                            access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY;
+                            check += MPI_File_open(MPI_COMM_SELF, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
+                            check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
+                            check += MPI_File_close(&f_handle);
+                        
+                            if (check != 0 && error_control_2 == 0) {
+                                printf("--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE SYSTEM DUMP NUMBER %d ---\n", gen/s);
+                                error_control_2 = 1;   // to avoid a large number of error messages
+                                check = 0; 
+                            }
+                        }
+
+
+                        /* needed to make sure that all processes are actually 
+                        * wrtiting on an already formatted PGM file */
+                        MPI_Barrier(MPI_COMM_WORLD);
+
+                
+                        /* opening file in parallel */
+                        access_mode = MPI_MODE_APPEND | MPI_MODE_WRONLY;
+                        check += MPI_File_open(MPI_COMM_WORLD, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
+
+                        /* computing offsets */
+	                    offset = header_size;
+	                    if (my_id < y_size_rmd) {
+		                    offset += my_id*my_n_cells;
+	                    } else {
+		                    offset += y_size_rmd*x_size + my_id*my_n_cells;
+	                    }
+
+                        /* writing in parallel */
+                        check += MPI_File_write_at_all(f_handle, offset, my_grid, my_n_cells, MPI_CHAR, &status);
+
+                        check += MPI_File_close(&f_handle);
+
+                        if (check != 0 && error_control_3 == 0) {
+                            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE SYSTEM DUMP NUMBER %d ---\n", my_id, gen/s);
+                            error_control_3 = 1;   // to avoid a large number of error messages
+                            check = 0;
+                        }
+
+                    }
+                }
+
+            }
 
 
 
         } else if (e == STATIC) {
             
 
+            /* auxiliary grid to store cells' status */
+            BOOL* my_grid_aux = (BOOL*) malloc(my_n_cells*sizeof(BOOL));
+            /* temporary pointer used for grid switching */
+            void* temp=NULL;
+
+            
             /* evolution */
 
             for (int gen=0; gen<n; gen++) {
@@ -363,16 +640,199 @@ int main(int argc, char **argv) {
                 }
 
 
+                /* updating first row */
+                
+                /* first element of the first row */
+                char count = 0;
+
+                count += my_grid[1];
+                for (int b=x_size-1; b<x_size+2; b++) {
+                    count += my_grid[b];
+                }
+                count += my_grid[2*x_size-1];
+                for (int b=0; b<2; b++) {
+                    count += above_line[b];
+                }
+                count += above_line[x_size-1];
+
+                if (count == 2 || count == 3) {
+                    my_grid_aux[0] = 1;
+                } else {
+                    my_grid_aux[0] = 0;
+                }
+
+                /* internal elements of the first row */
+                for (int j=1; j<x_size-1; j++) {
+
+                    count = 0;
+                    count += my_grid[j-1];
+                    count += my_grid[j+1];
+                    for (int b=x_size+j-1; b<x_sizej+2; b++) {
+                        count += my_grid[b];
+                    }
+                    for (int b=j-1; b<j+2; b++) {
+                        count += above_line[b];
+                    }
+
+                    if (count == 2 || count == 3) {
+                        my_grid_aux[j] = 1;
+                    } else {
+                        my_grid_aux[j] = 0;
+                    }
+                }
+
+                /* last element of the first row */
+                count = 0;
+                count += my_grid[0];
+                count += my_grid[x_size-2];
+                count += my_grid[x_size];
+                for (int b=2*x_size-2; b<2*x_size; b++) {
+                    count += my_grid[b];
+                }
+                count += above_line[0];
+                for (int b=x_size-2; b<x_size; b++) {
+                    count += above_line[b];
+                }
+
+                if (count == 2 || count == 3) {
+                    my_grid_aux[x_size-1] = 1;
+                } else {
+                    my_grid_aux[x_size-1] = 0;
+                }
 
 
+                /* updating internal cells */ 
 
-                /* computing new cells status */ 
+                /* iteration on internal rows */
+                for (int i=1; i<my_y_size-1; i++) {
+
+                    /* first element of the row */
+                    count = 0;
+                    for (int b=(i-1)*x_size; b<(i-1)*x_size+2; b++) {
+                        count += my_grid[b];
+                    }
+                    count += my_grid[i*x_size-1];
+                    count += my_grid[i*x_size+1];
+                    for (int b=(i+1)*x_size-1; b<(i+1)*x_size+2; b++) {
+                        count += my_grid[b];
+                    }
+                    count += my_grid[(i+2)*x_size-1]; 
+
+                    if (count == 2 || count == 3) {
+                        my_grid_aux[i*x_size] = 1;
+                    } else {
+                        my_grid_aux[i*x_size] = 0;
+                    }
+
+                    /* iteration on internal columns */
+                    for (int j=1; j<x_size-1; j++) {
+
+                        count = 0;
+                        for (int b=(i-1)*x_size+j-1; b<(i-1)*x_size+j+2; b++) {
+                            count += my_grid[b];
+                        }
+                        count += my_grid[i*x_size+j-1];
+                        count += my_grid[i*x_size+j+1];
+                        for (int b=(i+1)*x_size+j-1; b<(i+1)*x_size+j+2; b++) {
+                            count += my_grid[b];
+                        }
+
+                        if (count == 2 || count == 3) {
+                            my_grid_aux[i*x_size+j] = 1;
+                        } else {
+                            my_grid_aux[i*x_size+j] = 0;
+                        }
+                    }
+
+                    /* last element of the row */
+                    count = 0;
+                    count += my_grid[(i-1)*x_size];
+                    for (int b=i*x_size-2; b<i*x_size+1; b++) {
+                        count += my_grid[b];
+                    }
+                    count += my_grid[(i+1)*x_size-2];
+                    count += my_grid[(i+1)*x_size];
+                    for (int b=(i+2)*x_size-2; b<(i+2)*x_size; b++) {
+                        count += my_grid[b];
+                    }
+
+                    if (count == 2 || count == 3) {
+                        my_grid_aux[(i+1)*x_size-1] = 1;
+                    } else {
+                        my_grid_aux[(i+1)*x_size-1] = 0;
+                    }
+                }
 
 
+                /* updating last row */
+                
+                /* first element of the last row */
+                count = 0;
+                for (int b=(my_y_size-2)*x_size; b<(my_y_size-2)*x_size+2; b++) {
+                    count += my_grid[b];
+                }
+                count += my_grid[my_n_cells-x_size-1];
+                count += my_grid[my_n_cells-x_size+1];
+                count += my_grid[my_n_cells-1];
+                for (int b=0; b<2; b++) {
+                    count += below_line[b];
+                }
+                count += below_line[x_size-1];
+
+                if (count == 2 || count == 3) {
+                    my_grid_aux[my_n_cells-x_size] = 1;
+                } else {
+                    my_grid_aux[my_n_cells-x_size] = 0;
+                }
+
+                /* internal elements of the last row */
+                for (int j=1; j<x_size-1; j++) {
+
+                    count = 0;
+                    for (int b=my_n_cells-2*x_size+j-1; b<my_n_cells-2*x_size+j+2; b++) {
+                        count += my_grid[b];
+                    }
+                    count += my_grid[my_n_cells-x_size+j-1];
+                    count += my_grid[my_n_cells-x_size+j+1];
+                    for (int b=j-1; b<j+2; b++) {
+                        count += below_line[b];
+                    }
+
+                    if (count == 2 || count == 3) {
+                        my_grid_aux[my_n_cells-x_size+j] = 1;
+                    } else {
+                        my_grid_aux[my_n_cells-x_size+j] = 0;
+                    }
+                }
+
+                /* last element of the last row */
+                count = 0;
+                count += my_grid[my_n_cells-2*x_size];
+                for (int b=my_n_cells-x_size-2; b<my_n_cells-x_size+1; b++) {
+                    count += my_grid[b];
+                }
+                count += my_grid[my_n_cells-2];
+                count += below_line[0];
+                for (int b=x_size-2; b<x_size; b++) {
+                    count += below_line[b];
+                }
+
+                if (count == 2 || count == 3) {
+                    my_grid_aux[my_n_cells-1] = 1;
+                } else {
+                    my_grid_aux[my_n_cells-1] = 0;
+                }
+         
+
+                /* switching pointers to grid and grid_aux */
+                
+                temp = my_grid;
+                my_grid = my_grid_aux;
+                my_grid_aux = temp;
+                temp = NULL;
 
 
-
-                /* writing a dump of the system */
+                /* writing a dump of the system */ 
 
                 if (s != 0) {
 
@@ -450,7 +910,7 @@ int main(int argc, char **argv) {
             	access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY;
                 check += MPI_File_open(MPI_COMM_SELF, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
                 check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
- 		check += MPI_File_close(&f_handle);
+ 		        check += MPI_File_close(&f_handle);
 
                 if (check != 0 && error_control_2 == 0) {
                     printf("--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE FINAL STATE OF THE SYSTEM ---\n");
@@ -489,7 +949,7 @@ int main(int argc, char **argv) {
             
 	    
 	    free(snap_name);
-            free(my_grid);
+        free(my_grid);
 
         }
 

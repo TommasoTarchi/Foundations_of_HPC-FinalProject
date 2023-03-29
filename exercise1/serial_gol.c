@@ -296,8 +296,6 @@ int main(int argc, char **argv) {
                         count += grid[b];
                     }
                     count += grid[(i+2)*x_size-1]; 
-                    if (grid[i*x_size] == 1)
-                        count--;
 
                     if (count > 1 && count < 4) {
                         grid[i*x_size] = 1;
@@ -662,7 +660,7 @@ int main(int argc, char **argv) {
         free(snap_name);
 
 
-        write_pgm_image(grid, 1, x_size, y_size, "snapshots/final_snapshot.pgm");
+        write_pgm_image(grid, 1, x_size, y_size, "snapshots/final_state.pgm");
 
 
 
