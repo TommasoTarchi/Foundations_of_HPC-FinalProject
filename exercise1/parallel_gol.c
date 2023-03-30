@@ -43,6 +43,8 @@ int main(int argc, char **argv) {
     /* getting options */
     int action = 0;
     char *optstring = "irm:k:e:f:n:s:";
+    int m_length;
+    int k_length;
 
     int c;
     while ((c = getopt(argc, argv, optstring)) != -1) {
@@ -59,10 +61,12 @@ int main(int argc, char **argv) {
 
             case 'm':
                 m = atoi(optarg);
+		m_length = strlen(optarg);
                 break;
             
             case 'k':
                 k = atoi(optarg);
+		k_length = strlen(optarg);
                 break;
             
             case 'e':
@@ -138,7 +142,7 @@ int main(int argc, char **argv) {
 
         /* setting the seed (unique for each process) */
         struct drand48_data rand_gen;
-        long int seed = my_id+1;
+        long int seed = my_id+2;   /// MODIFICARE PER RENDERE NON RIPRODUCIBILE
         srand48_r(seed, &rand_gen);
 
         for (int i=0; i<my_n_cells; i++) {
@@ -158,11 +162,12 @@ int main(int argc, char **argv) {
         int check = 0;   // error checker
        
 	    /* formatting the PGM file */ 
-        const int header_size = 30;
+        const int color_maxval = 1;
+     	const int header_size = m_length+k_length+6+1;   // the last number added to header_size must be equal to the
+							 // number of ciphers to represent color_maxval in base 10
         if (my_id == 0) {
 
             /* setting the header */
-            const int color_maxval = 1;	    
             char header[header_size];
             sprintf(header, "P5 %d %d\n%d\n", k, m, color_maxval);
 
@@ -287,13 +292,13 @@ int main(int argc, char **argv) {
         check += MPI_File_open(MPI_COMM_WORLD, fname, access_mode, MPI_INFO_NULL, &f_handle);
 
         /* computing offsets */
+	    //int offset = header_size;
 	    int offset = header_size;
 	    if (my_id < y_size_rmd) {
 	        offset += my_id*my_n_cells;
 	    } else {
 	        offset += y_size_rmd*k + my_id*my_n_cells;
 	    }
-
 
         /* setting the file pointer to offset */
         check += MPI_File_seek(f_handle, offset, MPI_SEEK_SET);
@@ -323,7 +328,7 @@ int main(int argc, char **argv) {
         if (e == ORDERED) {
 
 
-		    printf("ordered evolution\n");
+	    printf("ordered evolution\n");
 
 
 
