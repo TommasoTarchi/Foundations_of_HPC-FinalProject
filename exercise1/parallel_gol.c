@@ -43,8 +43,8 @@ int main(int argc, char **argv) {
     /* getting options */
     int action = 0;
     char *optstring = "irm:k:e:f:n:s:";
-    int m_length;
-    int k_length;
+    int m_length;   // needed for header size
+    int k_length;   //
 
     int c;
     while ((c = getopt(argc, argv, optstring)) != -1) {
@@ -153,6 +153,8 @@ int main(int argc, char **argv) {
         }
         seed += my_id;
         srand48_r(seed, &rand_gen);
+
+	printf("my seed is: %ld, from %d\n", seed, my_id);
 
         for (int i=0; i<my_n_cells; i++) {
             /* producing a random integer among 0 and 1 */
@@ -342,6 +344,68 @@ int main(int argc, char **argv) {
             for (int gen=0; gen<n; gen++) {
 
 
+		/* writing a dump of the system */ 
+
+                if (n & s) {
+
+                    if (gen % s == 0) {
+
+
+                        sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen+1);
+
+                        /* formatting the PGM file */ 
+                        if (my_id == 0) {
+
+                            /* setting the header */
+                            char header[header_size];
+                            sprintf(header, "P5 %d %d\n%d\n", x_size, y_size, color_maxval);
+
+                            /* writing the header */
+                            access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY;
+                            check += MPI_File_open(MPI_COMM_SELF, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
+                            check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
+                            check += MPI_File_close(&f_handle);
+                        
+                            if (check != 0 && error_control_2 == 0) {
+                                printf("--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE SYSTEM DUMP NUMBER %d ---\n", gen/s);
+                                error_control_2 = 1;   // to avoid a large number of error messages
+                                check = 0; 
+                            }
+                        }
+
+
+                        /* needed to make sure that all processes are actually 
+                        * wrtiting on an already formatted PGM file */
+                        MPI_Barrier(MPI_COMM_WORLD);
+
+                
+                        /* opening file in parallel */
+                        access_mode = MPI_MODE_APPEND | MPI_MODE_WRONLY;
+                        check += MPI_File_open(MPI_COMM_WORLD, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
+
+                        /* computing offsets */
+	                    offset = header_size;
+	                    if (my_id < y_size_rmd) {
+		                    offset += my_id*my_n_cells;
+	                    } else {
+		                    offset += y_size_rmd*x_size + my_id*my_n_cells;
+	                    }
+
+                        /* writing in parallel */
+                        check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
+
+                        check += MPI_File_close(&f_handle);
+
+                        if (check != 0 && error_control_3 == 0) {
+                            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE SYSTEM DUMP NUMBER %d ---\n", my_id, gen/s);
+                            error_control_3 = 1;   // to avoid a large number of error messages
+                            check = 0;
+                        }
+
+                    }
+                }
+
+
                 /* iteration on processes */
                 for (int proc=0; proc<n_procs; proc++) {
 
@@ -360,7 +424,7 @@ int main(int argc, char **argv) {
 
                         } else if (my_id == 0) {
 
-                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prec, tag_recv_p, MPI_COMM_WORLD, &status);
+                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
                             check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
                         }
                         
@@ -382,7 +446,7 @@ int main(int argc, char **argv) {
 
                         } else if (my_id == n_procs-1) {
 
-                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prec, tag_recv_p, MPI_COMM_WORLD, &status);
+                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
                             check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
                         }
                         
@@ -404,7 +468,7 @@ int main(int argc, char **argv) {
 
                         } else if (my_id == proc) {
 
-                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prec, tag_recv_p, MPI_COMM_WORLD, &status);
+                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
                             check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
                         }
                         
@@ -492,11 +556,28 @@ int main(int argc, char **argv) {
                     MPI_Barrier(MPI_COMM_WORLD);
 
                 }
+            
+            }
 
 
-                /* writing a dump of the system */ 
 
-                if (s != 0) {
+        } else if (e == STATIC) {
+            
+
+            /* auxiliary grid to store cells' status */
+            BOOL* my_grid_aux = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
+            /* temporary pointer used for grid switching */
+            void* temp=NULL;
+
+            
+            /* evolution */
+
+            for (int gen=0; gen<n; gen++) {
+
+ 
+		/* writing a dump of the system */ 
+
+                if (n & s) {
 
                     if (gen % s == 0) {
 
@@ -554,26 +635,9 @@ int main(int argc, char **argv) {
 
                     }
                 }
-            
-            }
 
-
-
-        } else if (e == STATIC) {
-            
-
-            /* auxiliary grid to store cells' status */
-            BOOL* my_grid_aux = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
-            /* temporary pointer used for grid switching */
-            void* temp=NULL;
-
-            
-            /* evolution */
-
-            for (int gen=0; gen<n; gen++) {
-
- 
-                /* communicating border cells' status to neighbor processes */ 
+                
+		/* communicating border cells' status to neighbor processes */ 
                 
                 if (my_id % 2 == 0) {
 
@@ -671,68 +735,6 @@ int main(int argc, char **argv) {
                 my_grid = my_grid_aux;
                 my_grid_aux = temp;
                 temp = NULL;
-
-
-                /* writing a dump of the system */ 
-
-                if (s != 0) {
-
-                    if (gen % s == 0) {
-
-
-                        sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen+1);
-
-                        /* formatting the PGM file */ 
-                        if (my_id == 0) {
-
-                            /* setting the header */
-                            char header[header_size];
-                            sprintf(header, "P5 %d %d\n%d\n", x_size, y_size, color_maxval);
-
-                            /* writing the header */
-                            access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY;
-                            check += MPI_File_open(MPI_COMM_SELF, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
-                            check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
-                            check += MPI_File_close(&f_handle);
-                        
-                            if (check != 0 && error_control_2 == 0) {
-                                printf("--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE SYSTEM DUMP NUMBER %d ---\n", gen/s);
-                                error_control_2 = 1;   // to avoid a large number of error messages
-                                check = 0; 
-                            }
-                        }
-
-
-                        /* needed to make sure that all processes are actually 
-                        * wrtiting on an already formatted PGM file */
-                        MPI_Barrier(MPI_COMM_WORLD);
-
-                
-                        /* opening file in parallel */
-                        access_mode = MPI_MODE_APPEND | MPI_MODE_WRONLY;
-                        check += MPI_File_open(MPI_COMM_WORLD, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
-
-                        /* computing offsets */
-	                    offset = header_size;
-	                    if (my_id < y_size_rmd) {
-		                    offset += my_id*my_n_cells;
-	                    } else {
-		                    offset += y_size_rmd*x_size + my_id*my_n_cells;
-	                    }
-
-                        /* writing in parallel */
-                        check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
-
-                        check += MPI_File_close(&f_handle);
-
-                        if (check != 0 && error_control_3 == 0) {
-                            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE SYSTEM DUMP NUMBER %d ---\n", my_id, gen/s);
-                            error_control_3 = 1;   // to avoid a large number of error messages
-                            check = 0;
-                        }
-
-                    }
-                }
 
             }
 
