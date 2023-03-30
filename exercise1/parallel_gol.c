@@ -375,7 +375,7 @@ int main(int argc, char **argv) {
 
                     /* first element of the row */ 
                     count = 0;
-                    start = i*x_size;
+                    position = i*x_size;
                     for (int b=position-x_size; b<position-x_size+2; b++) {
                         count += my_grid[b];
                     }
@@ -422,7 +422,7 @@ int main(int argc, char **argv) {
                     }
                     count += my_grid[position-1];
                     count += my_grid[position+1];
-                    for (int b=position+x_size-1; b<position+x-size+1; b++) {
+                    for (int b=position+x_size-1; b<position+x_size+1; b++) {
                         count += my_grid[b];
                     }
 
