@@ -61,12 +61,12 @@ int main(int argc, char **argv) {
 
             case 'm':
                 m = atoi(optarg);
-		m_length = strlen(optarg);
+		        m_length = strlen(optarg);
                 break;
             
             case 'k':
                 k = atoi(optarg);
-		k_length = strlen(optarg);
+		        k_length = strlen(optarg);
                 break;
             
             case 'e':
@@ -100,6 +100,8 @@ int main(int argc, char **argv) {
     int my_id, n_procs;
     MPI_Init(&argc, &argv);
     MPI_Status status;
+
+    int check = 0;   // error checker for MPI communications and I/O
     
     MPI_Comm_size(MPI_COMM_WORLD, &n_procs);
     MPI_Comm_rank(MPI_COMM_WORLD, &my_id);
@@ -124,7 +126,6 @@ int main(int argc, char **argv) {
         const unsigned int n_cells = m*k;
 
 
-
         /* distributing playground's rows to MPI processes */
 
         unsigned int my_m = m/n_procs;   // number of rows assigned to the process
@@ -135,14 +136,22 @@ int main(int argc, char **argv) {
         const int my_n_cells = my_m*k;   // number of cells assigned to the process
 
 
-
         /* initializing grid to random booleans */
 
         BOOL* my_grid = (BOOL*) malloc(my_n_cells*sizeof(BOOL));
 
-        /* setting the seed (unique for each process) */
+        /* setting the seed */
         struct drand48_data rand_gen;
-        long int seed = my_id+2;   /// MODIFICARE PER RENDERE NON RIPRODUCIBILE
+        /* generating a unique seed for each process */
+        long int seed;
+        if (my_id == 0)   // in this way we are sure that the seed will be different for all processes
+            seed = time(NULL);
+        check += MPI_Bcast(&seed, 1, MPI_LONG, 0, MPI_COMM_WORLD);
+        if (check != 0) {
+            printf("--- AN ERROR OCCURRED WHILE BROADCASTING THE SEED ---\n");
+            check = 0;
+        }
+        seed += my_id;
         srand48_r(seed, &rand_gen);
 
         for (int i=0; i<my_n_cells; i++) {
@@ -155,7 +164,6 @@ int main(int argc, char **argv) {
         }
 
 
-
         /* writing down the playground */
 
         MPI_File f_handle;   // pointer to file
@@ -163,8 +171,11 @@ int main(int argc, char **argv) {
        
 	    /* formatting the PGM file */ 
         const int color_maxval = 1;
-     	const int header_size = m_length+k_length+6+1;   // the last number added to header_size must be equal to the
-							 // number of ciphers to represent color_maxval in base 10
+        /* the third number added to header_size must be equal to the total length 
+         * in bytes of the header, spaces and new-line characters included and 
+         * length of m and k excluded */
+     	const int header_size = m_length+k_length+7;
+
         if (my_id == 0) {
 
             /* setting the header */
@@ -232,7 +243,6 @@ int main(int argc, char **argv) {
 
         
         /* error variables for I/O */
-        int check = 0;   // error checker
         short int error_control_1 = 0;   // needed for the for loop
         short int error_control_2 = 0;   //
         short int error_control_3 = 0;   //
@@ -292,7 +302,6 @@ int main(int argc, char **argv) {
         check += MPI_File_open(MPI_COMM_WORLD, fname, access_mode, MPI_INFO_NULL, &f_handle);
 
         /* computing offsets */
-	    //int offset = header_size;
 	    int offset = header_size;
 	    if (my_id < y_size_rmd) {
 	        offset += my_id*my_n_cells;
@@ -328,7 +337,225 @@ int main(int argc, char **argv) {
         if (e == ORDERED) {
 
 
-	    printf("ordered evolution\n");
+            /* evolution */
+
+            for (int gen=0; gen<n; gen++) {
+
+
+                /* iteration on processes */
+                for (int proc=0; proc<n_procs; proc++) {
+
+
+                    /* getting neighbor cells' status */
+
+                    if (proc == 0) {
+
+                        if (my_id == n_procs-1) {
+
+                            check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
+                
+                        } else if (my_id == 1) {
+
+                            check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
+
+                        } else if (my_id == 0) {
+
+                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prec, tag_recv_p, MPI_COMM_WORLD, &status);
+                            check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+                        }
+                        
+                        if (check != 0 && error_control_1 == 0) {
+                            printf("--- AN ERROR OCCURRED WHILE COMMUNICATING NEIGHBOR CELLS' STATUS OF PROCESS %d ---\n", proc);
+                            check = 0;
+                            error_control_1 = 1;   // to avoid a large number of error messages
+                        }
+
+                    } else if (proc == n_procs-1) {
+
+                        if (my_id == n_procs-2) {
+
+                            check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
+                
+                        } else if (my_id == 0) {
+
+                            check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
+
+                        } else if (my_id == n_procs-1) {
+
+                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prec, tag_recv_p, MPI_COMM_WORLD, &status);
+                            check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+                        }
+                        
+                        if (check != 0 && error_control_1 == 0) {
+                            printf("--- AN ERROR OCCURRED WHILE COMMUNICATING NEIGHBOR CELLS' STATUS OF PROCESS %d ---\n", proc);
+                            check = 0;
+                            error_control_1 = 1;   // to avoid a large number of error messages
+                        }
+
+                    } else {
+
+                        if (my_id == proc-1) {
+
+                            check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
+                
+                        } else if (my_id == proc+1) {
+
+                            check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
+
+                        } else if (my_id == proc) {
+
+                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prec, tag_recv_p, MPI_COMM_WORLD, &status);
+                            check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+                        }
+                        
+                        if (check != 0 && error_control_1 == 0) {
+                            printf("--- AN ERROR OCCURRED WHILE COMMUNICATING NEIGHBOR CELLS' STATUS OF PROCESS %d ---\n", proc);
+                            check = 0;
+                            error_control_1 = 1;   // to avoid a large number of error messages
+                        }
+
+                    }
+
+
+                    if (my_id == proc) {
+
+                        /* updating the cells' status */
+
+                        char count;   // counter of alive neighbor cells
+                        int position;   // position of the cell to update
+
+                        /* iteration on rows */
+                        for (int i=1; i<my_y_size+1; i++) {
+
+                            /* first element of the row */ 
+                            count = 0;
+                            position = i*x_size;
+                            for (int b=position-x_size; b<position-x_size+2; b++) {
+                                count += my_grid[b];
+                            }
+                            count += my_grid[position-1];
+                            count += my_grid[position+1];
+                            for (int b=position+x_size-1; b<position+x_size+2; b++) {
+                                count += my_grid[b];
+                            }
+                            count += my_grid[position+2*x_size-1];
+
+                            if (count == 2 || count == 3) {
+                                my_grid[position] = 1;
+                            } else {
+                                my_grid[position] = 0;
+                            }
+
+                            /* iteration on internal columns */
+                            for (int j=1; j<x_size-1; j++) {
+
+                                count = 0;
+                                position = i*x_size+j;
+                                for (int b=position-x_size-1; b<position-x_size+2; b++) {
+                                    count += my_grid[b];
+                                }
+                                count += my_grid[position-1];
+                                count += my_grid[position+1];
+                                for (int b=position+x_size-1; b<position+x_size+2; b++) {
+                                    count += my_grid[b];
+                                }
+
+                                if (count == 2 || count == 3) {
+                                    my_grid[position] = 1;
+                                } else {
+                                    my_grid[position] = 0;
+                                }
+                            }
+
+                            /* last element of the row */
+                            count = 0;
+                            position = (i+1)*x_size-1;
+                            count += my_grid[position-2*x_size+1];
+                            for (int b=position-x_size-1; b<position-x_size+2; b++) {
+                                count += my_grid[b];
+                            }
+                            count += my_grid[position-1];
+                            count += my_grid[position+1];
+                            for (int b=position+x_size-1; b<position+x_size+1; b++) {
+                                count += my_grid[b];
+                            }
+
+                            if (count == 2 || count == 3) {
+                                my_grid[position] = 1;
+                            } else {
+                                my_grid[position] = 0;
+                            }
+                        }
+
+                    }
+
+                    MPI_Barrier(MPI_COMM_WORLD);
+
+                }
+
+
+                /* writing a dump of the system */ 
+
+                if (s != 0) {
+
+                    if (gen % s == 0) {
+
+
+                        sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen+1);
+
+                        /* formatting the PGM file */ 
+                        if (my_id == 0) {
+
+                            /* setting the header */
+                            char header[header_size];
+                            sprintf(header, "P5 %d %d\n%d\n", x_size, y_size, color_maxval);
+
+                            /* writing the header */
+                            access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY;
+                            check += MPI_File_open(MPI_COMM_SELF, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
+                            check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
+                            check += MPI_File_close(&f_handle);
+                        
+                            if (check != 0 && error_control_2 == 0) {
+                                printf("--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE SYSTEM DUMP NUMBER %d ---\n", gen/s);
+                                error_control_2 = 1;   // to avoid a large number of error messages
+                                check = 0; 
+                            }
+                        }
+
+
+                        /* needed to make sure that all processes are actually 
+                        * wrtiting on an already formatted PGM file */
+                        MPI_Barrier(MPI_COMM_WORLD);
+
+                
+                        /* opening file in parallel */
+                        access_mode = MPI_MODE_APPEND | MPI_MODE_WRONLY;
+                        check += MPI_File_open(MPI_COMM_WORLD, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
+
+                        /* computing offsets */
+	                    offset = header_size;
+	                    if (my_id < y_size_rmd) {
+		                    offset += my_id*my_n_cells;
+	                    } else {
+		                    offset += y_size_rmd*x_size + my_id*my_n_cells;
+	                    }
+
+                        /* writing in parallel */
+                        check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
+
+                        check += MPI_File_close(&f_handle);
+
+                        if (check != 0 && error_control_3 == 0) {
+                            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE SYSTEM DUMP NUMBER %d ---\n", my_id, gen/s);
+                            error_control_3 = 1;   // to avoid a large number of error messages
+                            check = 0;
+                        }
+
+                    }
+                }
+            
+            }
 
 
 
@@ -346,7 +573,7 @@ int main(int argc, char **argv) {
             for (int gen=0; gen<n; gen++) {
 
  
-                /* communicating neighbor cells' status to neighbor processes */ 
+                /* communicating border cells' status to neighbor processes */ 
                 
                 if (my_id % 2 == 0) {
 
@@ -509,12 +736,12 @@ int main(int argc, char **argv) {
 
             }
 
-	}
+	    }
 
 
-	/* writing the final state */
+	    /* writing the final state */
 
-	sprintf(snap_name, "snapshots/final_state.pgm");
+	    sprintf(snap_name, "snapshots/final_state.pgm");
 
         /* formatting the PGM file */ 
         if (my_id == 0) {
