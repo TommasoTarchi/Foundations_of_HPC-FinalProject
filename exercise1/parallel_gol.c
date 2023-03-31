@@ -46,15 +46,6 @@ int read_pgm_header(unsigned int*, const char*);
 int main(int argc, char **argv) {
 
 
-
-/* needed for timing */
-#ifdef TIME
-    if (my_id == 0)
-        struct timespec ts;
-#endif
-
-
-
     /* getting options */
     int action = 0;
     char *optstring = "irm:k:e:f:n:s:";
@@ -123,6 +114,13 @@ int main(int argc, char **argv) {
 
 
 
+/* needed for timing */
+#ifdef TIME
+    struct timespec ts;
+#endif
+
+
+
     /* initializing a playground */
     if (action == INIT) {
 
@@ -130,8 +128,9 @@ int main(int argc, char **argv) {
 
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0)
+    if (my_id == 0) {
         double t_start = CPU_TIME;
+    }
 #endif
 
 
@@ -250,9 +249,10 @@ int main(int argc, char **argv) {
 
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0)
+    if (my_id == 0) {
         double time = CPU_TIME - t_start;
         printf("elapsed time for initialization: %f sec\n\n", time);
+    }
 #endif
 
 
@@ -264,6 +264,15 @@ int main(int argc, char **argv) {
 
     /* running game of life */
     if (action == RUN) {
+
+
+
+#ifdef TIME
+if (my_id == 0) {
+    double t_start;
+}
+#endif
+
 
 
         /* assigning default name to file in case none was passed */
@@ -375,8 +384,9 @@ int main(int argc, char **argv) {
 
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0)
-        double t_start = CPU_TIME;
+    if (my_id == 0) {
+        t_start = CPU_TIME;
+    }
 #endif
 
 
@@ -605,9 +615,10 @@ int main(int argc, char **argv) {
 
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0)
+    if (my_id == 0) {
         double time = CPU_TIME - t_start;
         printf("elapsed time for ordered evolution: %f sec\n\n", time);
+    }
 #endif
 
 
@@ -618,8 +629,9 @@ int main(int argc, char **argv) {
 
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0)
-        double t_start = CPU_TIME;
+    if (my_id == 0) {
+        t_start = CPU_TIME;
+    }
 #endif
 
 
@@ -798,6 +810,18 @@ int main(int argc, char **argv) {
 
             }
 
+
+
+#ifdef TIME
+    MPI_Barrier(MPI_COMM_WORLD);
+    if (my_id == 0) {
+        double time = CPU_TIME - t_start;
+        printf("elapsed time for static evolution: %f sec\n\n", time);
+    }
+#endif
+
+
+
 	    }
 
 
@@ -852,16 +876,6 @@ int main(int argc, char **argv) {
             printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE FINAL STATE OF THE SYSTEM ---\n", my_id);
             check = 0;
 	    }
-
-
-
-#ifdef TIME
-    MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0)
-        double time = CPU_TIME - t_start;
-        printf("elapsed time for static evolution: %f sec\n\n", time);
-#endif
-
             
 	    
 	    free(snap_name);
