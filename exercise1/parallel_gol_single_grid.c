@@ -623,14 +623,10 @@ int main(int argc, char **argv) {
 #endif
 
 
-
-            /* auxiliary grid to store cells' status */
-            BOOL* my_grid_aux = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
-            /* temporary pointer used for grid switching */
-            void* temp=NULL;
-
-            
+          
             /* evolution */
+
+            int bit_control = 0   // needed to know which is the state signaling bit
 
             for (int gen=0; gen<n; gen++) {
 
@@ -640,6 +636,18 @@ int main(int argc, char **argv) {
                 if (s != 0) {
 
                     if (gen % s == 0) {
+
+
+                        /* selecting the signaling bit */
+                        if (gen % 2 == 1) {
+
+                            for (int i=0; i<my_n_cells; i++)
+                                my_grid[i] >>= 1;
+                        
+                        } else {
+
+                            for (int i=0; i<my_n_cells; i++)
+                                my_grid[i] &= 1;
 
 
                         sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen);
@@ -697,7 +705,7 @@ int main(int argc, char **argv) {
                 }
 
                 
-		/* communicating border cells' status to neighbor processes */ 
+        		/* communicating border cells' status to neighbor processes */ 
                 
                 if (my_id % 2 == 0) {
 
@@ -723,29 +731,34 @@ int main(int argc, char **argv) {
 
                 /* updating the cells' status */
 
-                char count;   // counter of alive neighbor cells
-                int position;   // position of the cell to update
+                /* needed for evolution without allocating auxiliary grid */
+                char alive = 2 - bit_control % 2;
+                char dead = 1 + bit_control % 2;
+                char shift = bit_control % 2;
+
+                char count;
+                char position;
 
                 /* iteration on rows */
                 for (int i=1; i<my_y_size+1; i++) {
 
-                    /* first element of the row */ 
+                    /* first element of the row */
                     count = 0;
                     position = i*x_size;
                     for (int b=position-x_size; b<position-x_size+2; b++) {
-                        count += my_grid[b];
+                        count += (my_grid[b] >> shift) & 1;
                     }
-                    count += my_grid[position-1];
-                    count += my_grid[position+1];
+                    count += (my_grid[position-1] >> shift) & 1;
+                    count += (my_grid[position+1] >> shift) & 1;
                     for (int b=position+x_size-1; b<position+x_size+2; b++) {
-                        count += my_grid[b];
+                        count += (my_grid[b] >> shift) & 1;
                     }
-                    count += my_grid[position+2*x_size-1];
+                    count += (my_grid[position+2*x_size-1] >> shift) & 1;
 
                     if (count == 2 || count == 3) {
-                        my_grid_aux[position] = 1;
+                        my_grid[position] |= alive;
                     } else {
-                        my_grid_aux[position] = 0;
+                        my_grid[position] &= dead;
                     }
 
                     /* iteration on internal columns */
@@ -754,47 +767,43 @@ int main(int argc, char **argv) {
                         count = 0;
                         position = i*x_size+j;
                         for (int b=position-x_size-1; b<position-x_size+2; b++) {
-                            count += my_grid[b];
+                            count += (my_grid[b] >> shift) & 1;
                         }
-                        count += my_grid[position-1];
-                        count += my_grid[position+1];
+                        count += (my_grid[position-1] >> shift) & 1;
+                        count += (my_grid[position+1] >> shift) & 1;
                         for (int b=position+x_size-1; b<position+x_size+2; b++) {
-                            count += my_grid[b];
+                            count += (my_grid[b] >> shift) & 1;
                         }
 
                         if (count == 2 || count == 3) {
-                            my_grid_aux[position] = 1;
+                            my_grid[position] |= alive;
                         } else {
-                            my_grid_aux[position] = 0;
+                            my_grid[position] &= dead;
                         }
                     }
 
                     /* last element of the row */
                     count = 0;
                     position = (i+1)*x_size-1;
-                    count += my_grid[position-2*x_size+1];
+                    count += (my_grid[position-2*x_size+1] >> shift) & 1;
                     for (int b=position-x_size-1; b<position-x_size+2; b++) {
-                        count += my_grid[b];
+                        count += (my_grid[b] >> shift) & 1;
                     }
-                    count += my_grid[position-1];
-                    count += my_grid[position+1];
+                    count += (my_grid[position-1] >> shift) & 1;
+                    count += (my_grid[position+1] >> shift) & 1;
                     for (int b=position+x_size-1; b<position+x_size+1; b++) {
-                        count += my_grid[b];
+                        count += (my_grid[b] >> shift) & 1;
                     }
 
                     if (count == 2 || count == 3) {
-                        my_grid_aux[position] = 1;
+                        my_grid[position] |= alive;
                     } else {
-                        my_grid_aux[position] = 0;
+                        my_grid[position] &= dead;
                     }
                 }
 
-                /* switching pointers to grid and grid_aux */
-                
-                temp = my_grid;
-                my_grid = my_grid_aux;
-                my_grid_aux = temp;
-                temp = NULL;
+
+                bit_control++;
 
             }
 
