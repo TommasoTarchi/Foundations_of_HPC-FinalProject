@@ -16,6 +16,10 @@ ${target_path}/parallel_gol_single_grid.x: src/parallel_gol_single_grid.c
 	gcc -DTIME $^ -o $@
 
 
-clean:
+clean_data:
 	rm -rf ${target_path}/*.x
+
+
+clean_images:
 	rm snapshots/*.pgm
+	rm *.pgm
