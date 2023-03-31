@@ -373,6 +373,10 @@ int main(int argc, char **argv) {
 
 
 
+	int bit_control = 0;   // needed to control the state signaling bit in static evolution
+
+
+
         if (e == ORDERED) {
 
 #ifdef TIME
@@ -629,8 +633,6 @@ int main(int argc, char **argv) {
           
             /* evolution */
 
-            int bit_control = 0;   // needed to know which is the state signaling bit
-
             for (int gen=0; gen<n; gen++) {
 
 
@@ -795,7 +797,7 @@ int main(int argc, char **argv) {
                     }
                     count += (my_grid[position-1] >> shift) & 1;
                     count += (my_grid[position+1] >> shift) & 1;
-                    for (int b=position+x_size-1; b<position+x_size+1; b++) {
+                    for (int b=position+x_size-1; b<position+x_size; b++) {
                         count += (my_grid[b] >> shift) & 1;
                     }
 
