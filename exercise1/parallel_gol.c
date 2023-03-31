@@ -117,9 +117,7 @@ int main(int argc, char **argv) {
 /* needed for timing */
 #ifdef TIME
     struct timespec ts;
-    //if (my_id == 0) {
-	  //  double t_start;
-    //}
+    double t_start;
 #endif
 
 
@@ -132,7 +130,7 @@ int main(int argc, char **argv) {
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_id == 0) {
-        double t_start = CPU_TIME;
+        t_start = CPU_TIME;
     }
 #endif
 
@@ -378,8 +376,9 @@ int main(int argc, char **argv) {
 
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0)
+    if (my_id == 0) {
         t_start = CPU_TIME;
+    }
 #endif
 
 
@@ -622,8 +621,9 @@ int main(int argc, char **argv) {
 
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0)
+    if (my_id == 0) {
         t_start = CPU_TIME;
+    }
 #endif
 
 
