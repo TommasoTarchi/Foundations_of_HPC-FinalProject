@@ -710,7 +710,7 @@ int main(int argc, char **argv) {
                     }
                 }
 
-                
+
         		/* communicating border cells' status to neighbor processes */ 
                 
                 if (my_id % 2 == 0) {
@@ -744,6 +744,7 @@ int main(int argc, char **argv) {
 
                 char count;
                 char position;
+
 
                 /* iteration on rows */
                 for (int i=1; i<my_y_size+1; i++) {
@@ -797,7 +798,7 @@ int main(int argc, char **argv) {
                     }
                     count += (my_grid[position-1] >> shift) & 1;
                     count += (my_grid[position+1] >> shift) & 1;
-                    for (int b=position+x_size-1; b<position+x_size; b++) {
+                    for (int b=position+x_size-1; b<position+x_size+1; b++) {
                         count += (my_grid[b] >> shift) & 1;
                     }
 
@@ -818,7 +819,7 @@ int main(int argc, char **argv) {
 
 	/* writing the final state */
 
-	/* selecting the state singaling bit */
+	/* selecting the state signaling bit */
 	if (e == STATIC) {
 
             if (bit_control % 2 == 1) {
@@ -955,9 +956,25 @@ int read_pgm_header(unsigned int* head, const char* fname) {
     }
 
     /* getting header size */ 
-    fseek(image_file, 0L, SEEK_END);
-    long unsigned int total_size = ftell(image_file);
-    head[3] = total_size - head[1]*head[2];
+    //fseek(image_file, 0L, SEEK_END);
+    //long unsigned int total_size = ftell(image_file);
+    //head[3] = total_size - head[1]*head[2];
+
+
+    int size = 0;
+    
+    for (int i=0; i<3; i++) {
+	int cipher = 9;
+	int power = 10;
+	size++;
+	while (head[i] > cipher) {
+	    size++;
+	    cipher += 9*power;
+	    power *= 10;
+	}
+    }
+
+    head[3] = 6 + size;
 
 
     fclose(image_file);

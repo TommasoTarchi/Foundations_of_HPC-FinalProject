@@ -600,6 +600,7 @@ int main(int argc, char **argv) {
                     MPI_Barrier(MPI_COMM_WORLD);
 
                 }
+
             
             }
 
@@ -817,7 +818,8 @@ int main(int argc, char **argv) {
 	    }
 
 
-	    /* writing the final state */
+
+	/* writing the final state */
 
 	    sprintf(snap_name, "snapshots/final_state.pgm");
 
@@ -868,8 +870,8 @@ int main(int argc, char **argv) {
             printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE FINAL STATE OF THE SYSTEM ---\n", my_id);
             check = 0;
 	    }
-            
-	    
+
+
 	    free(snap_name);
         free(my_grid);
 
@@ -929,9 +931,25 @@ int read_pgm_header(unsigned int* head, const char* fname) {
     }
 
     /* getting header size */ 
-    fseek(image_file, 0L, SEEK_END);
-    long unsigned int total_size = ftell(image_file);
-    head[3] = total_size - head[1]*head[2];
+    //fseek(image_file, 0L, SEEK_END);
+    //long unsigned int total_size = ftell(image_file);
+    //head[3] = total_size - head[1]*head[2];
+
+
+    int size = 0;
+    
+    for (int i=0; i<3; i++) {
+	int cipher = 9;
+	int power = 10;
+	size++;
+	while (head[i] > cipher) {
+	    size++;
+	    cipher += 9*power;
+	    power *= 10;
+	}
+    }
+
+    head[3] = 6 + size;
 
 
     fclose(image_file);
