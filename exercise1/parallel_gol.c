@@ -346,12 +346,12 @@ int main(int argc, char **argv) {
 
 		/* writing a dump of the system */ 
 
-                if (n & s) {
+                if (s != 0) {
 
                     if (gen % s == 0) {
 
 
-                        sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen+1);
+                        sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen);
 
                         /* formatting the PGM file */ 
                         if (my_id == 0) {
@@ -574,15 +574,15 @@ int main(int argc, char **argv) {
 
             for (int gen=0; gen<n; gen++) {
 
- 
+
 		/* writing a dump of the system */ 
 
-                if (n & s) {
+                if (s != 0) {
 
                     if (gen % s == 0) {
 
 
-                        sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen+1);
+                        sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen);
 
                         /* formatting the PGM file */ 
                         if (my_id == 0) {
