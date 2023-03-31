@@ -117,6 +117,9 @@ int main(int argc, char **argv) {
 /* needed for timing */
 #ifdef TIME
     struct timespec ts;
+    if (my_id == 0) {
+	double t_start;
+    }
 #endif
 
 
@@ -129,7 +132,7 @@ int main(int argc, char **argv) {
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_id == 0) {
-        double t_start = CPU_TIME;
+        t_start = CPU_TIME;
     }
 #endif
 
@@ -266,15 +269,6 @@ int main(int argc, char **argv) {
     if (action == RUN) {
 
 
-
-#ifdef TIME
-if (my_id == 0) {
-    double t_start;
-}
-#endif
-
-
-
         /* assigning default name to file in case none was passed */
         if (fname == NULL) {
 
@@ -384,9 +378,8 @@ if (my_id == 0) {
 
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0) {
+    if (my_id == 0)
         t_start = CPU_TIME;
-    }
 #endif
 
 
@@ -629,9 +622,8 @@ if (my_id == 0) {
 
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0) {
+    if (my_id == 0)
         t_start = CPU_TIME;
-    }
 #endif
 
 

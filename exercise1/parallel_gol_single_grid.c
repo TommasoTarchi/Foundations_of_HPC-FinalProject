@@ -626,7 +626,7 @@ int main(int argc, char **argv) {
           
             /* evolution */
 
-            int bit_control = 0   // needed to know which is the state signaling bit
+            int bit_control = 0;   // needed to know which is the state signaling bit
 
             for (int gen=0; gen<n; gen++) {
 
@@ -638,8 +638,8 @@ int main(int argc, char **argv) {
                     if (gen % s == 0) {
 
 
-                        /* selecting the signaling bit */
-                        if (gen % 2 == 1) {
+                        /* selecting the state signaling bit */
+                        if (bit_control % 2 == 1) {
 
                             for (int i=0; i<my_n_cells; i++)
                                 my_grid[i] >>= 1;
@@ -648,6 +648,7 @@ int main(int argc, char **argv) {
 
                             for (int i=0; i<my_n_cells; i++)
                                 my_grid[i] &= 1;
+			}
 
 
                         sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen);
@@ -807,12 +808,28 @@ int main(int argc, char **argv) {
 
             }
 
+         }
+
+
+	/* writing the final state */
+
+	/* selecting the state singaling bit */
+	if (e == STATIC) {
+
+            if (bit_control % 2 == 1) {
+
+            for (int i=0; i<my_n_cells; i++)
+                my_grid[i] >>= 1;
+                        
+            } else {
+
+                for (int i=0; i<my_n_cells; i++)
+                    my_grid[i] &= 1;
 	    }
+	}
 
 
-	    /* writing the final state */
-
-	    sprintf(snap_name, "snapshots/final_state.pgm");
+	    sprintf(snap_name, "snapshots/final_state_sg.pgm");
 
         /* formatting the PGM file */ 
         if (my_id == 0) {
