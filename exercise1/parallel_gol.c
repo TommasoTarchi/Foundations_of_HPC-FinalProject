@@ -66,21 +66,21 @@ int main(int argc, char **argv) {
                 break;
 
             case 'm':
-                if (m < 100) {
-                    printf("--- MATRIX DIMENSIONS TOO SMALL: MUST BE AT LEAST 100x100 ---\n");
+                m = atoi(optarg);
+		if (m < 100) {
+                    printf("\n--- MATRIX DIMENSIONS TOO SMALL: MUST BE AT LEAST 100x100 ---\n\n");
                     return 1;
                 }
-                m = atoi(optarg);
-		        m_length = strlen(optarg);
-                break;
+		m_length = strlen(optarg);
+		break;
             
             case 'k':
-                if (k < 100) {
-                    printf("--- MATRIX DIMENSIONS TOO SMALL: MUST BE AT LEAST 100x100 ---\n");
+                k = atoi(optarg);
+	        if (k < 100) {
+                    printf("\n--- MATRIX DIMENSIONS TOO SMALL: MUST BE AT LEAST 100x100 ---\n\n");
                     return 1;
                 }
-                k = atoi(optarg);
-		        k_length = strlen(optarg);
+		k_length = strlen(optarg);
                 break;
             
             case 'e':
@@ -328,7 +328,7 @@ int main(int argc, char **argv) {
         
         /* checking minimal dimensions */
         if (x_size < 100 || y_size < 100) {
-            printf("--- MATRIX DIMENSIONS TOO SMALL: MUST BE AT LEAST 100x100 ---\n");
+            printf("\n--- MATRIX DIMENSIONS TOO SMALL: MUST BE AT LEAST 100x100 ---\n\n");
             return 1;
         }
 
