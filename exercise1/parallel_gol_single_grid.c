@@ -636,7 +636,7 @@ int main(int argc, char **argv) {
             for (int gen=0; gen<n; gen++) {
 
 
-		/* writing a dump of the system */ 
+		        /* writing a dump of the system */ 
 
                 if (s != 0) {
 
@@ -647,8 +647,10 @@ int main(int argc, char **argv) {
                         if (bit_control % 2 == 1) {
 
                             for (int i=0; i<my_n_cells+2*x_size; i++)
-                                my_grid[i] >>= 1;
-				                        
+                                my_grid[i] >>= 1;				                        
+
+                            bit_control++
+                        
                         } else {
 
                             for (int i=0; i<my_n_cells+2*x_size; i++)
