@@ -642,17 +642,18 @@ int main(int argc, char **argv) {
 
                     if (gen % s == 0) {
 
-
+ 
                         /* selecting the state signaling bit */
                         if (bit_control % 2 == 1) {
 
-                            for (int i=0; i<my_n_cells; i++)
+                            for (int i=0; i<my_n_cells+2*x_size; i++)
                                 my_grid[i] >>= 1;
-                        
+				                        
                         } else {
 
-                            for (int i=0; i<my_n_cells; i++)
+                            for (int i=0; i<my_n_cells+2*x_size; i++)
                                 my_grid[i] &= 1;
+				
 			}
 
 
@@ -743,8 +744,7 @@ int main(int argc, char **argv) {
                 char shift = bit_control % 2;
 
                 char count;
-                char position;
-
+                int position;
 
                 /* iteration on rows */
                 for (int i=1; i<my_y_size+1; i++) {
@@ -769,7 +769,7 @@ int main(int argc, char **argv) {
                     }
 
                     /* iteration on internal columns */
-                    for (int j=1; j<x_size-1; j++) {
+                    for (int j=1; j<x_size+1; j++) {
 
                         count = 0;
                         position = i*x_size+j;
@@ -818,19 +818,20 @@ int main(int argc, char **argv) {
 
 
 	/* writing the final state */
-
+	
 	/* selecting the state signaling bit */
 	if (e == STATIC) {
 
             if (bit_control % 2 == 1) {
 
-            for (int i=0; i<my_n_cells; i++)
+            for (int i=x_size; i<my_n_cells+x_size; i++)
                 my_grid[i] >>= 1;
-                        
+                      
             } else {
 
-                for (int i=0; i<my_n_cells; i++)
+                for (int i=x_size; i<my_n_cells+x_size; i++)
                     my_grid[i] &= 1;
+		    
 	    }
 	}
 
@@ -848,7 +849,7 @@ int main(int argc, char **argv) {
             access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY;
             check += MPI_File_open(MPI_COMM_SELF, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
             check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
- 		        check += MPI_File_close(&f_handle);
+ 	    check += MPI_File_close(&f_handle);
 
             if (check != 0 && error_control_2 == 0) {
                 printf("--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE FINAL STATE OF THE SYSTEM ---\n");
@@ -878,7 +879,7 @@ int main(int argc, char **argv) {
         /* writing in parallel */
         check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
 
-	    check += MPI_File_close(&f_handle);
+	    //check += MPI_File_close(&f_handle);
 
 	    if (check != 0 && error_control_3 == 0) {
             printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE FINAL STATE OF THE SYSTEM ---\n", my_id);
@@ -961,8 +962,8 @@ int read_pgm_header(unsigned int* head, const char* fname) {
     //head[3] = total_size - head[1]*head[2];
 
 
+    /* getting header size */
     int size = 0;
-    
     for (int i=0; i<3; i++) {
 	int cipher = 9;
 	int power = 10;
