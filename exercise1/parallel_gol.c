@@ -66,11 +66,19 @@ int main(int argc, char **argv) {
                 break;
 
             case 'm':
+                if (m < 100) {
+                    printf("--- MATRIX DIMENSIONS TOO SMALL: MUST BE AT LEAST 100x100 ---\n");
+                    return 1;
+                }
                 m = atoi(optarg);
 		        m_length = strlen(optarg);
                 break;
             
             case 'k':
+                if (k < 100) {
+                    printf("--- MATRIX DIMENSIONS TOO SMALL: MUST BE AT LEAST 100x100 ---\n");
+                    return 1;
+                }
                 k = atoi(optarg);
 		        k_length = strlen(optarg);
                 break;
@@ -316,6 +324,13 @@ int main(int argc, char **argv) {
         const int header_size = header_content[3];
 
         const unsigned int n_cells = x_size*y_size;   // total number of cells
+
+        
+        /* checking minimal dimensions */
+        if (x_size < 100 || y_size < 100) {
+            printf("--- MATRIX DIMENSIONS TOO SMALL: MUST BE AT LEAST 100x100 ---\n");
+            return 1;
+        }
 
 
         /* distributing work among MPI processes */
