@@ -41,10 +41,10 @@ export OMP_PLACES=cores
 export OMP_PROC_BIND=$alloc
 
 ### overwriting old datafiles and setting up new ones
-echo "#node:        ${node}" > mkl_f.csv
-echo "#library:     MKL" >> mkl_f.csv
-echo "#precision:   float" >> mkl_f.csv
-echo "#allocation:  ${alloc}" >> mkl_f.csv
+echo "#node:,        ${node},," > mkl_f.csv
+echo "#library:,     MKL,," >> mkl_f.csv
+echo "#precision:,   float,," >> mkl_f.csv
+echo "#allocation:,  ${alloc},," >> mkl_f.csv
 echo >> mkl_f.csv
 echo "n_cores,mat_size,time(s),GFLOPS" >> mkl_f.csv
 
