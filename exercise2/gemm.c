@@ -147,7 +147,7 @@ int main(int argc, char** argv) {
 #ifdef SAVE_RESULTS
     FILE* datafile;
     datafile = fopen(DATAFILE, "a");
-    fprintf(datafile, "%d\t    %lf s\t   %lf\n", m, n, k, elapsed, gflops);
+    fprintf(datafile, "%d,%lf,%lf\n", m, elapsed, gflops);
     fclose(datafile);
 
     printf("done\n");
