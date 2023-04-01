@@ -811,6 +811,9 @@ int main(int argc, char **argv) {
                     }
                 }
 
+
+		bit_control++;
+
             }
 
          }
