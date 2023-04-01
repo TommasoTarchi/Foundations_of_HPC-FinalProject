@@ -649,7 +649,7 @@ int main(int argc, char **argv) {
                             for (int i=0; i<my_n_cells+2*x_size; i++)
                                 my_grid[i] >>= 1;				                        
 
-                            bit_control++
+                            bit_control++;
                         
                         } else {
 
@@ -810,9 +810,6 @@ int main(int argc, char **argv) {
                         my_grid[position] &= dead;
                     }
                 }
-
-
-                bit_control++;
 
             }
 
