@@ -441,6 +441,18 @@ int main(int argc, char **argv) {
             for (int gen=0; gen<n; gen++) {
 
 
+                /* saving a snapshot of the system */
+                if (s != 0) {
+
+                    if (gen % s == 0) {
+
+                        sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen);
+                        
+                        write_pgm_image(grid, 1, x_size, y_size, snap_name);
+                    }
+                }
+
+                
                 /* updating first row */
                 
                 /* first element of the first row */
@@ -630,18 +642,6 @@ int main(int argc, char **argv) {
                 grid = grid_aux;
                 grid_aux = temp;
                 temp = NULL;
-
-
-                /* saving a snapshot of the system */
-                if (s != 0) {
-
-                    if (gen % s == 0) {
-
-                        sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen+1);
-                        
-                        write_pgm_image(grid, 1, x_size, y_size, snap_name);
-                    }
-                }
                 
             }
 
