@@ -935,9 +935,8 @@ int read_pgm_header(unsigned int* head, const char* fname) {
     //long unsigned int total_size = ftell(image_file);
     //head[3] = total_size - head[1]*head[2];
 
-
+    /* getting header size */
     int size = 0;
-    
     for (int i=0; i<3; i++) {
 	int cipher = 9;
 	int power = 10;
@@ -948,7 +947,6 @@ int read_pgm_header(unsigned int* head, const char* fname) {
 	    power *= 10;
 	}
     }
-
     head[3] = 6 + size;
 
 
