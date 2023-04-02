@@ -9620,7 +9620,7 @@ done
 
 REMOVING COMPILED PROGRAMS AND UNLOADING MODULES...
 
-rm -rf /u/dssc/ttarch00/Foundations_of_HPC-FinalProject/exercise2/EPYC/cores_w_close_cores/*.x
+rm -rf /u/dssc/ttarch00/Foundations_of_HPC-FinalProject/exercise2/EPYC/cores_w_spread_cores/*.x
 Removing mkl version 2022.2.1
 Use `module list` to view any remaining dependent modules.
 Removing compiler-rt version 2022.2.1
