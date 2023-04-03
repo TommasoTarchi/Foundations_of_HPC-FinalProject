@@ -49,13 +49,13 @@ export OMP_PROC_BIND=$alloc
 #echo "#,,," >> mkl_f.csv
 #echo "cores,mat_size,time(s),GFLOPS" >> mkl_f.csv
 
-echo "#,,," > oblas_f.csv
-echo "#node:,${node},," >> oblas_f.csv
-echo "#library:,openBLAS,," >> oblas_f.csv
-echo "#precision:,float,," >> oblas_f.csv
-echo "#allocation:,${alloc},," >> oblas_f.csv
-echo "#,,," >> oblas_f.csv
-echo "cores,mat_size,time(s),GFLOPS" >> oblas_f.csv
+#echo "#,,," > oblas_f.csv
+#echo "#node:,${node},," >> oblas_f.csv
+#echo "#library:,openBLAS,," >> oblas_f.csv
+#echo "#precision:,float,," >> oblas_f.csv
+#echo "#allocation:,${alloc},," >> oblas_f.csv
+#echo "#,,," >> oblas_f.csv
+#echo "cores,mat_size,time(s),GFLOPS" >> oblas_f.csv
 
 #echo "#,,," > blis_f.csv
 #echo "#node:,${node},," >> blis_f.csv
@@ -98,8 +98,8 @@ do
 	do
 		#echo -n "${ncores}," >> mkl_f.csv
 		#./gemm_mkl_f.x $size $size $size
-		echo -n "${ncores},"  >> oblas_f.csv
-		./gemm_oblas_f.x $size $size $size
+		#echo -n "${ncores},"  >> oblas_f.csv
+		#./gemm_oblas_f.x $size $size $size
 		#echo -n "${ncores},"  >> blis_f.csv
 		#./gemm_blis_f.x $size $size $size
 		#echo -n "${ncores}," >> mkl_d.csv
