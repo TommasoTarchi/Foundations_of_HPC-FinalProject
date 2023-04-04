@@ -58,13 +58,13 @@ export OMP_NUM_THREADS=$ncores
 #echo "#,,," >> oblas_f.csv
 #echo "cores,mat_size,time(s),GFLOPS" >> oblas_f.csv
 
-echo "#,,," > blis_f.csv
-echo "#node:,${node},," >> blis_f.csv
-echo "#library:,BLIS,," >> blis_f.csv
-echo "#precision:,float,," >> blis_f.csv
-echo "#allocation:,${alloc},," >> blis_f.csv
-echo "#,,," >> blis_f.csv
-echo "cores,mat_size,time(s),GFLOPS" >> blis_f.csv
+#echo "#,,," > blis_f.csv
+#echo "#node:,${node},," >> blis_f.csv
+#echo "#library:,BLIS,," >> blis_f.csv
+#echo "#precision:,float,," >> blis_f.csv
+#echo "#allocation:,${alloc},," >> blis_f.csv
+#echo "#,,," >> blis_f.csv
+#echo "cores,mat_size,time(s),GFLOPS" >> blis_f.csv
 
 #echo "#,,," > mkl_d.csv
 #echo "#node:,${node},," >> mkl_d.csv
@@ -99,8 +99,8 @@ do
 		#./gemm_mkl_f.x $size $size $size
 		#echo -n "${ncores},"  >> oblas_f.csv
 		#./gemm_oblas_f.x $size $size $size
-		echo -n "${ncores},"  >> blis_f.csv
-		./gemm_blis_f.x $size $size $size
+		#echo -n "${ncores},"  >> blis_f.csv
+		#./gemm_blis_f.x $size $size $size
 		#echo -n "${ncores}," >> mkl_d.csv
 		#./gemm_mkl_d.x $size $size $size
 		#echo -n "${ncores},"  >> oblas_d.csv

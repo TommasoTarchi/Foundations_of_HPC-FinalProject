@@ -74,21 +74,21 @@ export OMP_NUM_THREADS=$ncores
 #echo "#,,," >> mkl_d.csv
 #echo "cores,mat_size,time(s),GFLOPS" >> mkl_d.csv
 
-echo "#,,," > oblas_d.csv
-echo "#node:,${node},," >> oblas_d.csv
-echo "#library:,openBLAS,," >> oblas_d.csv
-echo "#precision:,double,," >> oblas_d.csv
-echo "#allocation:,${alloc},," >> oblas_d.csv
-echo "#,,," >> oblas_d.csv
-echo "cores,mat_size,time(s),GFLOPS" >> oblas_d.csv
+#echo "#,,," > oblas_d.csv
+#echo "#node:,${node},," >> oblas_d.csv
+#echo "#library:,openBLAS,," >> oblas_d.csv
+#echo "#precision:,double,," >> oblas_d.csv
+#echo "#allocation:,${alloc},," >> oblas_d.csv
+#echo "#,,," >> oblas_d.csv
+#echo "cores,mat_size,time(s),GFLOPS" >> oblas_d.csv
 
-echo "#,,," > blis_d.csv
-echo "#node:,${node},," >> blis_d.csv
-echo "#library:,BLIS,," >> blis_d.csv
-echo "#precision:,double,," >> blis_d.csv
-echo "#allocation:,${alloc},," >> blis_d.csv
-echo "#,,," >> blis_d.csv
-echo "cores,mat_size,time(s),GFLOPS" >> blis_d.csv
+#echo "#,,," > blis_d.csv
+#echo "#node:,${node},," >> blis_d.csv
+#echo "#library:,BLIS,," >> blis_d.csv
+#echo "#precision:,double,," >> blis_d.csv
+#echo "#allocation:,${alloc},," >> blis_d.csv
+#echo "#,,," >> blis_d.csv
+#echo "cores,mat_size,time(s),GFLOPS" >> blis_d.csv
 
 ### performing measures
 for size in $(seq 2000 250 20000)
@@ -103,10 +103,10 @@ do
 		#./gemm_blis_f.x $size $size $size
 		#echo -n "${ncores}," >> mkl_d.csv
 		#./gemm_mkl_d.x $size $size $size
-		echo -n "${ncores},"  >> oblas_d.csv
-		./gemm_oblas_d.x $size $size $size
-		echo -n "${ncores},"  >> blis_d.csv
-		./gemm_blis_d.x $size $size $size
+		#echo -n "${ncores},"  >> oblas_d.csv
+		#./gemm_oblas_d.x $size $size $size
+		#echo -n "${ncores},"  >> blis_d.csv
+		#./gemm_blis_d.x $size $size $size
 		echo
 		echo -----------
 		echo
