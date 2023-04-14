@@ -195,4 +195,15 @@ module purge
 
 ### How to actually run jobs
 
-PARLARE DI BLIS PATH E DI UNCOMMENTING LINES (E DI LIMITE DI TEMPO)
+Let's suppose you have already cloned this repository and that you have already installed the BLIS library (if you do not know how to do that, you can find a simple tutorial in the course material at [this link][link1]).
+
+To reproduce some of the results here exposed, you can follow this steps:
+
+1. Change the BLIS library path in `Makefile`, i.e. change the variable `BLISROOT`'s value to the path in which you stored the installed library
+2. 
+
+
+
+
+
+[link1]: https://github.com/Foundations-of-HPC/Foundations_of_HPC_2022/blob/main/Assignment/exercise2/README.md
