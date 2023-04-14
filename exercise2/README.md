@@ -38,7 +38,7 @@ Each subdirectory of `EPYC/` and `THIN/` contains the exact same files:
 - `blis_d.csv`: a CSV file containing results for BLIS in double point precision
 
 
-### Job files
+## Job files
 
 All job files have a very similar structure.
 
@@ -193,6 +193,6 @@ module purge
 <a name="ref1">
 </a>
 
-## How to run jobs
+### How to actually run jobs
 
 PARLARE DI BLIS PATH E DI UNCOMMENTING LINES (E DI LIMITE DI TEMPO)
