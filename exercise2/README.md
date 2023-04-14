@@ -1,4 +1,4 @@
-# Exercise 1
+# Exercise 2
 
 For a quick overview of the aim of this exercise see `README.md` in this directory's parent directory.
 
