@@ -6,7 +6,9 @@ For a quick overview of the aim of this exercise see `README.md` in this directo
 precision, EPYC node, fixed number of cores, spread-cores threads affinity policy" is a possible configuration.
 
 
-## What you will find in this repository
+## What you will find in this directory
+
+The current directory contains:
 
 - This markdown file: an overview of the content of this folder and how to run it
 - `gemm.c`: a code to call the *gemm* function and to measure its performance
