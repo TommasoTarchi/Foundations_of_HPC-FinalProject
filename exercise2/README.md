@@ -26,7 +26,7 @@ The current directory contains:
 
 As you cas see, the structure of the two directories `EPYC/` and `THIN/` is exactly the same. The name of their subdirectories can be interpreted as `$(variable-condition)_w_$(threads-affinity-policy)/`, for instance `cores_w_close_cores/` in `THIN/` contains data gathered on THIN nodes with varying number of cores (at fixed size) with close-cores threads affinity policy.
 
-Each subdirectory of `EPYC/` and `THIN/` contains the exact same files:
+Each subdirectory of `EPYC/` and `THIN/` contains the same set of files:
 
 - `job.sh`: a bash script used to compile `gemm.c` in the desired configuration, run it and gather results on performance; the script is made to be run as a SLURM sbatch job on ORFEO
 - `summary.out`: a file that is produced each time `job.sh` is run, and that can be used to check whether the job was run successfully until the end
@@ -289,7 +289,7 @@ done
 
 Of course we could think of uncommenting lines for more than one configuration at the same time, but that is feasible only if we have a time limit large enough to do all the computation (to change the time limit you can just change the related command in the first block of instructions). In general, the time needed to run one of the configurations depends on several factors: which is the varying parameter, which nodes partition you are running one, what precision you are using, etc...
 
-With a time limit of at least two hours, I can guarantee jobs to be completed **only** in the case in which only one configuration at a time is run.
+With a time limit of at least two hours, we can guarantee jobs to be completed **only** in the case in which only one configuration at a time is run.
 
 
 ### Running on other clusters
@@ -301,9 +301,9 @@ Also the module loading/unloading parts will probably have to be changed, depend
 
 ## Results
 
-Here we just briefly expose the data we got. For a deeper analysis we invite you to read the `report.pdf` file in this directory's parent directory (INSERIRE RIFERIMENTO AL REPORT).
+Here we just briefly expose the data we got. For a deeper analysis we invite you to read the `report.pdf` (INSERIRE RIFERIMENTO AL REPORT) file in this directory's parent directory.
 
-
+Here 
 
 
 
