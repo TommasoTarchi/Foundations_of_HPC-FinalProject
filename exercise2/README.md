@@ -177,7 +177,7 @@ done
 
 In this block the first six subblocks are there to create (or ovewrite, if already present in the folder) the six CSV files to store data. The following for loop iterates over the numbers of cores (for fixed matrix size) or over the matrix sizes (for fixed number of cores), while the function of the inner for loop is to repeat the measurement five times in order to have a little bit of statistic. Inside the inner for loop each two lines are there to actually call the executables and to write the preformance measure to the CSV files.
 
-Note that all these lines (both for file overwriting and for measurements) are commented, and it's left to the user to uncomment the needed ones. For details see [the following section](#ref1).
+Note that all these lines (both for file overwriting and for measurements) are commented, and it's left to the user to uncomment the needed ones. To know how see [the following section](#ref1).
 
 The last block of instructions simply cleans the current directory from executables and releases the previously loaded modules. It is the same for all job files:
 
@@ -303,9 +303,60 @@ Also the module loading/unloading parts will probably have to be changed, depend
 
 Here we just briefly expose the data we got. For a deeper analysis we invite you to read the `report.pdf` (INSERIRE RIFERIMENTO AL REPORT) file in this directory's parent directory.
 
-To make it easier to consult data, here you can find a table with direct access to the CSV files:
+To make it easier to consult data, here you can find a table with direct access to all CSV files (if a cell is empty, then its content is the same as the last non empty cell above in the same column - we believe it to be more readable in this way):
 
-[attempt](EPYC/cores_w_close_cores.csv)
+| node | varying parameter | precision | threads affinity | library | file |
+| ---- | ----------------- | ---------------- | --------- | ------- | ---- |
+| EPYC | number of cores | float | close cores | MKL | [1](EPYC/cores_w_close_cores/mkl_f.csv) |
+| | | |                                        | openBLAS | [2](EPYC/cores_w_close_cores/oblas_f.csv) |
+| | | |                                        | BLIS | [3](EPYC/cores_w_close_cores/blis_f.csv) |
+| | |                           | spread cores | MKL |  [4](EPYC/cores_w_spread_cores/mkl_f.csv) |
+| | | |                                        | openBLAS | [5](EPYC/cores_w_spread_cores/oblas_f.csv) |
+| | | |                                        | BLIS | [6](EPYC/cores_w_spread_cores/blis_f.csv) |
+| |                     | double | close cores | MKL | [7](EPYC/cores_w_close_cores/mkl_d.csv) | 
+| | | |                                        | openBLAS | [8](EPYC/cores_w_close_cores/oblas_d.csv) |
+| | | |                                        | BLIS | [9](EPYC/cores_w_close_cores/blis_d.csv) |
+| | |                           | spread cores | MKL | [10](EPYC/cores_w_spread_cores/mkl_d.csv) |
+| | | |                                        | openBLAS| [11](EPYC/cores_w_spread_cores/oblas_d.csv) |
+| | | |                                        | BLIS | [12](EPYC/cores_w_spread_cores/blis_d.csv) |
+|          | matrix size | float | close cores | MKL | [13](EPYC/size_w_close_cores/mkl_f.csv) |
+| | | |                                        | openBLAS | [14](EPYC/size_w_close_cores/oblas_f.csv) |
+| | | |                                        | BLIS | [15](EPYC/size_w_close_cores/blis_f.csv) |
+| | |                           | spread cores | MKL | [16](EPYC/size_w_spread_cores/mkl_f.csv) |
+| | | |                                        | openBLAS | [17](EPYC/size_w_spread_cores/oblas_f.csv) |
+| | | |                                        | BLIS | [18](EPYC/size_w_spread_cores/blis_f.csv) |
+| |                     | double | close cores | MKL | [19](EPYC/size_w_close_cores/mkl_d.csv) |
+| | | |                                        | openBLAS | [20](EPYC/size_w_close_cores/oblas_d.csv) |
+| | | |                                        | BLIS | [21](EPYC/size_w_close_cores/blis_d.csv) |
+| | |                           | spread cores | MKL | [22](EPYC/size_w_spread_cores/mkl_d.csv) |
+| | | |                                        | openBLAS | [23](EPYC/size_w_spread_cores/oblas_d.csv) |
+| | | |                                        | BLIS | [24](EPYC/size_w_spread_cores/blis_d.csv) |
+| THIN | number of cores | float | close cores | MKL |
+| | | |                                        | openBLAS |
+| | | |                                        | BLIS |
+| | |                           | spread cores | MKL |
+| | | |                                        | openBLAS |
+| | | |                                        | BLIS |
+| |                     | double | close cores | MKL | 
+| | | |                                        | openBLAS |
+| | | |                                        | BLIS |
+| | |                           | spread cores | MKL |
+| | | |                                        | openBLAS|
+| | | |                                        | BLIS |
+|          | matrix size | float | close cores | MKL |
+| | | |                                        | openBLAS |
+| | | |                                        | BLIS |
+| | |                           | spread cores | MKL |
+| | | |                                        | openBLAS |
+| | | |                                        | BLIS |
+| |                     | double | close cores | MKL |
+| | | |                                        | openBLAS |
+| | | |                                        | BLIS |
+| | |                           | spread cores | MKL |
+| | | |                                        | openBLAS |
+| | | |                                        | BLIS |
+
+
 
 
 
