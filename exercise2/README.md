@@ -303,7 +303,9 @@ Also the module loading/unloading parts will probably have to be changed, depend
 
 Here we just briefly expose the data we got. For a deeper analysis we invite you to read the `report.pdf` (INSERIRE RIFERIMENTO AL REPORT) file in this directory's parent directory.
 
-Here 
+To make it easier to consult data, here you can find a table with direct access to the CSV files:
+
+[attempt](EPYC/cores_w_close_cores.csv)
 
 
 
