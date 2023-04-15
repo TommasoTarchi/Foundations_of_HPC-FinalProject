@@ -28,8 +28,8 @@ As you cas see, the structure of the two directories `EPYC/` and `THIN/` is exac
 
 Each subdirectory of `EPYC/` and `THIN/` contains the exact same files:
 
-- `job.sh`: a bash script used to compile `gemm.c` in the desired configuration, run it and gather results on performance; the script is made to be ran as a SLURM sbatch job on ORFEO
-- `summary.out`: a file that is produced each time job.sh is run, and that can be used to check whether the job was ran successfully until the end
+- `job.sh`: a bash script used to compile `gemm.c` in the desired configuration, run it and gather results on performance; the script is made to be run as a SLURM sbatch job on ORFEO
+- `summary.out`: a file that is produced each time `job.sh` is run, and that can be used to check whether the job was run successfully until the end
 - `mkl_f.csv`: a CSV file containing results for MKL in single point precision
 - `oblas_f.csv`: a CSV file containing results for openBLAS in single point precision
 - `blis_f.csv`: a CSV file containing results for BLIS in single point precision
@@ -38,7 +38,7 @@ Each subdirectory of `EPYC/` and `THIN/` contains the exact same files:
 - `blis_d.csv`: a CSV file containing results for BLIS in double point precision
 
 
-## Job files
+### Job files
 
 All job files have a very similar structure.
 
@@ -97,7 +97,7 @@ export OMP_PROC_BIND=$alloc
 
 Where `OMP_PLACES` and `OMP_PROC_BIND` are enviroment variables used to set the threads affinity policy.
 
-The following block (until the two separating lines) is exactly the same for all `job.sh` files; the only difference is that when the number of cores is fixed `export OMP_NUM_THREADS=$ncores` is put in the previous block of instructions (`OMP_NUM_THREADS` is an enviroment variables used to set the number of openMP threads). For instance:
+The following block (until the two separating dashed lines) is exactly the same for all `job.sh` files; the only difference is that when the number of cores is fixed `export OMP_NUM_THREADS=$ncores` is put in the previous block of instructions (`OMP_NUM_THREADS` is an enviroment variables used to set the number of openMP threads). For instance:
 
 ````
 ### overwriting old datafiles and setting up new ones
@@ -175,7 +175,7 @@ do
 done
 ````
 
-In this block the first six subblocks are there to create (or ovewrite, if already present in the folder) the six CSV files to store data. The following for loop iterates over the numbers of cores (for fixed matrix size) or over the matrix sizes (for fixed number of cores), while the function of the inner for loop is to repeat the measurement five times in order to have a little bit of statistic. Inside the inner for loop each two lines are there to actually call the `gemm` function and to write the measures of preformance to the CSV files.
+In this block the first six subblocks are there to create (or ovewrite, if already present in the folder) the six CSV files to store data. The following for loop iterates over the numbers of cores (for fixed matrix size) or over the matrix sizes (for fixed number of cores), while the function of the inner for loop is to repeat the measurement five times in order to have a little bit of statistic. Inside the inner for loop each two lines are there to actually call the executables and to write the preformance measure to the CSV files.
 
 Note that all these lines (both for file overwriting and for measurements) are commented, and it's left to the user to uncomment the needed ones. For details see [the following section](#ref1).
 
@@ -193,14 +193,115 @@ module purge
 <a name="ref1">
 </a>
 
-### How to actually run jobs
+## How to actually run jobs
 
-Let's suppose you have already cloned this repository and that you have already installed the BLIS library (if you do not know how to do that, you can find a simple tutorial in the course material at [this link][link1]).
+**Note**: this job files are written to be run on facilities using SLURM as the resource manager, in particular the requested resources are compatible with ORFEO (cluster hosted at Area Science Park (Trieste)).
 
-To reproduce some of the results here exposed, you can follow this steps:
+Let's suppose you have already cloned this repository and that you have already installed the BLIS library (if you do not know how to do that, you can find a [simple tutorial][link1] in the course material).
 
-1. Change the BLIS library path in `Makefile`, i.e. change the variable `BLISROOT`'s value to the path in which you stored the installed library
-2. 
+To reproduce on ORFEO some of the results here exposed, you can follow these steps:
+
+1. Change the BLIS library path in `Makefile` (i.e. change the variable `BLISROOT`'s value) to the one in which you installed the BLIS library
+2. Navigate to the folder corresponding to the nodes partition you are interested to test on (either `EPYC/` or `THIN/`)
+3. Navigate to the folder corresponding to the parameter you want to vary (either the matrix size or the number of cores) and to the threads affinity policy you want to use (either close or spread cores)
+4. Modify `job.sh` uncommenting the lines corresponding to the library and the precision you want to use (i.e. the four lines before the loop needed to overwrite (or create if not present) the CSV file and the two lines inside the inner loop needed to call the executable and save results into the CSV)
+5. Call `sbatch job.sh` from inside the directory contaning `job.sh`
+
+To clarify point 4., let's see an example in which we want to gather data for openBLAS library with double point precision:
+
+````
+### overwriting old datafiles and setting up new ones
+#echo "#,,," > mkl_f.csv
+#echo "#node:,${node},," >> mkl_f.csv
+#echo "#library:,MKL,," >> mkl_f.csv
+#echo "#precision:,float,," >> mkl_f.csv
+#echo "#allocation:,${alloc},," >> mkl_f.csv
+#echo "#,,," >> mkl_f.csv
+#echo "cores,mat_size,time(s),GFLOPS" >> mkl_f.csv
+
+#echo "#,,," > oblas_f.csv
+#echo "#node:,${node},," >> oblas_f.csv
+#echo "#library:,openBLAS,," >> oblas_f.csv
+#echo "#precision:,float,," >> oblas_f.csv
+#echo "#allocation:,${alloc},," >> oblas_f.csv
+#echo "#,,," >> oblas_f.csv
+#echo "cores,mat_size,time(s),GFLOPS" >> oblas_f.csv
+
+#echo "#,,," > blis_f.csv
+#echo "#node:,${node},," >> blis_f.csv
+#echo "#library:,BLIS,," >> blis_f.csv
+#echo "#precision:,float,," >> blis_f.csv
+#echo "#allocation:,${alloc},," >> blis_f.csv
+#echo "#,,," >> blis_f.csv
+#echo "cores,mat_size,time(s),GFLOPS" >> blis_f.csv
+
+#echo "#,,," > mkl_d.csv
+#echo "#node:,${node},," >> mkl_d.csv
+#echo "#library:,MKL,," >> mkl_d.csv
+#echo "#precision:,double,," >> mkl_d.csv
+#echo "#allocation:,${alloc},," >> mkl_d.csv
+#echo "#,,," >> mkl_d.csv
+#echo "cores,mat_size,time(s),GFLOPS" >> mkl_d.csv
+
+echo "#,,," > oblas_d.csv
+echo "#node:,${node},," >> oblas_d.csv
+echo "#library:,openBLAS,," >> oblas_d.csv
+echo "#precision:,double,," >> oblas_d.csv
+echo "#allocation:,${alloc},," >> oblas_d.csv
+echo "#,,," >> oblas_d.csv
+echo "cores,mat_size,time(s),GFLOPS" >> oblas_d.csv
+
+#echo "#,,," > blis_d.csv
+#echo "#node:,${node},," >> blis_d.csv
+#echo "#library:,BLIS,," >> blis_d.csv
+#echo "#precision:,double,," >> blis_d.csv
+#echo "#allocation:,${alloc},," >> blis_d.csv
+#echo "#,,," >> blis_d.csv
+#echo "cores,mat_size,time(s),GFLOPS" >> blis_d.csv
+
+### performing measures
+for ncores in $(seq 1 1 128)
+do
+	export OMP_NUM_THREADS=$ncores
+	
+	for count in $(seq 1 1 5)
+	do
+		#echo -n "${ncores}," >> mkl_f.csv
+		#./gemm_mkl_f.x $size $size $size
+		#echo -n "${ncores},"  >> oblas_f.csv
+		#./gemm_oblas_f.x $size $size $size
+		#echo -n "${ncores},"  >> blis_f.csv
+		#./gemm_blis_f.x $size $size $size
+		#echo -n "${ncores}," >> mkl_d.csv
+		#./gemm_mkl_d.x $size $size $size
+		echo -n "${ncores},"  >> oblas_d.csv
+		./gemm_oblas_d.x $size $size $size
+		#echo -n "${ncores},"  >> blis_d.csv
+		#./gemm_blis_d.x $size $size $size
+		echo
+		echo -----------
+		echo
+	done
+done
+````
+
+### Running more configurations at the same time
+
+Of course we could think of uncommenting lines for more than one configuration at the same time, but that is feasible only if we have a time limit large enough to do all the computation (to change the time limit you can just change the related command in the first block of instructions). In general, the time needed to run one of the configurations depends on several factors: which is the varying parameter, which nodes partition you are running one, what precision you are using, etc...
+
+With a time limit of at least two hours, I can guarantee jobs to be completed **only** in the case in which only one configuration at a time is run.
+
+
+### Running on other clusters
+
+To run these jobs on a cluster different from ORFEO (**given that it has SLURM as the resource manager**), you will have to make a couple of changes to `job.sh`. In particular you will have to change the resource requests (i.e. the first block of instructions) according to the partitions and the number of cores per node available and the maximum time allowed.
+
+Also the module loading/unloading parts will probably have to be changed, depending on the modules organization on the cluster.
+
+
+## Results
+
+Here we just briefly expose the data we got. For a deeper analysis we invite you to read the `report.pdf` file in this directory's parent directory (INSERIRE RIFERIMENTO AL REPORT).
 
 
 
