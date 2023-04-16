@@ -28,14 +28,3 @@ In practice, we implemented an MPI version of GOL in which the workload was equa
 ### Exercise 2
 
 In this second assignment we were asked to compare the performance of three HPC math libraries: **MKL**, **openBLAS** and **BLIS** (the last one had to be downloaded and compiled by the student on his own working area on ORFEO). In particular, we had to compare the performance of a level 3 BLAS function called *gemm* on matrix-matrix multiplications, both for increasing matrix size (at fixed number of CPUs) and for incresing number of CPUs (at fixed matrix size), both on **EPYC** and **THIN** nodes of ORFEO, both for single and double point precision floating point numbers and with different threads allocation policies (we chose to use *close cores* and *spread cores*).
-
-We were already given a working code called `gemm.c` (actually, in the original repository of the course there is a mistake and the file is called `dgemm.c` - see [here][link1]) that could be used to call the function with single or double point precision from any of the three libraries, and to measure its performance in total time and *GFLOPS* (giga-floating point operations per second). We slightly modified this code to write the results to file (a different one depending on the library and the precision used).
-
-We were also given a Makefile (see [here][link2]) to compile the code with different libraries and precisions. Also in this case we slightly modified the code to write the results to file and to compile the `gemm.c` codes in the right folder (i.e. the folder were we needed them to run to gather data in a certain configuration - by *configuration* we mean a given set of conditions, for instance: "openBLAS with double point precision on EPYC node with fixed size and spread cores").
-
-
-
-
-
-[link1]: https://github.com/Foundations-of-HPC/Foundations_of_HPC_2022/blob/main/Assignment/exercise2/dgemm.c
-[link2]: https://github.com/Foundations-of-HPC/Foundations_of_HPC_2022/blob/main/Assignment/exercise2/Makefile
