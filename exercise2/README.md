@@ -307,7 +307,7 @@ Also the module loading/unloading parts will probably need to be changed, depend
 
 Here we just briefly expose the data we got. For their analysis we invite you to read `report.pdf` (**INSERIRE RIFERIMENTO AL REPORT**) in this directory's parent directory.
 
-To make it easier to consult data, here you can find a table with direct access to all CSV files (if a cell is empty, then its content is the same as the last non empty cell above in the same column - we believe it to be more readable in this way):
+To make it easier to consult data, here you can find a table with direct access to all CSV files (if a cell is empty, then its content is the same as the last non empty cell above in the same column - we believe the table to be more readable in this way):
 
 | node | varying parameter | precision | threads affinity | library | file |
 | ---- | ----------------- | ---------------- | --------- | ------- | ---- |
