@@ -208,7 +208,7 @@ To reproduce on ORFEO some of the results here exposed, you can follow these ste
 1. change the BLIS library path in `Makefile` (i.e. change the variable `BLISROOT`'s value) to the one in which you installed the BLIS library
 2. navigate to the folder corresponding to the nodes partition you are interested to test on (either `EPYC/` or `THIN/`)
 3. navigate to the folder corresponding to the parameter you want to vary (either the matrix size or the number of cores) and the threads affinity policy you want to use (either close or spread cores)
-4. modify `job.sh` uncommenting the lines corresponding to the library and the precision you want to use (i.e. the four lines before the loop needed to overwrite (or create if not present) the CSV file and the two lines inside the inner loop needed to run the executable and save results into the CSV)
+4. modify `job.sh` uncommenting the lines corresponding to the library and the precision you want to use (i.e. the four lines before the loop needed to overwrite the CSV file and the two lines inside the inner loop needed to run the executable and save results into the CSV)
 5. call `sbatch job.sh` from inside the directory contaning `job.sh`
 
 To clarify point 4., let's see an example in which we want to gather data for openBLAS library with double point precision:
