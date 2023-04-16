@@ -20,7 +20,7 @@ For an overview of the content of `exercise1/` and `exercise2/` (and to know how
 
 In this assignment we were asked to implement a parallel version of the famous Conway's Game of Life ("GOL") and to measure its scalability in different conditions. The parallelism had to be a **hybrid MPI/openMP**, i.e. we had to work with a distributed memory approach and a shared memory approach on the same code.
 
-In practice, we implemented an MPI version of GOL in which the workload was equally distributed among the processes; then, each MPI process would parallelize its own work spawning a number of openMP processes. To study the scalability we compiled and ran (from remote) the program on **ORFEO** (the cluster hosted at *Area Science Park* (Trieste)).
+In practice, we implemented an MPI version of GOL in which the workload was equally distributed among the processes; then, each MPI process would parallelize its own work spawning a number of openMP processes. To study the scalability we compiled and ran the program on **ORFEO** (the cluster hosted at *Area Science Park* (Trieste)).
 
 For details about this assignment see [this document][link1] in the original course repository. 
 
