@@ -28,7 +28,7 @@ As you cas see, the structure of the two directories `EPYC/` and `THIN/` is exac
 
 We were already given a working code called `gemm.c` (actually, in the original repository of the course there is a mistake and the file is called `dgemm.c` - see [here][link1]) that could be used to call the function with single or double point precision from any of the three libraries, and to measure its performance in total time and *GFLOPS* (giga-floating point operations per second). The version you can find in this directory is a slightly modified one, in which it is possible to write the results to a CSV file (a different one depending on the library and the precision used).
 
-We were also given a Makefile (see [here][link2]) to compile the code with different libraries and precisions. Also in this case we slightly modified the code to write the results to file and to compile the `gemm.c` codes in the right folder.
+We were also given a Makefile (see [here][link2]) to compile `gemm.c` with different libraries and precisions. Also in this case we slightly modified the code to write the results to file and to compile the executables in the right folder.
 
 Each subdirectory of `EPYC/` and `THIN/` contains the same set of files:
 
