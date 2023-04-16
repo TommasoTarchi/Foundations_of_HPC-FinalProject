@@ -1,6 +1,6 @@
 # Exercise 2
 
-For a quick overview of the aim of this exercise see `README.md` in this directory's parent directory.
+For a quick overview of the aim of this exercise see [`README.md`](../README.md) in this directory's parent directory.
 
 **NOTE**: by ***configuration*** we mean a given set of conditions, for instance: "MKL library, single point
 precision, EPYC node, fixed number of cores, spread-cores threads affinity policy" is a possible configuration.
