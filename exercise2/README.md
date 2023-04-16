@@ -62,7 +62,7 @@ Here, for instance, we are requesting an entire (all of its 128 cores) EPYC node
 In the second part (very similar for all `job.sh` files) we (in order):
 1. load the needed modules: the architecture of the target machine (AMD for EPYC nodes and Intel for THIN nodes), MKL and openBLAS libraries
 2. export the path for the BLIS library (**NOTE:** this has to be changed according to your own installation of the library)
-3. compile `gemm.c` in the current directory for all libraries and for both single and double point precision, passing the current directory as the one in which we want the CSV files to be saved
+3. compile `gemm.c` saving the executables in the current directory for all libraries and for both single and double point precision, passing the current directory as the one in which we want the CSV files to be saved
 
 Again for example `cores_w_close_cores/job.sh` (the messages printed to screen via `echo` are there only to make `summary.out` readable):
 
@@ -201,11 +201,11 @@ Let's suppose you have already cloned this repository and that you have already 
 
 To reproduce on ORFEO some of the results here exposed, you can follow these steps:
 
-1. Change the BLIS library path in `Makefile` (i.e. change the variable `BLISROOT`'s value) to the one in which you installed the BLIS library
-2. Navigate to the folder corresponding to the nodes partition you are interested to test on (either `EPYC/` or `THIN/`)
-3. Navigate to the folder corresponding to the parameter you want to vary (either the matrix size or the number of cores) and to the threads affinity policy you want to use (either close or spread cores)
-4. Modify `job.sh` uncommenting the lines corresponding to the library and the precision you want to use (i.e. the four lines before the loop needed to overwrite (or create if not present) the CSV file and the two lines inside the inner loop needed to call the executable and save results into the CSV)
-5. Call `sbatch job.sh` from inside the directory contaning `job.sh`
+1. change the BLIS library path in `Makefile` (i.e. change the variable `BLISROOT`'s value) to the one in which you installed the BLIS library
+2. navigate to the folder corresponding to the nodes partition you are interested to test on (either `EPYC/` or `THIN/`)
+3. navigate to the folder corresponding to the parameter you want to vary (either the matrix size or the number of cores) and the threads affinity policy you want to use (either close or spread cores)
+4. modify `job.sh` uncommenting the lines corresponding to the library and the precision you want to use (i.e. the four lines before the loop needed to overwrite (or create if not present) the CSV file and the two lines inside the inner loop needed to run the executable and save results into the CSV)
+5. call `sbatch job.sh` from inside the directory contaning `job.sh`
 
 To clarify point 4., let's see an example in which we want to gather data for openBLAS library with double point precision:
 
@@ -296,12 +296,12 @@ With a time limit of at least two hours, we can guarantee jobs to be completed *
 
 To run these jobs on a cluster different from ORFEO (**given that it has SLURM as the resource manager**), you will have to make a couple of changes to `job.sh`. In particular you will have to change the resource requests (i.e. the first block of instructions) according to the partitions and the number of cores per node available and the maximum time allowed.
 
-Also the module loading/unloading parts will probably have to be changed, depending on the modules organization on the cluster.
+Also the module loading/unloading parts will probably need to be changed, depending on the modules organization on the cluster.
 
 
 ## Results
 
-Here we just briefly expose the data we got. For a deeper analysis we invite you to read the `report.pdf` (INSERIRE RIFERIMENTO AL REPORT) file in this directory's parent directory.
+Here we just briefly expose the data we got. For their analysis we invite you to read `report.pdf` (INSERIRE RIFERIMENTO AL REPORT) in this directory's parent directory.
 
 To make it easier to consult data, here you can find a table with direct access to all CSV files (if a cell is empty, then its content is the same as the last non empty cell above in the same column - we believe it to be more readable in this way):
 
@@ -331,30 +331,30 @@ To make it easier to consult data, here you can find a table with direct access 
 | | |                           | spread cores | MKL | [22](EPYC/size_w_spread_cores/mkl_d.csv) |
 | | | |                                        | openBLAS | [23](EPYC/size_w_spread_cores/oblas_d.csv) |
 | | | |                                        | BLIS | [24](EPYC/size_w_spread_cores/blis_d.csv) |
-| THIN | number of cores | float | close cores | MKL |
-| | | |                                        | openBLAS |
-| | | |                                        | BLIS |
-| | |                           | spread cores | MKL |
-| | | |                                        | openBLAS |
-| | | |                                        | BLIS |
-| |                     | double | close cores | MKL | 
-| | | |                                        | openBLAS |
-| | | |                                        | BLIS |
-| | |                           | spread cores | MKL |
-| | | |                                        | openBLAS|
-| | | |                                        | BLIS |
-|          | matrix size | float | close cores | MKL |
-| | | |                                        | openBLAS |
-| | | |                                        | BLIS |
-| | |                           | spread cores | MKL |
-| | | |                                        | openBLAS |
-| | | |                                        | BLIS |
-| |                     | double | close cores | MKL |
-| | | |                                        | openBLAS |
-| | | |                                        | BLIS |
-| | |                           | spread cores | MKL |
-| | | |                                        | openBLAS |
-| | | |                                        | BLIS |
+| THIN | number of cores | float | close cores | MKL | [1](THIN/cores_w_close_cores/mkl_f.csv) |
+| | | |                                        | openBLAS | [2](THIN/cores_w_close_cores/oblas_f.csv) |
+| | | |                                        | BLIS | [3](THIN/cores_w_close_cores/blis_f.csv) |
+| | |                           | spread cores | MKL |  [4](THIN/cores_w_spread_cores/mkl_f.csv) |
+| | | |                                        | openBLAS | [5](THIN/cores_w_spread_cores/oblas_f.csv) |
+| | | |                                        | BLIS | [6](THIN/cores_w_spread_cores/blis_f.csv) |
+| |                     | double | close cores | MKL | [7](THIN/cores_w_close_cores/mkl_d.csv) | 
+| | | |                                        | openBLAS | [8](THIN/cores_w_close_cores/oblas_d.csv) |
+| | | |                                        | BLIS | [9](THIN/cores_w_close_cores/blis_d.csv) |
+| | |                           | spread cores | MKL | [10](THIN/cores_w_spread_cores/mkl_d.csv) |
+| | | |                                        | openBLAS| [11](THIN/cores_w_spread_cores/oblas_d.csv) |
+| | | |                                        | BLIS | [12](THIN/cores_w_spread_cores/blis_d.csv) |
+|          | matrix size | float | close cores | MKL | [13](THIN/size_w_close_cores/mkl_f.csv) |
+| | | |                                        | openBLAS | [14](THIN/size_w_close_cores/oblas_f.csv) |
+| | | |                                        | BLIS | [15](THIN/size_w_close_cores/blis_f.csv) |
+| | |                           | spread cores | MKL | [16](THIN/size_w_spread_cores/mkl_f.csv) |
+| | | |                                        | openBLAS | [17](THIN/size_w_spread_cores/oblas_f.csv) |
+| | | |                                        | BLIS | [18](THIN/size_w_spread_cores/blis_f.csv) |
+| |                     | double | close cores | MKL | [19](THIN/size_w_close_cores/mkl_d.csv) |
+| | | |                                        | openBLAS | [20](THIN/size_w_close_cores/oblas_d.csv) |
+| | | |                                        | BLIS | [21](THIN/size_w_close_cores/blis_d.csv) |
+| | |                           | spread cores | MKL | [22](THIN/size_w_spread_cores/mkl_d.csv) |
+| | | |                                        | openBLAS | [23](THIN/size_w_spread_cores/oblas_d.csv) |
+| | | |                                        | BLIS | [24](THIN/size_w_spread_cores/blis_d.csv) |
 
 
 
