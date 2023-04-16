@@ -2,7 +2,7 @@
 
 For a quick overview of the aim of this exercise see `README.md` in this directory's parent directory.
 
-**NOTE**: we remind that by ***configuration*** we mean a given set of conditions, for instance: "MKL library, single point
+**NOTE**: by ***configuration*** we mean a given set of conditions, for instance: "MKL library, single point
 precision, EPYC node, fixed number of cores, spread-cores threads affinity policy" is a possible configuration.
 
 
@@ -25,6 +25,10 @@ The current directory contains:
     - `size_w_spread_cores/`
 
 As you cas see, the structure of the two directories `EPYC/` and `THIN/` is exactly the same. The name of their subdirectories can be interpreted as `$(variable-condition)_w_$(threads-affinity-policy)/`, for instance `cores_w_close_cores/` in `THIN/` contains data gathered on THIN nodes with varying number of cores (at fixed size) with close-cores threads affinity policy.
+
+We were already given a working code called `gemm.c` (actually, in the original repository of the course there is a mistake and the file is called `dgemm.c` - see [here][link1]) that could be used to call the function with single or double point precision from any of the three libraries, and to measure its performance in total time and *GFLOPS* (giga-floating point operations per second). The version you can find in this directory is a slightly modified one, in which it is possible to write the results to a CSV file (a different one depending on the library and the precision used).
+
+We were also given a Makefile (see [here][link2]) to compile the code with different libraries and precisions. Also in this case we slightly modified the code to write the results to file and to compile the `gemm.c` codes in the right folder.
 
 Each subdirectory of `EPYC/` and `THIN/` contains the same set of files:
 
@@ -197,7 +201,7 @@ module purge
 
 **Note**: this job files are written to be run on facilities using SLURM as the resource manager, in particular the requested resources are compatible with ORFEO (cluster hosted at Area Science Park (Trieste)).
 
-Let's suppose you have already cloned this repository and that you have already installed the BLIS library (if you do not know how to do that, you can find a [simple tutorial][link1] in the course material).
+Let's suppose you have already cloned this repository and that you have already installed the BLIS library (if you do not know how to do that, you can find a [simple tutorial][link3] in the course material).
 
 To reproduce on ORFEO some of the results here exposed, you can follow these steps:
 
@@ -301,7 +305,7 @@ Also the module loading/unloading parts will probably need to be changed, depend
 
 ## Results
 
-Here we just briefly expose the data we got. For their analysis we invite you to read `report.pdf` (INSERIRE RIFERIMENTO AL REPORT) in this directory's parent directory.
+Here we just briefly expose the data we got. For their analysis we invite you to read `report.pdf` (**INSERIRE RIFERIMENTO AL REPORT**) in this directory's parent directory.
 
 To make it easier to consult data, here you can find a table with direct access to all CSV files (if a cell is empty, then its content is the same as the last non empty cell above in the same column - we believe it to be more readable in this way):
 
@@ -360,4 +364,6 @@ To make it easier to consult data, here you can find a table with direct access 
 
 
 
-[link1]: https://github.com/Foundations-of-HPC/Foundations_of_HPC_2022/blob/main/Assignment/exercise2/README.md
+[link1]: https://github.com/Foundations-of-HPC/Foundations_of_HPC_2022/blob/main/Assignment/exercise2/dgemm.c
+[link2]: https://github.com/Foundations-of-HPC/Foundations_of_HPC_2022/blob/main/Assignment/exercise2/Makefile
+[link3]: https://github.com/Foundations-of-HPC/Foundations_of_HPC_2022/blob/main/Assignment/exercise2/README.md
