@@ -7,8 +7,8 @@ This is the final project for the Foundations of High Performance Computing cour
 
 - This markdown file: a brief overview of the content of this repository and the exercises we were assigned
 - `report.pdf`: a detailed report of everything we did for this project
-- `exercise1/`: a directory containing all the files related to the first exercise
-- `exercise2/`: a directory containing all the files related to the second exercise
+- `exercise1/`: a directory containing all files related to the first exercise
+- `exercise2/`: a directory containing all files related to the second exercise
 
 For an overview of the content of `exercise1/` and `exercise2/` (and to know how to reproduce the results) see the related `README.md` files.
 
