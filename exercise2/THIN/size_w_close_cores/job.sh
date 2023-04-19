@@ -1,7 +1,6 @@
 #!/bin/bash
 #SBATCH --no-requeue
 #SBATCH --job-name="size_scal"
-#SBATCH --get-user-env
 #SBATCH --partition=THIN
 #SBATCH -N 1
 #SBATCH -n 12

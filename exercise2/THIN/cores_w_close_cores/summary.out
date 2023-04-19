@@ -8,10 +8,10 @@ COMPILING PROGRAMS FOR OPENBLAS, MKL AND BLIS ON TARGET MACHINE...
 
 gcc -DUSE_FLOAT -DMKL gemm.c -m64 -I/opt/area/shared/programs/x86/oneAPI/2022.3.1/mkl/2022.2.1/include -L/opt/area/shared/programs/x86/oneAPI/2022.3.1/mkl/2022.2.1/lib/intel64  -lmkl_intel_lp64 -lmkl_gnu_thread -lmkl_core -lgomp -lpthread -lm -ldl  -o /u/dssc/ttarch00/Foundations_of_HPC-FinalProject/exercise2/THIN/cores_w_close_cores/gemm_mkl_f.x -DSAVE_RESULTS
 gcc -DUSE_FLOAT -DOPENBLAS gemm.c -m64 -I/opt/area/shared/programs/Intel/openBLAS/0.3.21-omp/include -L//opt/area/shared/programs/Intel/openBLAS/0.3.21-omp/lib -lopenblas -lpthread -o /u/dssc/ttarch00/Foundations_of_HPC-FinalProject/exercise2/THIN/cores_w_close_cores/gemm_oblas_f.x -fopenmp -DSAVE_RESULTS
-gcc -DUSE_FLOAT  -DBLIS gemm.c -m64 -I/u/dssc/ttarch00/myblis/include/blis -L//u/dssc/ttarch00/myblis/lib -o /u/dssc/ttarch00/Foundations_of_HPC-FinalProject/exercise2/THIN/cores_w_close_cores/gemm_blis_f.x -lpthread  -lblis -fopenmp -lm -DSAVE_RESULTS
+gcc -DUSE_FLOAT  -DBLIS gemm.c -m64 -I/u/dssc/ttarch00/myblis_THIN/include/blis -L//u/dssc/ttarch00/myblis_THIN/lib -o /u/dssc/ttarch00/Foundations_of_HPC-FinalProject/exercise2/THIN/cores_w_close_cores/gemm_blis_f.x -lpthread  -lblis -fopenmp -lm -DSAVE_RESULTS
 gcc -DUSE_DOUBLE -DMKL gemm.c -m64 -I/opt/area/shared/programs/x86/oneAPI/2022.3.1/mkl/2022.2.1/include -L/opt/area/shared/programs/x86/oneAPI/2022.3.1/mkl/2022.2.1/lib/intel64  -lmkl_intel_lp64 -lmkl_gnu_thread -lmkl_core -lgomp -lpthread -lm -ldl  -o /u/dssc/ttarch00/Foundations_of_HPC-FinalProject/exercise2/THIN/cores_w_close_cores/gemm_mkl_d.x -DSAVE_RESULTS
 gcc -DUSE_DOUBLE -DOPENBLAS gemm.c -m64 -I/opt/area/shared/programs/Intel/openBLAS/0.3.21-omp/include -L//opt/area/shared/programs/Intel/openBLAS/0.3.21-omp/lib -lopenblas -lpthread -o /u/dssc/ttarch00/Foundations_of_HPC-FinalProject/exercise2/THIN/cores_w_close_cores/gemm_oblas_d.x -fopenmp -DSAVE_RESULTS
-gcc -DUSE_DOUBLE -DBLIS gemm.c -m64 -I/u/dssc/ttarch00/myblis/include/blis -L//u/dssc/ttarch00/myblis/lib -o /u/dssc/ttarch00/Foundations_of_HPC-FinalProject/exercise2/THIN/cores_w_close_cores/gemm_blis_d.x -lpthread  -lblis -fopenmp -lm -DSAVE_RESULTS
+gcc -DUSE_DOUBLE -DBLIS gemm.c -m64 -I/u/dssc/ttarch00/myblis_THIN/include/blis -L//u/dssc/ttarch00/myblis_THIN/lib -o /u/dssc/ttarch00/Foundations_of_HPC-FinalProject/exercise2/THIN/cores_w_close_cores/gemm_blis_d.x -lpthread  -lblis -fopenmp -lm -DSAVE_RESULTS
 
 --------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------
@@ -26,7 +26,7 @@ GATHERING RESULTS...
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -53,7 +53,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -80,7 +80,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -107,7 +107,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -134,7 +134,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -161,7 +161,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -188,7 +188,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -215,7 +215,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -242,7 +242,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -269,7 +269,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -296,7 +296,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -323,7 +323,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -350,7 +350,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -377,7 +377,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -404,7 +404,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -431,7 +431,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -458,7 +458,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -485,7 +485,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -512,7 +512,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -539,7 +539,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -566,7 +566,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -593,7 +593,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -620,7 +620,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -647,7 +647,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -674,7 +674,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -701,7 +701,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -728,7 +728,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -755,7 +755,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -782,7 +782,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -809,7 +809,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -836,7 +836,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -863,7 +863,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -890,7 +890,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -917,7 +917,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -944,7 +944,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -971,7 +971,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -998,7 +998,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1025,7 +1025,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1052,7 +1052,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1079,7 +1079,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1106,7 +1106,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1133,7 +1133,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1160,7 +1160,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1187,7 +1187,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1214,7 +1214,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1241,7 +1241,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1268,7 +1268,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1295,7 +1295,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1322,7 +1322,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1349,7 +1349,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1376,7 +1376,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1403,7 +1403,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1430,7 +1430,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1457,7 +1457,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1484,7 +1484,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1511,7 +1511,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1538,7 +1538,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1565,7 +1565,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1592,7 +1592,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1619,7 +1619,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1646,7 +1646,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1673,7 +1673,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1700,7 +1700,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1727,7 +1727,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1754,7 +1754,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1781,7 +1781,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1808,7 +1808,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1835,7 +1835,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1862,7 +1862,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1889,7 +1889,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1916,7 +1916,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1943,7 +1943,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1970,7 +1970,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -1997,7 +1997,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2024,7 +2024,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2051,7 +2051,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2078,7 +2078,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2105,7 +2105,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2132,7 +2132,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2159,7 +2159,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2186,7 +2186,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2213,7 +2213,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2240,7 +2240,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2267,7 +2267,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2294,7 +2294,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2321,7 +2321,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2348,7 +2348,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2375,7 +2375,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2402,7 +2402,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2429,7 +2429,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2456,7 +2456,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2483,7 +2483,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2510,7 +2510,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2537,7 +2537,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2564,7 +2564,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2591,7 +2591,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2618,7 +2618,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2645,7 +2645,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2672,7 +2672,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2699,7 +2699,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2726,7 +2726,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2753,7 +2753,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2780,7 +2780,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2807,7 +2807,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2834,7 +2834,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2861,7 +2861,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2888,7 +2888,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2915,7 +2915,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2942,7 +2942,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2969,7 +2969,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -2996,7 +2996,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -3023,7 +3023,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -3050,7 +3050,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -3077,7 +3077,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -3104,7 +3104,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -3131,7 +3131,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -3158,7 +3158,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -3185,7 +3185,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -3212,7 +3212,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done
@@ -3239,7 +3239,7 @@ done
  Initializing data for matrix multiplication C=A*B for matrix 
  A(10000x10000) and matrix B(10000x10000)
 
- Using double 
+ Using float 
 
  Computing matrix product using gemm function via CBLAS interface 
 done

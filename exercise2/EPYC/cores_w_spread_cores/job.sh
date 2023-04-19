@@ -1,7 +1,6 @@
 #!/bin/bash
 #SBATCH --no-requeue
 #SBATCH --job-name="cores_scal"
-#SBATCH --get-user-env
 #SBATCH --partition=EPYC
 #SBATCH -N 1
 #SBATCH -n 128
