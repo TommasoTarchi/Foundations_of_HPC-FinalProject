@@ -334,30 +334,30 @@ To make it easier to consult data, here you can find a table with direct access 
 | | |                           | spread cores | MKL | [22](EPYC/size_w_spread_cores/mkl_d.csv) |
 | | | |                                        | openBLAS | [23](EPYC/size_w_spread_cores/oblas_d.csv) |
 | | | |                                        | BLIS | [24](EPYC/size_w_spread_cores/blis_d.csv) |
-| THIN | number of cores | float | close cores | MKL | [1](THIN/cores_w_close_cores/mkl_f.csv) |
-| | | |                                        | openBLAS | [2](THIN/cores_w_close_cores/oblas_f.csv) |
-| | | |                                        | BLIS | [3](THIN/cores_w_close_cores/blis_f.csv) |
-| | |                           | spread cores | MKL |  [4](THIN/cores_w_spread_cores/mkl_f.csv) |
-| | | |                                        | openBLAS | [5](THIN/cores_w_spread_cores/oblas_f.csv) |
-| | | |                                        | BLIS | [6](THIN/cores_w_spread_cores/blis_f.csv) |
-| |                     | double | close cores | MKL | [7](THIN/cores_w_close_cores/mkl_d.csv) | 
-| | | |                                        | openBLAS | [8](THIN/cores_w_close_cores/oblas_d.csv) |
-| | | |                                        | BLIS | [9](THIN/cores_w_close_cores/blis_d.csv) |
-| | |                           | spread cores | MKL | [10](THIN/cores_w_spread_cores/mkl_d.csv) |
-| | | |                                        | openBLAS| [11](THIN/cores_w_spread_cores/oblas_d.csv) |
-| | | |                                        | BLIS | [12](THIN/cores_w_spread_cores/blis_d.csv) |
-|          | matrix size | float | close cores | MKL | [13](THIN/size_w_close_cores/mkl_f.csv) |
-| | | |                                        | openBLAS | [14](THIN/size_w_close_cores/oblas_f.csv) |
-| | | |                                        | BLIS | [15](THIN/size_w_close_cores/blis_f.csv) |
-| | |                           | spread cores | MKL | [16](THIN/size_w_spread_cores/mkl_f.csv) |
-| | | |                                        | openBLAS | [17](THIN/size_w_spread_cores/oblas_f.csv) |
-| | | |                                        | BLIS | [18](THIN/size_w_spread_cores/blis_f.csv) |
-| |                     | double | close cores | MKL | [19](THIN/size_w_close_cores/mkl_d.csv) |
-| | | |                                        | openBLAS | [20](THIN/size_w_close_cores/oblas_d.csv) |
-| | | |                                        | BLIS | [21](THIN/size_w_close_cores/blis_d.csv) |
-| | |                           | spread cores | MKL | [22](THIN/size_w_spread_cores/mkl_d.csv) |
-| | | |                                        | openBLAS | [23](THIN/size_w_spread_cores/oblas_d.csv) |
-| | | |                                        | BLIS | [24](THIN/size_w_spread_cores/blis_d.csv) |
+| THIN | number of cores | float | close cores | MKL | [25](THIN/cores_w_close_cores/mkl_f.csv) |
+| | | |                                        | openBLAS | [26](THIN/cores_w_close_cores/oblas_f.csv) |
+| | | |                                        | BLIS | [27](THIN/cores_w_close_cores/blis_f.csv) |
+| | |                           | spread cores | MKL |  [28](THIN/cores_w_spread_cores/mkl_f.csv) |
+| | | |                                        | openBLAS | [29](THIN/cores_w_spread_cores/oblas_f.csv) |
+| | | |                                        | BLIS | [30](THIN/cores_w_spread_cores/blis_f.csv) |
+| |                     | double | close cores | MKL | [31](THIN/cores_w_close_cores/mkl_d.csv) | 
+| | | |                                        | openBLAS | [32](THIN/cores_w_close_cores/oblas_d.csv) |
+| | | |                                        | BLIS | [33](THIN/cores_w_close_cores/blis_d.csv) |
+| | |                           | spread cores | MKL | [34](THIN/cores_w_spread_cores/mkl_d.csv) |
+| | | |                                        | openBLAS| [35](THIN/cores_w_spread_cores/oblas_d.csv) |
+| | | |                                        | BLIS | [36](THIN/cores_w_spread_cores/blis_d.csv) |
+|          | matrix size | float | close cores | MKL | [37](THIN/size_w_close_cores/mkl_f.csv) |
+| | | |                                        | openBLAS | [38](THIN/size_w_close_cores/oblas_f.csv) |
+| | | |                                        | BLIS | [39](THIN/size_w_close_cores/blis_f.csv) |
+| | |                           | spread cores | MKL | [40](THIN/size_w_spread_cores/mkl_f.csv) |
+| | | |                                        | openBLAS | [41](THIN/size_w_spread_cores/oblas_f.csv) |
+| | | |                                        | BLIS | [42](THIN/size_w_spread_cores/blis_f.csv) |
+| |                     | double | close cores | MKL | [43](THIN/size_w_close_cores/mkl_d.csv) |
+| | | |                                        | openBLAS | [44](THIN/size_w_close_cores/oblas_d.csv) |
+| | | |                                        | BLIS | [45](THIN/size_w_close_cores/blis_d.csv) |
+| | |                           | spread cores | MKL | [46](THIN/size_w_spread_cores/mkl_d.csv) |
+| | | |                                        | openBLAS | [47](THIN/size_w_spread_cores/oblas_d.csv) |
+| | | |                                        | BLIS | [48](THIN/size_w_spread_cores/blis_d.csv) |
 
 
 
