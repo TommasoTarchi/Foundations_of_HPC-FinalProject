@@ -100,7 +100,7 @@ export OMP_PROC_BIND=$alloc
 
 Where `OMP_PLACES` and `OMP_PROC_BIND` are environment variables used to set the threads affinity policy.
 
-The following block is exactly the same for all `job.sh` files; the only difference is that when the number of cores is fixed `export OMP_NUM_THREADS=$ncores` is put in the previous block of instructions (`OMP_NUM_THREADS` is an enviroment variables used to set the number of openMP threads). For instance:
+The following block is exactly the same for all `job.sh` files; the only differences are that when the number of cores is fixed `export OMP_NUM_THREADS=$ncores` is put in the previous block of instructions (`OMP_NUM_THREADS` is an enviroment variables used to set the number of openMP threads) and, of course, that the iteration is over the number of cores or the matrix size depending on the configuration. For instance:
 
 ````
 ### overwriting old datafiles and setting up new ones
