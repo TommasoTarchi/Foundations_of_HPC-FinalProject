@@ -98,7 +98,7 @@ export OMP_PLACES=cores
 export OMP_PROC_BIND=$alloc
 ````
 
-Where `OMP_PLACES` and `OMP_PROC_BIND` are enviroment variables used to set the threads affinity policy.
+Where `OMP_PLACES` and `OMP_PROC_BIND` are environment variables used to set the threads affinity policy.
 
 The following block (until the two separating dashed lines) is exactly the same for all `job.sh` files; the only difference is that when the number of cores is fixed `export OMP_NUM_THREADS=$ncores` is put in the previous block of instructions (`OMP_NUM_THREADS` is an enviroment variables used to set the number of openMP threads). For instance:
 
