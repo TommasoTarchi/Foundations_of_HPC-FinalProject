@@ -290,15 +290,17 @@ do
 done
 ````
 
+
 ### Drawing graphs
 
 To better analyse the results it is useful to put into a chart data obtained in different configurations, to make the trend in performance and the difference among performances apparent. To do that, after having collected data, it is sufficient to run `analysis.ipynb` on any machine. The code will produce a series of graphs each one confronting the performance of the six combinations of library and threads affinity policy in the conditions given by the combination of the other parameters.
 
 **Note**: `analysis.ipynb` is written to work with this specific organization of the directory; if you decide to rearrange it in a different way, it will not work any more.
 
+
 ### Running more configurations at the same time
 
-Of course we could think of uncommenting lines for more than one configuration at the same time, but that is feasible only if we have a time limit large enough to do all the computation (to change the time limit you can just change the related command in the first block of instructions). In general, the time needed to run one of the configurations depends on several factors: which is the varying parameter, which nodes partition you are running one, what precision you are using, etc...
+Of course, we could think of uncommenting lines for more than one configuration at the same time inside the job file, but that is feasible only if we have a time limit large enough to do all the computation (to change the time limit you can just change the related command in the first block of instructions, but you need to be allowed to have a superior limit). In general, the time needed to run one of the configurations depends on several factors: which is the varying parameter, which nodes partition you are running one, what precision you are using, etc...
 
 With a time limit of at least two hours, we can guarantee jobs to be completed **only** in the case in which only one configuration at a time is run.
 
