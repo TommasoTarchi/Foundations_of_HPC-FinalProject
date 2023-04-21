@@ -652,7 +652,7 @@ int main(int argc, char **argv) {
         free(snap_name);
 
 
-        write_pgm_image(grid, 1, x_size, y_size, "snapshots/final_state.pgm", n-1);
+        write_pgm_image(grid, 1, x_size, y_size, "snapshots/final_state_sg.pgm", n-1);
 
     }
 
