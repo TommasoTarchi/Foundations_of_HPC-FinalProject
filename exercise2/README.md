@@ -202,7 +202,7 @@ module purge
 
 **Note**: this job files are written to be run on facilities using SLURM as the resource manager, in particular the requested resources are compatible with ORFEO (cluster hosted at Area Science Park (Trieste)).
 
-Let's suppose you have already cloned this repository and that you have already installed the BLIS library (if you do not know how to do that, you can find a [simple tutorial][link3] in the course material).
+Let's suppose you have already cloned this repository and that you have already installed the BLIS library (if you do not know how to do that, you can find a [simple tutorial][link3] in the course material). **Note**: to gain the best performance out of BLIS you should compile the library on the machine (actually on any machine with the same architecture) on which you are going to run the code; therefore, in our case two compilations are ideally required, one for EPYC nodes (AMD architecture) and one for THIN nodes (Intel achitecture).
 
 To reproduce on ORFEO some of the results here exposed, you can follow these steps:
 
