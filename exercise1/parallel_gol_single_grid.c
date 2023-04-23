@@ -123,6 +123,10 @@ int main(int argc, char **argv) {
     MPI_Comm_rank(MPI_COMM_WORLD, &my_id);
 
 
+    // test
+    printf("I'm process %d\n", my_id);
+
+
 
     /* needed for timing */
 #ifdef TIME
