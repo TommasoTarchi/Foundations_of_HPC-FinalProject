@@ -407,7 +407,7 @@ int main(int argc, char **argv) {
 
 
 
-    sprintf(snap_name, "test.pgm", gen);
+    sprintf(snap_name, "test.pgm");
 
                         /* formatting the PGM file */ 
                         if (my_id == 0) {
@@ -423,7 +423,7 @@ int main(int argc, char **argv) {
                             check += MPI_File_close(&f_handle);
                         
                             if (check != 0 && error_control_2 == 0) {
-                                printf("\n--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE SYSTEM DUMP NUMBER %d ---\n\n", gen/s);
+                                printf("\n--- AN ERROR OCCURRED WHILE WRITING THE HEADER ---\n\n");
                                 error_control_2 = 1;   // to avoid a large number of error messages
                                 check = 0; 
                             }
@@ -453,7 +453,7 @@ int main(int argc, char **argv) {
                         check += MPI_File_close(&f_handle);
 
                         if (check != 0 && error_control_3 == 0) {
-                            printf("\n--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE SYSTEM DUMP NUMBER %d ---\n\n", my_id, gen/s);
+                            printf("\n--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE SYSTEM ---\n\n", my_id);
                             error_control_3 = 1;   // to avoid a large number of error messages
                             check = 0;
                         }
