@@ -363,7 +363,7 @@ int main(int argc, char **argv) {
 	    if (my_id < y_size_rmd) {
 	        offset += my_id*my_n_cells;
 	    } else {
-	        offset += y_size_rmd*k + my_id*my_n_cells;
+	        offset += y_size_rmd*x_size + my_id*my_n_cells;
 	    }
 
         /* setting the file pointer to offset */
