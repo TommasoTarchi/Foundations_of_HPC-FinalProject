@@ -180,7 +180,7 @@ int main(int argc, char **argv) {
             seed = time(NULL);
         check += MPI_Bcast(&seed, 1, MPI_LONG, 0, MPI_COMM_WORLD);
         if (check != 0) {
-            printf("--- AN ERROR OCCURRED WHILE BROADCASTING THE SEED ---\n");
+            printf("\n--- AN ERROR OCCURRED WHILE BROADCASTING THE SEED ---\n\n");
             check = 0;
         }
         seed += my_id;
@@ -222,7 +222,7 @@ int main(int argc, char **argv) {
         }
 
         if (check != 0) {
-            printf("--- AN I/O ERROR OCCURRED WHILE WRITING THE HEADER ---\n");
+            printf("\n--- AN I/O ERROR OCCURRED WHILE WRITING THE HEADER ---\n\n");
             check = 0;
         }
 
@@ -250,7 +250,7 @@ int main(int argc, char **argv) {
         check += MPI_File_close(&f_handle);
 
         if (check != 0)
-            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE INITIAL PLAYGROUND ---\n", my_id);
+            printf("\n--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE INITIAL PLAYGROUND ---\n\n", my_id);
 
         free(my_grid);
 
@@ -304,7 +304,7 @@ int main(int argc, char **argv) {
             check += read_pgm_header(header_content, fname);
             
             if (check != 0) {
-                printf("--- AN ERROR OCCURRED WHILE READING THE HEADER OF THE PGM FILE ---\n");
+                printf("\n--- AN ERROR OCCURRED WHILE READING THE HEADER OF THE PGM FILE ---\n\n");
                 check = 0;
             }
         }
@@ -313,7 +313,7 @@ int main(int argc, char **argv) {
         check += MPI_Bcast(header_content, 4, MPI_INT, 0, MPI_COMM_WORLD);
 
 	    if (check != 0) {
-	        printf("--- AN ERROR OCCURRED WHILE BROADCASTING HEADER'S INFORMATIONS ON %d PROCESS ---\n", my_id);
+	        printf("\n--- AN ERROR OCCURRED WHILE BROADCASTING HEADER'S INFORMATIONS ON %d PROCESS ---\n\n", my_id);
 	        check = 0;
 	    }
 
@@ -368,7 +368,7 @@ int main(int argc, char **argv) {
         check += MPI_File_close(&f_handle);
 
         if (check != 0) {
-            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE READING THE INITIAL PLAYGROUND ---\n", my_id);
+            printf("\n--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE READING THE INITIAL PLAYGROUND ---\n\n", my_id);
             check = 0;
         }
 
@@ -426,7 +426,7 @@ int main(int argc, char **argv) {
                             check += MPI_File_close(&f_handle);
                         
                             if (check != 0 && error_control_2 == 0) {
-                                printf("--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE SYSTEM DUMP NUMBER %d ---\n", gen/s);
+                                printf("\n--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE SYSTEM DUMP NUMBER %d ---\n\n", gen/s);
                                 error_control_2 = 1;   // to avoid a large number of error messages
                                 check = 0; 
                             }
@@ -456,7 +456,7 @@ int main(int argc, char **argv) {
                         check += MPI_File_close(&f_handle);
 
                         if (check != 0 && error_control_3 == 0) {
-                            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE SYSTEM DUMP NUMBER %d ---\n", my_id, gen/s);
+                            printf("\n--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE SYSTEM DUMP NUMBER %d ---\n\n", my_id, gen/s);
                             error_control_3 = 1;   // to avoid a large number of error messages
                             check = 0;
                         }
@@ -488,7 +488,7 @@ int main(int argc, char **argv) {
                         }
                         
                         if (check != 0 && error_control_1 == 0) {
-                            printf("--- AN ERROR OCCURRED WHILE COMMUNICATING NEIGHBOR CELLS' STATUS OF PROCESS %d ---\n", proc);
+                            printf("\n--- AN ERROR OCCURRED WHILE COMMUNICATING NEIGHBOR CELLS' STATUS OF PROCESS %d ---\n\n", proc);
                             check = 0;
                             error_control_1 = 1;   // to avoid a large number of error messages
                         }
@@ -510,7 +510,7 @@ int main(int argc, char **argv) {
                         }
                         
                         if (check != 0 && error_control_1 == 0) {
-                            printf("--- AN ERROR OCCURRED WHILE COMMUNICATING NEIGHBOR CELLS' STATUS OF PROCESS %d ---\n", proc);
+                            printf("\n--- AN ERROR OCCURRED WHILE COMMUNICATING NEIGHBOR CELLS' STATUS OF PROCESS %d ---\n\n", proc);
                             check = 0;
                             error_control_1 = 1;   // to avoid a large number of error messages
                         }
@@ -532,7 +532,7 @@ int main(int argc, char **argv) {
                         }
                         
                         if (check != 0 && error_control_1 == 0) {
-                            printf("--- AN ERROR OCCURRED WHILE COMMUNICATING NEIGHBOR CELLS' STATUS OF PROCESS %d ---\n", proc);
+                            printf("\n--- AN ERROR OCCURRED WHILE COMMUNICATING NEIGHBOR CELLS' STATUS OF PROCESS %d ---\n\n", proc);
                             check = 0;
                             error_control_1 = 1;   // to avoid a large number of error messages
                         }
@@ -678,7 +678,7 @@ int main(int argc, char **argv) {
                             check += MPI_File_close(&f_handle);
                         
                             if (check != 0 && error_control_2 == 0) {
-                                printf("--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE SYSTEM DUMP NUMBER %d ---\n", gen/s);
+                                printf("\n--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE SYSTEM DUMP NUMBER %d ---\n\n", gen/s);
                                 error_control_2 = 1;   // to avoid a large number of error messages
                                 check = 0; 
                             }
@@ -708,7 +708,7 @@ int main(int argc, char **argv) {
                         check += MPI_File_close(&f_handle);
 
                         if (check != 0 && error_control_3 == 0) {
-                            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE SYSTEM DUMP NUMBER %d ---\n", my_id, gen/s);
+                            printf("\n--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE SYSTEM DUMP NUMBER %d ---\n\n", my_id, gen/s);
                             error_control_3 = 1;   // to avoid a large number of error messages
                             check = 0;
                         }
@@ -735,7 +735,7 @@ int main(int argc, char **argv) {
                 }
 
                 if (check != 0 && error_control_1 == 0) {
-                    printf("--- AN ERROR ON COMMUNICATION TO OR FROM PROCESS %d OCCURRED ---\n", my_id);
+                    printf("\n--- AN ERROR ON COMMUNICATION TO OR FROM PROCESS %d OCCURRED ---\n\n", my_id);
                     error_control_1 = 1;   // to avoid a large number of error messages
                     check = 0;
                 }
@@ -852,7 +852,7 @@ int main(int argc, char **argv) {
  		        check += MPI_File_close(&f_handle);
 
             if (check != 0 && error_control_2 == 0) {
-                printf("--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE FINAL STATE OF THE SYSTEM ---\n");
+                printf("\n--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE FINAL STATE OF THE SYSTEM ---\n\n");
                 error_control_2 = 1;   // to avoid a large number of error messages
                 check = 0; 
             }
@@ -882,7 +882,7 @@ int main(int argc, char **argv) {
 	    check += MPI_File_close(&f_handle);
 
 	    if (check != 0 && error_control_3 == 0) {
-            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE FINAL STATE OF THE SYSTEM ---\n", my_id);
+            printf("\n--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE FINAL STATE OF THE SYSTEM ---\n\n", my_id);
             check = 0;
 	    }
 
