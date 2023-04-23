@@ -23,7 +23,7 @@ The current directory contains:
     - `cores_w_spread_cores/`
     - `size_w_close_cores/`
     - `size_w_spread_cores/`
-- `analysis/':
+- `analysis/`:
     - `analysis.ipynb`: a jupyter notebook used to draw the graphs used to compare performances of different configurations
 
 As you cas see, the structure of the two directories `EPYC/` and `THIN/` is exactly the same. The name of their subdirectories can be interpreted as `$(variable-condition)_w_$(threads-affinity-policy)/`, for instance `cores_w_close_cores/` in `THIN/` contains data gathered on THIN nodes with varying number of cores (at fixed size) with close-cores threads affinity policy.
@@ -295,7 +295,7 @@ done
 
 To better analyse the results it is useful to put into a chart data obtained in different configurations, to make the trend in performance and the difference among performances apparent. To do that, after having collected data, it is sufficient to run `analysis.ipynb` on any machine. The code will produce a series of graphs each one confronting the performance of the six combinations of library and threads affinity policy in the conditions given by the combination of the other parameters.
 
-**Note**: `analysis.ipynb` is written to work with this specific organization of the directory; if you decide to rearrange it in a different way, it will not work any more.
+**Note**: `analysis.ipynb` is written to work with this specific organization of the directory; if you decide to rearrange it in a different way, you will have to change `analysis.ipynb` as well.
 
 
 ### Running more configurations at the same time
