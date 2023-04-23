@@ -24,6 +24,7 @@
 
 #define ORDERED 0
 #define STATIC  1
+#define STATIC_SAVE_MEM 2
 
 #define BOOL char
 
@@ -634,6 +635,205 @@ int main(int argc, char **argv) {
 
 
         } else if (e == STATIC) {
+
+
+#ifdef TIME
+    MPI_Barrier(MPI_COMM_WORLD);
+    if (my_id == 0) {
+        t_start = CPU_TIME;
+    }
+#endif
+
+
+
+            /* auxiliary grid to store cells' status */
+            BOOL* my_grid_aux = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
+            /* temporary pointer used for grid switching */
+            void* temp=NULL;
+
+            
+            /* evolution */
+
+            for (int gen=0; gen<n; gen++) {
+
+
+		/* writing a dump of the system */ 
+
+                if (s != 0) {
+
+                    if (gen % s == 0) {
+
+
+                        sprintf(snap_name, "snapshots/snapshot_%05d.pgm", gen);
+
+                        /* formatting the PGM file */ 
+                        if (my_id == 0) {
+
+                            /* setting the header */
+                            char header[header_size];
+                            sprintf(header, "P5 %d %d\n%d\n", x_size, y_size, color_maxval);
+
+                            /* writing the header */
+                            access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY;
+                            check += MPI_File_open(MPI_COMM_SELF, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
+                            check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
+                            check += MPI_File_close(&f_handle);
+                        
+                            if (check != 0 && error_control_2 == 0) {
+                                printf("--- AN ERROR OCCURRED WHILE WRITING THE HEADER OF THE SYSTEM DUMP NUMBER %d ---\n", gen/s);
+                                error_control_2 = 1;   // to avoid a large number of error messages
+                                check = 0; 
+                            }
+                        }
+
+
+                        /* needed to make sure that all processes are actually 
+                        * wrtiting on an already formatted PGM file */
+                        MPI_Barrier(MPI_COMM_WORLD);
+
+                
+                        /* opening file in parallel */
+                        access_mode = MPI_MODE_APPEND | MPI_MODE_WRONLY;
+                        check += MPI_File_open(MPI_COMM_WORLD, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
+
+                        /* computing offsets */
+	                    offset = header_size;
+	                    if (my_id < y_size_rmd) {
+		                    offset += my_id*my_n_cells;
+	                    } else {
+		                    offset += y_size_rmd*x_size + my_id*my_n_cells;
+	                    }
+
+                        /* writing in parallel */
+                        check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
+
+                        check += MPI_File_close(&f_handle);
+
+                        if (check != 0 && error_control_3 == 0) {
+                            printf("--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE SYSTEM DUMP NUMBER %d ---\n", my_id, gen/s);
+                            error_control_3 = 1;   // to avoid a large number of error messages
+                            check = 0;
+                        }
+
+                    }
+                }
+
+                
+		/* communicating border cells' status to neighbor processes */ 
+                
+                if (my_id % 2 == 0) {
+
+                    check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
+                    check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+                    check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
+                    check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
+
+                } else {
+                     check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+                     check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
+                     check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
+                     check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
+                  
+                }
+
+                if (check != 0 && error_control_1 == 0) {
+                    printf("--- AN ERROR ON COMMUNICATION TO OR FROM PROCESS %d OCCURRED ---\n", my_id);
+                    error_control_1 = 1;   // to avoid a large number of error messages
+                    check = 0;
+                }
+
+
+                /* updating the cells' status */
+
+                char count;   // counter of alive neighbor cells
+                int position;   // position of the cell to update
+
+                /* iteration on rows */
+                for (int i=1; i<my_y_size+1; i++) {
+
+                    /* first element of the row */ 
+                    count = 0;
+                    position = i*x_size;
+                    for (int b=position-x_size; b<position-x_size+2; b++) {
+                        count += my_grid[b];
+                    }
+                    count += my_grid[position-1];
+                    count += my_grid[position+1];
+                    for (int b=position+x_size-1; b<position+x_size+2; b++) {
+                        count += my_grid[b];
+                    }
+                    count += my_grid[position+2*x_size-1];
+
+                    if (count == 2 || count == 3) {
+                        my_grid_aux[position] = 1;
+                    } else {
+                        my_grid_aux[position] = 0;
+                    }
+
+                    /* iteration on internal columns */
+                    for (int j=1; j<x_size-1; j++) {
+
+                        count = 0;
+                        position = i*x_size+j;
+                        for (int b=position-x_size-1; b<position-x_size+2; b++) {
+                            count += my_grid[b];
+                        }
+                        count += my_grid[position-1];
+                        count += my_grid[position+1];
+                        for (int b=position+x_size-1; b<position+x_size+2; b++) {
+                            count += my_grid[b];
+                        }
+
+                        if (count == 2 || count == 3) {
+                            my_grid_aux[position] = 1;
+                        } else {
+                            my_grid_aux[position] = 0;
+                        }
+                    }
+
+                    /* last element of the row */
+                    count = 0;
+                    position = (i+1)*x_size-1;
+                    count += my_grid[position-2*x_size+1];
+                    for (int b=position-x_size-1; b<position-x_size+2; b++) {
+                        count += my_grid[b];
+                    }
+                    count += my_grid[position-1];
+                    count += my_grid[position+1];
+                    for (int b=position+x_size-1; b<position+x_size+1; b++) {
+                        count += my_grid[b];
+                    }
+
+                    if (count == 2 || count == 3) {
+                        my_grid_aux[position] = 1;
+                    } else {
+                        my_grid_aux[position] = 0;
+                    }
+                }
+
+                /* switching pointers to grid and grid_aux */
+                
+                temp = my_grid;
+                my_grid = my_grid_aux;
+                my_grid_aux = temp;
+                temp = NULL;
+
+            }
+
+
+
+#ifdef TIME
+    MPI_Barrier(MPI_COMM_WORLD);
+    if (my_id == 0) {
+        double time = CPU_TIME - t_start;
+        printf("elapsed time for static evolution: %f sec\n\n", time);
+    }
+#endif
+
+
+
+
+        } else if (e == STATIC_SAVE_MEM) {
             
 
 
@@ -837,7 +1037,7 @@ int main(int argc, char **argv) {
 	/* writing the final state */
 	
 	/* selecting the state signaling bit */
-	if (e == STATIC) {
+	if (e == STATIC_SAVE_MEM) {
 
             if (bit_control % 2 == 1) {
 
