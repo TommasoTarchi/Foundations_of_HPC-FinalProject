@@ -447,7 +447,7 @@ int main(int argc, char **argv) {
 
                 
                         /* opening file in parallel */
-                        access_mode = MPI_MODE_APPEND | MPI_MODE_WRONLY;
+                        access_mode = MPI_MODE_WRONLY;
                         check += MPI_File_open(MPI_COMM_WORLD, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
 
                         /* computing offsets */
@@ -697,7 +697,7 @@ int main(int argc, char **argv) {
 
                 
                         /* opening file in parallel */
-                        access_mode = MPI_MODE_APPEND | MPI_MODE_WRONLY;
+                        access_mode = MPI_MODE_WRONLY;
                         check += MPI_File_open(MPI_COMM_WORLD, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
 
                         /* computing offsets */
@@ -907,7 +907,7 @@ int main(int argc, char **argv) {
 
                 
                         /* opening file in parallel */
-                        access_mode = MPI_MODE_APPEND | MPI_MODE_WRONLY;
+                        access_mode = MPI_MODE_WRONLY;
                         check += MPI_File_open(MPI_COMM_WORLD, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
 
                         /* computing offsets */
@@ -1057,7 +1057,7 @@ int main(int argc, char **argv) {
 	}
 
 
-	    sprintf(snap_name, "snapshots/final_state_sg.pgm");
+	    sprintf(snap_name, "snapshots/final_state.pgm");
 
         /* formatting the PGM file */ 
         if (my_id == 0) {
@@ -1086,7 +1086,7 @@ int main(int argc, char **argv) {
             
 
         /* opening file in parallel */
-        access_mode = MPI_MODE_APPEND | MPI_MODE_WRONLY;
+        access_mode = MPI_MODE_WRONLY;
         check += MPI_File_open(MPI_COMM_WORLD, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
 
         /* computing offsets */
