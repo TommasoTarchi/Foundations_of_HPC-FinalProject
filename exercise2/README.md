@@ -25,6 +25,7 @@ The current directory contains:
     - `size_w_spread_cores/`
 - `analysis/`:
     - `analysis.ipynb`: a jupyter notebook used to draw the graphs used to compare performances of different configurations
+    - graphs created using `analysis.ipynb` in PNG format
 
 As you cas see, the structure of the two directories `EPYC/` and `THIN/` is exactly the same. The name of their subdirectories can be interpreted as `$(variable-condition)_w_$(threads-affinity-policy)/`, for instance `cores_w_close_cores/` in `THIN/` contains data gathered on THIN nodes with varying number of cores (at fixed size) with close-cores threads affinity policy.
 
