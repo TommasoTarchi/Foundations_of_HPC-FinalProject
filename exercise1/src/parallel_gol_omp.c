@@ -140,6 +140,7 @@ int main(int argc, char **argv) {
     }
 
 
+
     /* needed for timing */
 #ifdef TIME
     struct timespec ts;
@@ -219,7 +220,7 @@ int main(int argc, char **argv) {
                 /* converting random number to BOOL */
                 my_grid[i] = (BOOL) rand_bool;
             }
-	}
+	    }
 
 
         /* writing down the playground */
@@ -411,7 +412,8 @@ int main(int argc, char **argv) {
 
 
 
-	int bit_control = 0;   // needed to control the state signaling bit in static evolution
+	    int bit_control = 0;   // needed to control the state signaling bit
+                               // in static evolution with only one grid
 
 
 
