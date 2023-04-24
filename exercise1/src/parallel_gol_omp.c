@@ -206,9 +206,8 @@ int main(int argc, char **argv) {
 
        #pragma omp parallel
         {
-	    /* setting a different seed for each thread */
-	    int my_thread_id = omp_get_thread_num();
-            printf("seed: %d\n", seed+my_thread_id);
+	        /* setting a different seed for each thread */
+	        int my_thread_id = omp_get_thread_num();
             srand48_r(seed+my_thread_id, &rand_gen);
 
            #pragma omp for schedule(static)
