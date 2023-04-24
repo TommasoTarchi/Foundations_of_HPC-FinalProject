@@ -127,7 +127,6 @@ int main(int argc, char **argv) {
     int n_threads = 0;
    #pragma omp parallel
     {
-        int my_thread_id = omp_get_thread_num();
        #pragma omp master
         n_threads = omp_get_num_threads();
     }
@@ -135,8 +134,10 @@ int main(int argc, char **argv) {
 
     // test
    #pragma omp parallel
-    printf("I'm thread %d on process %d\n", my_thread_id, my_id);
-
+    {
+	int my_thread_id = omp_get_thread_num();
+    	printf("I'm thread %d on process %d\n", my_thread_id, my_id);
+    }
 
 
     /* needed for timing */
@@ -202,22 +203,24 @@ int main(int argc, char **argv) {
             check = 0;
         }
         seed += my_id*n_threads;
-        /* using a different seed for each thread */
+
        #pragma omp parallel
         {
-            printf("seed: %d", seed+my_thread_id);
+	    /* setting a different seed for each thread */
+	    int my_thread_id = omp_get_thread_num();
+            printf("seed: %d\n", seed+my_thread_id);
             srand48_r(seed+my_thread_id, &rand_gen);
-        }
 
-       #prama omp for schedule(static)
-        for (int i=0; i<my_n_cells; i++) {
-            /* producing a random integer among 0 and 1 */
-            double random_number;
-            drand48_r(&rand_gen, &random_number);
-            short int rand_bool = (short int) (random_number+0.5);
-            /* converting random number to BOOL */
-            my_grid[i] = (BOOL) rand_bool;
-        }
+           #pragma omp for schedule(static)
+            for (int i=0; i<my_n_cells; i++) {
+                /* producing a random integer among 0 and 1 */
+                double random_number;
+                drand48_r(&rand_gen, &random_number);
+                short int rand_bool = (short int) (random_number+0.5);
+                /* converting random number to BOOL */
+                my_grid[i] = (BOOL) rand_bool;
+            }
+	}
 
 
         /* writing down the playground */
@@ -239,7 +242,7 @@ int main(int argc, char **argv) {
             sprintf(header, "P5 %d %d\n%d\n", k, m, color_maxval);
 
             /* writing the header */
-            int access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY | MPI_MODE_APPEND;
+            int access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY;
             check += MPI_File_open(MPI_COMM_SELF, fname, access_mode, MPI_INFO_NULL, &f_handle);
             check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
             check += MPI_File_close(&f_handle);
@@ -257,7 +260,7 @@ int main(int argc, char **argv) {
 
 
         /* opening file in parallel */
-        int access_mode = MPI_MODE_APPEND | MPI_MODE_WRONLY;
+        int access_mode = MPI_MODE_WRONLY;
         check += MPI_File_open(MPI_COMM_WORLD, fname, access_mode, MPI_INFO_NULL, &f_handle);
 
         /* computing offsets */
@@ -284,7 +287,7 @@ int main(int argc, char **argv) {
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_id == 0) {
         double time = CPU_TIME - t_start;
-        printf("elapsed time for initialization: %f sec\n\n", time);
+        printf("elapsed time for initialisation: %f sec\n\n", time);
     }
 #endif
 
