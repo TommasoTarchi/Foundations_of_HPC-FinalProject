@@ -22,7 +22,7 @@ export OMP_PLACES=cores
 export OMP_PROC_BIND=close   # PROVARE ANCHE SPREAD (MAGARI FUNZIONA MEGLIO PER FALSE SHARING)
 
 
-cd ..
+cd ../..
 
 make parallel_gol data=datafolder
 
@@ -51,6 +51,6 @@ do
 done
 
 
-cd ..
+cd ../..
 
 make clean data=datafolder
