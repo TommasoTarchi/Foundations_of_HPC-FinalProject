@@ -26,7 +26,7 @@
 
 #define BOOL char
 
-char fname_deflt[] = "../images/game_of_life.pgm";
+char fname_deflt[] = "../../images/game_of_life.pgm";
 
 int   action = ORDERED;
 int   m      = M_DFLT;
@@ -412,7 +412,7 @@ int main(int argc, char **argv) {
 
                     if (gen % s == 0) {
 
-                        sprintf(snap_name, "../images/snapshots/snapshot_%05d.pgm", gen+1);
+                        sprintf(snap_name, "../../images/snapshots/snapshot_%05d.pgm", gen+1);
                         
                         write_pgm_image(grid, 1, x_size, y_size, snap_name, 1);
                     }
@@ -645,7 +645,7 @@ int main(int argc, char **argv) {
 
                     if (gen % s == 0) {
 
-                        sprintf(snap_name, "../images/snapshots/snapshot_%05d.pgm", gen+1);
+                        sprintf(snap_name, "../../images/snapshots/snapshot_%05d.pgm", gen+1);
                         
                         write_pgm_image(grid, 1, x_size, y_size, snap_name, 1);
                     }
@@ -875,7 +875,7 @@ int main(int argc, char **argv) {
 
                     if (gen % s == 0) {
 
-                        sprintf(snap_name, "../images/snapshots/snapshot_%05d.pgm", gen+1);
+                        sprintf(snap_name, "../../images/snapshots/snapshot_%05d.pgm", gen+1);
                         
                         write_pgm_image(grid, 1, x_size, y_size, snap_name, gen);
                     }
@@ -896,7 +896,7 @@ int main(int argc, char **argv) {
         free(snap_name);
 
 
-        write_pgm_image(grid, 1, x_size, y_size, "../images/snapshots/final_state.pgm", n-1);
+        write_pgm_image(grid, 1, x_size, y_size, "../../images/snapshots/final_state.pgm", n-1);
 
     }
 

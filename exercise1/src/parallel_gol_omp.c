@@ -28,7 +28,7 @@
 
 #define BOOL char
 
-char fname_deflt[] = "../images/game_of_life.pgm";
+char fname_deflt[] = "../../images/game_of_life.pgm";
 
 int   action = ORDERED;
 int   m      = M_DFLT;
@@ -118,7 +118,7 @@ int main(int argc, char **argv) {
     MPI_Init_thread(&argc, &argv, MPI_THREAD_FUNNELED, &mpi_provided_thread_level);
     
     if ( mpi_provided_thread_level < MPI_THREAD_FUNNELED ) {
-        printf("a problem arise when asking for MPI_THREAD_FUNNELED level\n");
+        printf("\n--- A PROBLEM ARISE WHEN ASKING FOR MPI_THREAD_FUNNELED LEVEL\n\n");
         MPI_Finalize();
         exit( 1 );
     }
@@ -169,6 +169,9 @@ int main(int argc, char **argv) {
     }
 #endif
 
+
+        if (my_id == 0)
+            printf("creating a random playground...\n\n");
 
 
         /* assigning default name to file in case none was passed */
@@ -468,6 +471,10 @@ int main(int argc, char **argv) {
 #pragma omp master
  {
 
+                if (my_id == 0)
+                    printf("using ordered evolution...\n\n");
+
+
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_id == 0) {
@@ -496,7 +503,7 @@ int main(int argc, char **argv) {
                             if (gen % s == 0) {
 
 
-                                sprintf(snap_name, "../images/snapshots/snapshot_%05d.pgm", gen);
+                                sprintf(snap_name, "../../images/snapshots/snapshot_%05d.pgm", gen);
 
                                 /* formatting the PGM file */ 
                                 if (my_id == 0) {
@@ -853,6 +860,10 @@ int main(int argc, char **argv) {
 #pragma omp master
  {
 
+            if (my_id == 0)
+                printf("using static evolution with auxiliary grid...\n\n");
+
+
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_id == 0) {
@@ -891,7 +902,7 @@ int main(int argc, char **argv) {
                             if (gen % s == 0) {
 
 
-                                sprintf(snap_name, "../images/snapshots/snapshot_%05d.pgm", gen);
+                                sprintf(snap_name, "../../images/snapshots/snapshot_%05d.pgm", gen);
 
                                 /* formatting the PGM file */ 
                                 if (my_id == 0) {
@@ -1183,6 +1194,10 @@ int main(int argc, char **argv) {
 #pragma omp master
  {
 
+            if (my_id == 0)
+                printf("using static evolution without auxiliary grid...\n\n");
+
+
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_id == 0) {
@@ -1225,7 +1240,7 @@ int main(int argc, char **argv) {
                                 }
 
 
-                                sprintf(snap_name, "../images/snapshots/snapshot_%05d.pgm", gen);
+                                sprintf(snap_name, "../../images/snapshots/snapshot_%05d.pgm", gen);
 
                                 /* formatting the PGM file */ 
                                 if (my_id == 0) {
@@ -1531,7 +1546,7 @@ int main(int argc, char **argv) {
             }
 
         
-            sprintf(snap_name, "../images/snapshots/final_state.pgm");
+            sprintf(snap_name, "../../images/snapshots/final_state.pgm");
 
             /* formatting the PGM file */ 
             if (my_id == 0) {
