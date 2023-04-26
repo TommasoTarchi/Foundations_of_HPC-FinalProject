@@ -16,9 +16,11 @@ The current directory contains:
     - `snapshots/`: a folder containing dumps of the system (optionally) taken with a certain frequency
     - other possible images, in particular state of systems initialised by the executable
 - `Makefile`: a makefile that can be used to compile game of life codes both in serial and parallel
-- `openMP_scal/`: a folder containing results collected for **openMP scalability** (see ...)
+- `openMP_scal/`: a folder containing results collected for **openMP scalability** (see ...):
     - `job.sh`: a bash script used to collect data on the cluster; the script is made to be run as a SLURM sbatch job on ORFEO
-- `strong_scal/`: a folder containing results collected for **strong MPI scalability** (see ...)
+- `strong_scal/`: a folder containing results collected for **strong MPI scalability** (see ...):
+    - `job.sh`: a bash script used to collect data on the cluster; the script is made to be run as a SLURM sbatch job on ORFEO
+- `weak_scal/`: a folder containing results collected for **weak MPI scalability** (see ...):
     - `job.sh`: a bash script used to collect data on the cluster; the script is made to be run as a SLURM sbatch job on ORFEO
 
 Let's look at the codes more in detail:
