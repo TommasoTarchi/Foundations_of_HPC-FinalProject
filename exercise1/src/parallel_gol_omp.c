@@ -706,12 +706,19 @@ int main(int argc, char **argv) {
             } else if (e == STATIC) {
 
 
+
+#pragma omp barrier
+#pragma omp master
+ {
+
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_id == 0) {
         t_start = CPU_TIME;
     }
 #endif
+ 
+ }
 
 
                #pragma omp barrier
@@ -1008,6 +1015,9 @@ int main(int argc, char **argv) {
                 }
 
 
+#pragma omp barrier
+#pragma omp master
+ {
 
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
@@ -1016,6 +1026,8 @@ int main(int argc, char **argv) {
         printf("elapsed time for static evolution: %f sec\n\n", time);
     }
 #endif
+
+ }
 
 
 
@@ -1218,6 +1230,16 @@ int main(int argc, char **argv) {
 
             }
 
+
+#ifdef TIME
+    MPI_Barrier(MPI_COMM_WORLD);
+    if (my_id == 0) {
+        double time = CPU_TIME - t_start;
+        printf("elapsed time for static evolution with one grid: %f sec\n\n", time);
+    }
+#endif
+
+
          }
 
 
@@ -1296,16 +1318,6 @@ int main(int argc, char **argv) {
 	            }
 
 
-
-#ifdef TIME
-    MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0) {
-        double time = CPU_TIME - t_start;
-        printf("elapsed time for static evolution: %f sec\n\n", time);
-    }
-#endif
-
-
     
 	            free(snap_name);
                 free(my_grid);
@@ -1313,7 +1325,7 @@ int main(int argc, char **argv) {
             }
 
 
-        }   // end of parallel region
+        }   // end of openMP parallel region
 
 
 
