@@ -1,12 +1,5 @@
-
-
-
-### to run use "srun -n 1 make ..."
-
-
-
 ### variables passed from command line
-target_path=${path}
+target_path=${data}
 
 
 
