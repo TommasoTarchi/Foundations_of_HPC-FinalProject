@@ -382,6 +382,10 @@ int main(int argc, char **argv) {
 
         /* grid to store cells status and two more rows for neighbor cells */ 
         BOOL* my_grid = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
+        /* auxiliary grid to store cells' status */
+        BOOL* my_grid_aux = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
+        /* temporary pointer used for grid switching */
+        void* temp=NULL;
 
         MPI_File f_handle;   // pointer to file
 
@@ -417,8 +421,8 @@ int main(int argc, char **argv) {
         const int tag_recv_s = succ*10;
 
 
-        /* string to store the name of the snapshot files */
-        char* snap_name = (char*) malloc(29*sizeof(char));
+
+        char* snap_name = (char*) malloc(29*sizeof(char));   // string to store name of snapshot files
 
 
 
@@ -431,6 +435,8 @@ int main(int argc, char **argv) {
 
        #pragma omp parallel
         {
+
+            int my_thread_id = omp_get_thread_num();   // id of the openMP thread
 
 
             /* splitting process's portion of grid among threads */
@@ -448,8 +454,8 @@ int main(int argc, char **argv) {
             const int my_thread_stop = my_thread_start + my_thread_n_cells;
 
             /* computing first and last 'complete' rows */
-            first_row = my_thread_start / x_size + 1;
-            last_row = my_thread_stop / x_size;
+            const int first_row = my_thread_start / x_size + 1;
+            const int last_row = my_thread_stop / x_size;
             
             /* computing first and last nearest edge's positions */ 
             if (my_thread_start % x_size == 0) {   // first edge position
@@ -685,7 +691,6 @@ int main(int argc, char **argv) {
                                     if (position == first_edge) {
 
                                         count = 0;
-                                        position = (i+1)*x_size-1;
                                         count += my_grid[position-2*x_size+1];
                                         for (int b=position-x_size-1; b<position-x_size+2; b++) {
                                             count += my_grid[b];
@@ -874,19 +879,7 @@ int main(int argc, char **argv) {
  }
 
 
-               #pragma omp barrier
-               #pragma omp master
-                {
 
-                    /* auxiliary grid to store cells' status */
-                    BOOL* my_grid_aux = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
-                    /* temporary pointer used for grid switching */
-                    void* temp=NULL;
-            
-                }
-               #pragma omp barrier
-
-            
                 /* evolution */
 
                 for (int gen=0; gen<n; gen++) {
