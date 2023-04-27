@@ -460,10 +460,11 @@ int main(int argc, char **argv) {
             const int last_row = my_thread_stop / x_size;
             
             /* computing first and last nearest edge's positions */ 
+            int first_edge;
             if (my_thread_start % x_size == 0) {   // first edge position
-                const int first_edge = my_thread_start - 1;
+                first_edge = my_thread_start - 1;
             } else {
-                const int first_edge = first_row * x_size - 1;
+                first_edge = first_row * x_size - 1;
             }
             const int last_edge = last_row * x_size;   // last edge position
 
@@ -1125,7 +1126,7 @@ int main(int argc, char **argv) {
 
                     /* updating remaining elements */ 
 
-                    for ( ; <my_thread_stop; position++) {
+                    for ( ; position<my_thread_stop; position++) {
 
                         count = 0;
                         for (int b=position-x_size-1; b<position-x_size+2; b++) {
