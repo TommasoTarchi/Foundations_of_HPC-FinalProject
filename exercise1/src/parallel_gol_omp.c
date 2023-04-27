@@ -463,6 +463,7 @@ int main(int argc, char **argv) {
             } else {
                 const int first_edge = first_row * x_size - 1;
             }
+            const int first_edge = 4;
             const int last_edge = last_row * x_size;   // last edge position
 
 
@@ -801,7 +802,7 @@ int main(int argc, char **argv) {
 
                                     /* updating remaining elements */ 
 
-                                    for ( ; i<my_thread_stop; i++) {
+                                    for ( ; position<my_thread_stop; position++) {
 
                                         count = 0;
                                         for (int b=position-x_size-1; b<position-x_size+2; b++) {
