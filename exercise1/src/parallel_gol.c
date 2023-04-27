@@ -921,7 +921,7 @@ int main(int argc, char **argv) {
                         /* writing in parallel */
                         check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
 
-                        //check += MPI_File_close(&f_handle);
+                        check += MPI_File_close(&f_handle);
 
                         if (check != 0 && error_control_3 == 0) {
                             printf("\n--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE SYSTEM DUMP NUMBER %d ---\n\n", my_id, gen/s);
@@ -1100,7 +1100,7 @@ int main(int argc, char **argv) {
         /* writing in parallel */
         check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
 
-	    //check += MPI_File_close(&f_handle);
+	    check += MPI_File_close(&f_handle);
 
 	    if (check != 0 && error_control_3 == 0) {
             printf("\n--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE FINAL STATE OF THE SYSTEM ---\n\n", my_id);
