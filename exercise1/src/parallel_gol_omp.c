@@ -1125,7 +1125,7 @@ int main(int argc, char **argv) {
 
                     /* updating remaining elements */ 
 
-                    for ( ; i<my_thread_stop; i++) {
+                    for ( ; <my_thread_stop; position++) {
 
                         count = 0;
                         for (int b=position-x_size-1; b<position-x_size+2; b++) {
@@ -1355,7 +1355,6 @@ int main(int argc, char **argv) {
                     if (position == first_edge) {
 
                         count = 0;
-                        position = (i+1)*x_size-1;
                         count += (my_grid[position-2*x_size+1] >> shift) & 1;
                         for (int b=position-x_size-1; b<position-x_size+2; b++) {
                             count += (my_grid[b] >> shift) & 1;
@@ -1466,7 +1465,7 @@ int main(int argc, char **argv) {
 
                     /* updating remaining elements */ 
 
-                    for ( ; i<my_thread_stop; i++) {
+                    for ( ; position<my_thread_stop; position++) {
 
                         count = 0;
                         for (int b=position-x_size-1; b<position-x_size+2; b++) {
