@@ -221,7 +221,7 @@ int main(int argc, char **argv) {
             sprintf(header, "P5 %d %d\n%d\n", k, m, color_maxval);
 
             /* writing the header */
-            int access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY | MPI_MODE_APPEND;
+            int access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY;
             check += MPI_File_open(MPI_COMM_SELF, fname, access_mode, MPI_INFO_NULL, &f_handle);
             check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
             check += MPI_File_close(&f_handle);
@@ -239,7 +239,7 @@ int main(int argc, char **argv) {
 
 
         /* opening file in parallel */
-        int access_mode = MPI_MODE_APPEND | MPI_MODE_WRONLY;
+        int access_mode = MPI_MODE_WRONLY;
         check += MPI_File_open(MPI_COMM_WORLD, fname, access_mode, MPI_INFO_NULL, &f_handle);
 
         /* computing offsets */
