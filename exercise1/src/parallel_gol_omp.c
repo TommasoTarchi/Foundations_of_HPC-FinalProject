@@ -114,7 +114,7 @@ int main(int argc, char **argv) {
     /* setting up MPI (in funneled mode) and single processes' variables */
 
     int my_id, n_procs;
-    int mpi_provided_threaD_level;
+    int mpi_provided_thread_level;
     MPI_Init_thread(&argc, &argv, MPI_THREAD_FUNNELED, &mpi_provided_thread_level);
     
     if ( mpi_provided_thread_level < MPI_THREAD_FUNNELED ) {
