@@ -363,7 +363,7 @@ int main(int argc, char **argv) {
         const unsigned int n_cells = x_size*y_size;   // total number of cells
                                                       
 
-        /* checking minimal dimensions */
+        /* checking minimum matrix dimensions */
         if (x_size < 100 || y_size < 100) {
             printf("\n--- MATRIX DIMENSIONS TOO SMALL: MUST BE AT LEAST 100x100 ---\n\n");
             return 1;
@@ -441,7 +441,7 @@ int main(int argc, char **argv) {
 
 
             /* splitting process's portion of grid among threads and computing
-             * variables needed for iteration */
+             * variables needed for iteration evolution */
 
             /* computing number of cells for each thread */
             int my_thread_n_cells = my_n_cells / n_threads;
@@ -455,8 +455,8 @@ int main(int argc, char **argv) {
                 my_thread_start += thread_n_cells_rmd;
             const int my_thread_stop = my_thread_start + my_thread_n_cells;
 
-            /* computing first and last 'complete' rows */
-            const int first_row = my_thread_start / x_size + 1;
+            /* computing first and last (excluded) 'complete' rows */
+            const int first_row = my_thread_start / x_size + (my_thread_start % x_size != 0);
             const int last_row = my_thread_stop / x_size;
             
             /* computing first and last nearest edge's positions */ 
@@ -466,7 +466,7 @@ int main(int argc, char **argv) {
             } else {
                 first_edge = first_row * x_size - 1;
             }
-            const int last_edge = last_row * x_size;   // last edge position
+            //const int last_edge = last_row * x_size;   // last edge position
 
 
 
@@ -1100,10 +1100,16 @@ int main(int argc, char **argv) {
                         }
                     }
 
+                    position++;
 
-                    /* updating last edge */ 
 
-                    position = last_edge;
+                    /* check if all cells have been updated */
+                    if (position == my_thread_stop)
+                        continue;
+
+
+                    /* updating first element after last row */ 
+
                     count = 0;
                     count += my_grid[position-2*x_size+1];
                     for (int b=position-x_size-1; b<position-x_size+2; b++) {
@@ -1584,7 +1590,7 @@ int main(int argc, char **argv) {
             /* writing in parallel */
             check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
 
-            //check += MPI_File_close(&f_handle);
+            check += MPI_File_close(&f_handle);
 
             if (check != 0 && error_control_3 == 0) {
                 printf("\n--- AN I/O ERROR OCCURRED ON PROCESS %d WHILE WRITING THE FINAL STATE OF THE SYSTEM ---\n\n", my_id);
