@@ -779,10 +779,16 @@ int main(int argc, char **argv) {
                                         }
                                     }
 
+                                    position++;
 
-                                    /* updating last edge */ 
 
-                                    position = last_edge;
+                                    /* checking if all cells have been already updated */ 
+                                    if (position == my_thread_stop)
+                                        continue;
+
+
+                                    /* updating first element after last row */ 
+
                                     count = 0;
                                     count += my_grid[position-2*x_size+1];
                                     for (int b=position-x_size-1; b<position-x_size+2; b++) {
@@ -1103,7 +1109,7 @@ int main(int argc, char **argv) {
                     position++;
 
 
-                    /* check if all cells have been updated */
+                    /* checking if all cells have been already updated */
                     if (position == my_thread_stop)
                         continue;
 
@@ -1446,10 +1452,16 @@ int main(int argc, char **argv) {
                         }
                     }
 
+                    position++;
 
-                    /* updating last edge */ 
 
-                    position = last_edge;
+                    /* checking if all cells have been already updated */
+                    if (position == my_thread_stop)
+                        continue;
+
+
+                    /* updating first element after last row */ 
+
                     count = 0;
                     count += (my_grid[position-2*x_size+1] >> shift) & 1;
                     for (int b=position-x_size-1; b<position-x_size+2; b++) {
