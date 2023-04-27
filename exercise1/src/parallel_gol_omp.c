@@ -439,7 +439,9 @@ int main(int argc, char **argv) {
             int my_thread_id = omp_get_thread_num();   // id of the openMP thread
 
 
-            /* splitting process's portion of grid among threads */
+
+            /* splitting process's portion of grid among threads and computing
+             * variables needed for iteration */
 
             /* computing number of cells for each thread */
             int my_thread_n_cells = my_n_cells / n_threads;
@@ -463,8 +465,8 @@ int main(int argc, char **argv) {
             } else {
                 const int first_edge = first_row * x_size - 1;
             }
-            const int first_edge = 4;
             const int last_edge = last_row * x_size;   // last edge position
+
 
 
 
@@ -1013,7 +1015,6 @@ int main(int argc, char **argv) {
                     if (position == first_edge) {
 
                         count = 0;
-                        position = (i+1)*x_size-1;
                         count += my_grid[position-2*x_size+1];
                         for (int b=position-x_size-1; b<position-x_size+2; b++) {
                             count += my_grid[b];
