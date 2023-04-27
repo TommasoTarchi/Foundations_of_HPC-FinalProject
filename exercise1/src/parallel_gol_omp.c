@@ -24,7 +24,7 @@
 
 #define ORDERED 0
 #define STATIC  1
-#define STATIC_SAVE_MEM 2
+#define STATIC_IN_PLACE 2
 
 #define BOOL char
 
@@ -857,9 +857,15 @@ int main(int argc, char **argv) {
 
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
+
     if (my_id == 0) {
         double time = CPU_TIME - t_start;
         printf("elapsed time for ordered evolution: %f sec\n\n", time);
+
+        FILE* datafile;
+        datafile = fopen("data.csv", "a");
+        fprintf(datafile, ",%lf", time);
+        fclose(datafile);
     }
 #endif
 
@@ -1186,7 +1192,12 @@ int main(int argc, char **argv) {
     if (my_id == 0) {
         double time = CPU_TIME - t_start;
         printf("elapsed time for static evolution: %f sec\n\n", time);
-    }
+ 
+        FILE* datafile;
+        datafile = fopen("data.csv", "a");
+        fprintf(datafile, ",%lf", time);
+        fclose(datafile);
+   }
 #endif
 
  }
@@ -1194,7 +1205,7 @@ int main(int argc, char **argv) {
 
 
 
-            } else if (e == STATIC_SAVE_MEM) {
+            } else if (e == STATIC_IN_PLACE) {
             
 
 
@@ -1203,7 +1214,7 @@ int main(int argc, char **argv) {
  {
 
             if (my_id == 0)
-                printf("using static evolution without auxiliary grid...\n\n");
+                printf("using static evolution without auxiliary grid ('in place')...\n\n");
 
 
 #ifdef TIME
@@ -1526,7 +1537,12 @@ int main(int argc, char **argv) {
     if (my_id == 0) {
         double time = CPU_TIME - t_start;
         printf("elapsed time for static evolution with one grid: %f sec\n\n", time);
-    }
+ 
+        FILE* datafile;
+        datafile = fopen("data.csv", "a");
+        fprintf(datafile, ",%lf", time);
+        fclose(datafile);
+   }
 #endif
 
  }
@@ -1543,7 +1559,7 @@ int main(int argc, char **argv) {
             /* writing the final state */
 	
             /* selecting the state signaling bit */
-            if (e == STATIC_SAVE_MEM) {
+            if (e == STATIC_IN_PLACE) {
 
                 if (bit_control % 2 == 1) {
 
