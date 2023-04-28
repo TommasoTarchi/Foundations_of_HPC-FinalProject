@@ -481,6 +481,8 @@ int main(int argc, char **argv) {
             // test
             //
             printf("\tfrom %d:  %d, %d\n", my_thread_id, my_thread_start, my_thread_stop);
+            printf("\tfrom %d:  %d, %d\n", my_thread_id, first_row, last_row);
+            printf("\tfrom %d:  %d\n", my_thread_id, first_edge);
 
 
 
