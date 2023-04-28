@@ -550,6 +550,8 @@ int main(int argc, char **argv) {
 
                     if (my_id == proc) {
 
+
+
                         /* updating the cells' status */
 
                         char count;   // counter of alive neighbor cells
@@ -709,14 +711,10 @@ int main(int argc, char **argv) {
 	                    }
 
 
-                        // test
-                        printf("offset of %d:  %d\n\n", gen, offset);
-
                         /* writing in parallel */
-                        check += MPI_File_write_at(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
+                        check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
 
-                        // test
-                        printf("offset of %d:  %d\n\n", gen, offset);
+                        check += MPI_Barrier(MPI_COMM_WORLD);
 
                         check += MPI_File_close(&f_handle);
 
