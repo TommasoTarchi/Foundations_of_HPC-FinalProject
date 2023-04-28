@@ -1348,6 +1348,7 @@ int main(int argc, char **argv) {
 
                     /* updating the cells' status */
 
+
                     /* needed for evolution without allocating auxiliary grid */
                     char alive = 2 - bit_control % 2;
                     char dead = 1 + bit_control % 2;
@@ -1700,14 +1701,14 @@ int read_pgm_header(unsigned int* head, const char* fname) {
     /* getting header size */
     int size = 0;
     for (int i=0; i<3; i++) {
-	int cipher = 9;
-	int power = 10;
-	size++;
-	while (head[i] > cipher) {
-	    size++;
-	    cipher += 9*power;
-	    power *= 10;
-	}
+        int cipher = 9;
+        int power = 10;
+        size++;
+        while (head[i] > cipher) {
+            size++;
+            cipher += 9*power;
+            power *= 10;
+        }
     }
     head[3] = 6 + size;
 
