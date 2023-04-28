@@ -783,43 +783,18 @@ int main(int argc, char **argv) {
 
 
                                     /* checking if all cells have been already updated */ 
-                                    if (position == my_thread_stop)
-                                        continue;
+                                    if (position != my_thread_stop) {
 
-
-                                    /* updating first element after last row */ 
-
-                                    count = 0;
-                                    count += my_grid[position-2*x_size+1];
-                                    for (int b=position-x_size-1; b<position-x_size+2; b++) {
-                                        count += my_grid[b];
-                                    }
-                                    count += my_grid[position-1];
-                                    count += my_grid[position+1];
-                                    for (int b=position+x_size-1; b<position+x_size+1; b++) {
-                                        count += my_grid[b];
-                                    }
-
-                                    if (count == 2 || count == 3) {
-                                        my_grid[position] = 1;
-                                    } else {
-                                        my_grid[position] = 0;
-                                    }
-                            
-                                    position++;
-
-
-                                    /* updating remaining elements */ 
-
-                                    for ( ; position<my_thread_stop; position++) {
+                                        /* updating first element after last row */ 
 
                                         count = 0;
+                                        count += my_grid[position-2*x_size+1];
                                         for (int b=position-x_size-1; b<position-x_size+2; b++) {
                                             count += my_grid[b];
                                         }
                                         count += my_grid[position-1];
                                         count += my_grid[position+1];
-                                        for (int b=position+x_size-1; b<position+x_size+2; b++) {
+                                        for (int b=position+x_size-1; b<position+x_size+1; b++) {
                                             count += my_grid[b];
                                         }
 
@@ -827,6 +802,30 @@ int main(int argc, char **argv) {
                                             my_grid[position] = 1;
                                         } else {
                                             my_grid[position] = 0;
+                                        }
+                                
+                                        position++;
+
+
+                                        /* updating remaining elements */ 
+
+                                        for ( ; position<my_thread_stop; position++) {
+
+                                            count = 0;
+                                            for (int b=position-x_size-1; b<position-x_size+2; b++) {
+                                                count += my_grid[b];
+                                            }
+                                            count += my_grid[position-1];
+                                            count += my_grid[position+1];
+                                            for (int b=position+x_size-1; b<position+x_size+2; b++) {
+                                                count += my_grid[b];
+                                            }
+
+                                            if (count == 2 || count == 3) {
+                                                my_grid[position] = 1;
+                                            } else {
+                                                my_grid[position] = 0;
+                                            }
                                         }
                                     }
 
@@ -1115,54 +1114,52 @@ int main(int argc, char **argv) {
                     position++;
 
 
-                    /* checking if all cells have been already updated */
-                    if (position == my_thread_stop)
-                        continue;
+                    /* checking if all cells have been already updated */ 
+                    if (position != my_thread_stop) {
 
-
-                    /* updating first element after last row */ 
-
-                    count = 0;
-                    count += my_grid[position-2*x_size+1];
-                    for (int b=position-x_size-1; b<position-x_size+2; b++) {
-                        count += my_grid[b];
-                    }
-                    count += my_grid[position-1];
-                    count += my_grid[position+1];
-                    for (int b=position+x_size-1; b<position+x_size+1; b++) {
-                        count += my_grid[b];
-                    }
-
-                    if (count == 2 || count == 3) {
-                        my_grid_aux[position] = 1;
-                    } else {
-                        my_grid_aux[position] = 0;
-                    }
-                    
-                    position++;
-
-
-                    /* updating remaining elements */ 
-
-                    for ( ; position<my_thread_stop; position++) {
+                        /* updating first element after last row */ 
 
                         count = 0;
+                        count += my_grid[position-2*x_size+1];
                         for (int b=position-x_size-1; b<position-x_size+2; b++) {
                             count += my_grid[b];
                         }
                         count += my_grid[position-1];
                         count += my_grid[position+1];
-                        for (int b=position+x_size-1; b<position+x_size+2; b++) {
+                        for (int b=position+x_size-1; b<position+x_size+1; b++) {
                             count += my_grid[b];
                         }
 
                         if (count == 2 || count == 3) {
-                            my_grid_aux[position] = 1;
+                            my_grid[position] = 1;
                         } else {
-                            my_grid_aux[position] = 0;
+                            my_grid[position] = 0;
+                        }
+                
+                        position++;
+
+
+                        /* updating remaining elements */ 
+
+                        for ( ; position<my_thread_stop; position++) {
+
+                            count = 0;
+                            for (int b=position-x_size-1; b<position-x_size+2; b++) {
+                                count += my_grid[b];
+                            }
+                            count += my_grid[position-1];
+                            count += my_grid[position+1];
+                            for (int b=position+x_size-1; b<position+x_size+2; b++) {
+                                count += my_grid[b];
+                            }
+
+                            if (count == 2 || count == 3) {
+                                my_grid[position] = 1;
+                            } else {
+                                my_grid[position] = 0;
+                            }
                         }
                     }
-
 
 
                     /* switching pointers to grid and grid_aux */
@@ -1466,51 +1463,50 @@ int main(int argc, char **argv) {
                     position++;
 
 
-                    /* checking if all cells have been already updated */
-                    if (position == my_thread_stop)
-                        continue;
+                    /* checking if all cells have been already updated */ 
+                    if (position != my_thread_stop) {
 
-
-                    /* updating first element after last row */ 
-
-                    count = 0;
-                    count += (my_grid[position-2*x_size+1] >> shift) & 1;
-                    for (int b=position-x_size-1; b<position-x_size+2; b++) {
-                        count += (my_grid[b] >> shift) & 1;
-                    }
-                    count += (my_grid[position-1] >> shift) & 1;
-                    count += (my_grid[position+1] >> shift) & 1;
-                    for (int b=position+x_size-1; b<position+x_size+1; b++) {
-                        count += (my_grid[b] >> shift) & 1;
-                    }
-
-                    if (count == 2 || count == 3) {
-                        my_grid[position] |= alive;
-                    } else {
-                        my_grid[position] &= dead;
-                    }
-            
-                    position++;
-
-
-                    /* updating remaining elements */ 
-
-                    for ( ; position<my_thread_stop; position++) {
+                        /* updating first element after last row */ 
 
                         count = 0;
+                        count += my_grid[position-2*x_size+1];
                         for (int b=position-x_size-1; b<position-x_size+2; b++) {
-                            count += (my_grid[b] >> shift) & 1;
+                            count += my_grid[b];
                         }
-                        count += (my_grid[position-1] >> shift) & 1;
-                        count += (my_grid[position+1] >> shift) & 1;
-                        for (int b=position+x_size-1; b<position+x_size+2; b++) {
-                            count += (my_grid[b] >> shift) & 1;
+                        count += my_grid[position-1];
+                        count += my_grid[position+1];
+                        for (int b=position+x_size-1; b<position+x_size+1; b++) {
+                            count += my_grid[b];
                         }
 
                         if (count == 2 || count == 3) {
-                            my_grid[position] |= alive;
+                            my_grid[position] = 1;
                         } else {
-                            my_grid[position] &= dead;
+                            my_grid[position] = 0;
+                        }
+                
+                        position++;
+
+
+                        /* updating remaining elements */ 
+
+                        for ( ; position<my_thread_stop; position++) {
+
+                            count = 0;
+                            for (int b=position-x_size-1; b<position-x_size+2; b++) {
+                                count += my_grid[b];
+                            }
+                            count += my_grid[position-1];
+                            count += my_grid[position+1];
+                            for (int b=position+x_size-1; b<position+x_size+2; b++) {
+                                count += my_grid[b];
+                            }
+
+                            if (count == 2 || count == 3) {
+                                my_grid[position] = 1;
+                            } else {
+                                my_grid[position] = 0;
+                            }
                         }
                     }
 
