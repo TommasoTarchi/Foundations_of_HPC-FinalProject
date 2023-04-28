@@ -466,7 +466,7 @@ int main(int argc, char **argv) {
 
             /* computing first and last (excluded) 'complete' rows */
             const int first_row = my_thread_start / x_size + (my_thread_start % x_size != 0);
-            const int last_row = my_thread_stop / x_size;
+            const int last_row = my_thread_stop / x_size + 1;
             
             /* computing first and last nearest edge's positions */ 
             int first_edge;
@@ -480,9 +480,9 @@ int main(int argc, char **argv) {
 
             // test
             //
-            printf("\tfrom %d:  %d, %d\n", my_thread_id, my_thread_start, my_thread_stop);
-            printf("\tfrom %d:  %d, %d\n", my_thread_id, first_row, last_row);
-            printf("\tfrom %d:  %d\n", my_thread_id, first_edge);
+            printf("\tfrom %d of %d:  %d, %d\n", my_thread_id, my_id, my_thread_start, my_thread_stop);
+            printf("\tfrom %d of %d:  %d, %d\n", my_thread_id, my_id, first_row, last_row);
+            printf("\tfrom %d of %d:  %d\n", my_thread_id, my_id, first_edge);
 
 
 
