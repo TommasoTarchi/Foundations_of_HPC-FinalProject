@@ -715,6 +715,9 @@ int main(int argc, char **argv) {
                         /* writing in parallel */
                         check += MPI_File_write_at(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
 
+                        // test
+                        printf("offset of %d:  %d\n\n", gen, offset);
+
                         check += MPI_File_close(&f_handle);
 
                         if (check != 0 && error_control_3 == 0) {
