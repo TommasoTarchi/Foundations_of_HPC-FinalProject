@@ -1119,6 +1119,10 @@ int main(int argc, char **argv) {
 	        offset += y_size_rmd*x_size + my_id*my_n_cells;
 	    }
 
+
+        // test 
+        printf("fin qui...\n");
+
         /* writing in parallel */
         check += MPI_File_write_at(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
 
