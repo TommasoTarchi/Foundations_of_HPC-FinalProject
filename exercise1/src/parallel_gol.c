@@ -726,6 +726,10 @@ int main(int argc, char **argv) {
                             check = 0;
                         }
 
+
+                        // test
+                        printf("%d\n", gen);
+
                     }
                 }
 
@@ -828,6 +832,9 @@ int main(int argc, char **argv) {
                 my_grid = my_grid_aux;
                 my_grid_aux = temp;
                 temp = NULL;
+
+                // test
+                printf("\tgenerations:  %d\n", gen);
 
             }
 
