@@ -559,7 +559,7 @@ int main(int argc, char **argv) {
                     if (my_id == proc) {
 
 
-                        printf("generation:  %d\n", gen);
+                        printf("generation %d from %d\n", gen, my_id);
 
 
                         /* updating the cells' status */
