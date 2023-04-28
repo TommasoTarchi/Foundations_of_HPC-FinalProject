@@ -1560,6 +1560,7 @@ int main(int argc, char **argv) {
         }   // end of the openMP parallel region
 
 
+        printf("\tat the end: %d\n", bit_control);
 
             /* writing the final state */
 	
