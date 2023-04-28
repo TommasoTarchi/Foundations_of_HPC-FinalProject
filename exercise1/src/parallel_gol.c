@@ -695,10 +695,6 @@ int main(int argc, char **argv) {
                         }
 
 
-
-                        // test
-                        printf("after formatting:  %d\n", gen);
-
                         /* needed to make sure that all processes are actually 
                         * wrtiting on an already formatted PGM file */
                         MPI_Barrier(MPI_COMM_WORLD);
@@ -720,8 +716,6 @@ int main(int argc, char **argv) {
                         // test
                         printf("after opening:  %d\n", gen);
 
-                        
-                        MPI_Barrier(MPI_COMM_WORLD);
 
                         /* writing in parallel */
                         check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
