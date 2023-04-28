@@ -371,6 +371,8 @@ int main(int argc, char **argv) {
         /* reading in parallel */
         check += MPI_File_read_all(f_handle, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
 
+        check += MPI_Barrier(MPI_COMM_WORLD);
+
         check += MPI_File_close(&f_handle);
 
         if (check != 0) {
