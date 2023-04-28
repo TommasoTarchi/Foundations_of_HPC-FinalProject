@@ -710,7 +710,7 @@ int main(int argc, char **argv) {
 
 
                         // test
-                        printf("offset of %d:  %d\n", gen, offset);
+                        printf("offset of %d:  %d\n\n", gen, offset);
 
                         /* writing in parallel */
                         check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
