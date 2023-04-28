@@ -1341,7 +1341,9 @@ int main(int argc, char **argv) {
                             check = 0;
                         }
 
-                   }
+                    }
+                   #pragma omp barrier   // to make sure that the value of bit_control
+                                         // is propagated correctly among threads
 
 
                     /* updating the cells' status */
