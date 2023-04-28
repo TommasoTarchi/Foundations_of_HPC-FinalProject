@@ -1341,8 +1341,10 @@ int main(int argc, char **argv) {
                             check = 0;
                         }
 
+                        printf("from inside: %d\n", bit_control);
                     }
 
+                    printf("from outside: %d\n", bit_control);
 
 
                     /* updating the cells' status */
