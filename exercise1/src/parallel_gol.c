@@ -697,7 +697,7 @@ int main(int argc, char **argv) {
 
                 
                         /* opening file in parallel */
-                        access_mode = MPI_MODE_WRONLY | MPI_MODE_APPEND;
+                        access_mode = MPI_MODE_WRONLY;
                         check += MPI_File_open(MPI_COMM_WORLD, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
 
                         /* computing offsets */
