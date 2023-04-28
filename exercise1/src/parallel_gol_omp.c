@@ -284,6 +284,8 @@ int main(int argc, char **argv) {
         /* writing in parallel */
         check += MPI_File_write_at_all(f_handle, offset, my_grid, my_m*k, MPI_CHAR, &status);
 
+        check += MPI_Barrier(MPI_COMM_WORLD);
+
         check += MPI_File_close(&f_handle);
 
         if (check != 0)
@@ -406,6 +408,8 @@ int main(int argc, char **argv) {
         /* reading in parallel */
         check += MPI_File_read_all(f_handle, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
 
+        MPI_Barrier(MPI_COMM_WORLD);
+
         check += MPI_File_close(&f_handle);
 
         if (check != 0) {
@@ -422,7 +426,7 @@ int main(int argc, char **argv) {
 
 
 
-        char* snap_name = (char*) malloc(29*sizeof(char));   // string to store name of snapshot files
+        char* snap_name = (char*) malloc(50*sizeof(char));   // string to store name of snapshot files
 
 
 
@@ -556,6 +560,8 @@ int main(int argc, char **argv) {
                                 /* writing in parallel */
                                 check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
         
+                                check += MPI_Barrier(MPI_COMM_WORLD);
+
                                 check += MPI_File_close(&f_handle);
 
                                 if (check != 0 && error_control_3 == 0) {
@@ -953,6 +959,8 @@ int main(int argc, char **argv) {
                                 /* writing in parallel */
                                 check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
 
+                                check += MPI_Barrier(MPI_COMM_WORLD);
+
                                 check += MPI_File_close(&f_handle);
 
                                 if (check != 0 && error_control_3 == 0) {
@@ -1167,9 +1175,7 @@ int main(int argc, char **argv) {
                    #pragma omp barrier
                    #pragma omp master
                     {
-              
-                        MPI_Barrier(MPI_COMM_WORLD);
-
+                     
                         temp = my_grid;
                         my_grid = my_grid_aux;
                         my_grid_aux = temp;
@@ -1298,6 +1304,8 @@ int main(int argc, char **argv) {
 
                                 /* writing in parallel */
                                 check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
+                                
+                                check += MPI_Barrier(MPI_COMM_WORLD);
 
                                 check += MPI_File_close(&f_handle);
 
@@ -1613,6 +1621,8 @@ int main(int argc, char **argv) {
 
             /* writing in parallel */
             check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
+
+            check += MPI_Barrier(MPI_COMM_WORLD);
 
             check += MPI_File_close(&f_handle);
 
