@@ -716,6 +716,10 @@ int main(int argc, char **argv) {
 		                    offset += y_size_rmd*x_size + my_id*my_n_cells;
 	                    }
 
+
+                        // test
+                        printf("after opening:  %d\n", gen);
+
                         
                         MPI_Barrier(MPI_COMM_WORLD);
 
