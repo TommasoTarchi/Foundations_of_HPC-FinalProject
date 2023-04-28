@@ -535,7 +535,7 @@ int main(int argc, char **argv) {
                         }
 
 
-                        pintf("\tcommunicating from %d\n", my_id);
+                        printf("\tcommunicating from %d\n", my_id);
 
                     } else {
 
