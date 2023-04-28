@@ -480,8 +480,6 @@ int main(int argc, char **argv) {
                 }
 
 
-                MPI_Barrier(MPI_COMM_WORLD);
-
 
                 /* iteration on processes */
                 for (int proc=0; proc<n_procs; proc++) {
@@ -561,7 +559,6 @@ int main(int argc, char **argv) {
                     if (my_id == proc) {
 
 
-
                         /* updating the cells' status */
 
                         char count;   // counter of alive neighbor cells
@@ -629,6 +626,8 @@ int main(int argc, char **argv) {
                                 my_grid[position] = 0;
                             }
                         }
+
+
 
                     }
 
