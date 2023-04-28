@@ -559,6 +559,9 @@ int main(int argc, char **argv) {
                     if (my_id == proc) {
 
 
+                        printf("generation:  %d\n", gen);
+
+
                         /* updating the cells' status */
 
                         char count;   // counter of alive neighbor cells
@@ -626,7 +629,6 @@ int main(int argc, char **argv) {
                                 my_grid[position] = 0;
                             }
                         }
-
 
 
                     }
