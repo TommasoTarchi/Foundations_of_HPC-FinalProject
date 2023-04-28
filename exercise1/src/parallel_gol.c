@@ -695,6 +695,10 @@ int main(int argc, char **argv) {
                         }
 
 
+
+                        // test
+                        printf("after formatting:  %d\n", gen);
+
                         /* needed to make sure that all processes are actually 
                         * wrtiting on an already formatted PGM file */
                         MPI_Barrier(MPI_COMM_WORLD);
@@ -730,7 +734,7 @@ int main(int argc, char **argv) {
 
 
                         // test
-                        printf("%d\n", gen);
+                        printf("after I/O:  %d\n", gen);
 
                     }
                 }
