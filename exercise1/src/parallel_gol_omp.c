@@ -435,6 +435,11 @@ int main(int argc, char **argv) {
 
 
 
+        // test
+        //
+        printf("from %d:  %d, %d\n", my_id, x_size, x_size+my_n_cells);
+
+
         /* opening parallel region */
 
        #pragma omp parallel
@@ -475,7 +480,7 @@ int main(int argc, char **argv) {
 
             // test
             //
-            printf("from %d:  %d, %d\n", my_thread_id, my_thread_start, my_thread_stop);
+            printf("\tfrom %d:  %d, %d\n", my_thread_id, my_thread_start, my_thread_stop);
 
 
 
