@@ -470,7 +470,12 @@ int main(int argc, char **argv) {
             } else {
                 first_edge = first_row * x_size - 1;
             }
-            //const int last_edge = last_row * x_size;   // last edge position
+            
+
+
+            // test
+            //
+            printf("from %d:  %d, %d\n", my_thread_start, my_thread_stop);
 
 
 
