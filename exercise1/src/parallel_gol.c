@@ -401,6 +401,7 @@ int main(int argc, char **argv) {
 
         if (e == ORDERED) {
 
+
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_id == 0) {
@@ -477,6 +478,9 @@ int main(int argc, char **argv) {
 
                     }
                 }
+
+
+                MPI_Barrier(MPI_COMM_WORLD);
 
 
                 /* iteration on processes */
