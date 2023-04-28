@@ -1348,7 +1348,6 @@ int main(int argc, char **argv) {
 
                     /* updating the cells' status */
 
-
                     /* needed for evolution without allocating auxiliary grid */
                     char alive = 2 - bit_control % 2;
                     char dead = 1 + bit_control % 2;
@@ -1528,6 +1527,7 @@ int main(int argc, char **argv) {
 
                         MPI_Barrier(MPI_COMM_WORLD);
                     }
+                   #pragma omp barrier
 
                 }
 
