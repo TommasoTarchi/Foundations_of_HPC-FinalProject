@@ -712,6 +712,8 @@ int main(int argc, char **argv) {
 		                    offset += y_size_rmd*x_size + my_id*my_n_cells;
 	                    }
 
+                        
+                        MPI_Barrier(MPI_COMM_WORLD);
 
                         /* writing in parallel */
                         check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
