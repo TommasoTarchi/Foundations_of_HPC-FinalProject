@@ -1246,7 +1246,7 @@ int main(int argc, char **argv) {
 
          
                                 /* selecting the state signaling bit */
-                                if (bit_control % 2 == 1) {
+                                if (bit_control % 2 != 1) {
 
                                     for (int i=0; i<my_n_cells+2*x_size; i++)
                                         my_grid[i] >>= 1;				                        
@@ -1341,10 +1341,7 @@ int main(int argc, char **argv) {
                             check = 0;
                         }
 
-                        printf("from inside: %d\n", bit_control);
-                    }
-
-                    printf("from outside: %d\n", bit_control);
+                   }
 
 
                     /* updating the cells' status */
@@ -1560,7 +1557,6 @@ int main(int argc, char **argv) {
         }   // end of the openMP parallel region
 
 
-        printf("\tat the end: %d\n", bit_control);
 
             /* writing the final state */
 	
