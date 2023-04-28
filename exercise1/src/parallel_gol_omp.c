@@ -435,11 +435,6 @@ int main(int argc, char **argv) {
 
 
 
-        // test
-        //
-        printf("from %d:  %d, %d\n", my_id, x_size, x_size+my_n_cells);
-
-
         /* opening parallel region */
 
        #pragma omp parallel
@@ -476,14 +471,6 @@ int main(int argc, char **argv) {
                 first_edge = first_row * x_size - 1;
             }
             
-
-
-            // test
-            //
-            printf("\tfrom %d of %d:  %d, %d\n", my_thread_id, my_id, my_thread_start, my_thread_stop);
-            printf("\tfrom %d of %d:  %d, %d\n", my_thread_id, my_id, first_row, last_row);
-            printf("\tfrom %d of %d:  %d\n", my_thread_id, my_id, first_edge);
-
 
 
 
@@ -1489,20 +1476,20 @@ int main(int argc, char **argv) {
                         /* updating first element after last row */ 
 
                         count = 0;
-                        count += my_grid[position-2*x_size+1];
+                        count += (my_grid[position-2*x_size+1] >> shift) & 1;
                         for (int b=position-x_size-1; b<position-x_size+2; b++) {
-                            count += my_grid[b];
+                            count += (my_grid[b] >> shift) & 1;
                         }
-                        count += my_grid[position-1];
-                        count += my_grid[position+1];
+                        count += (my_grid[position-1] >> shift) & 1;
+                        count += (my_grid[position+1] >> shift) & 1;
                         for (int b=position+x_size-1; b<position+x_size+1; b++) {
-                            count += my_grid[b];
+                            count += (my_grid[b] >> shift) & 1;
                         }
 
                         if (count == 2 || count == 3) {
-                            my_grid[position] = 1;
+                            my_grid[position] |= alive;
                         } else {
-                            my_grid[position] = 0;
+                            my_grid[position] &= dead;
                         }
                 
                         position++;
@@ -1514,18 +1501,18 @@ int main(int argc, char **argv) {
 
                             count = 0;
                             for (int b=position-x_size-1; b<position-x_size+2; b++) {
-                                count += my_grid[b];
+                                count += (my_grid[b] >> shift) & 1;
                             }
-                            count += my_grid[position-1];
-                            count += my_grid[position+1];
+                            count += (my_grid[position-1] >> shift) & 1;
+                            count += (my_grid[position+1] >> shift) & 1;
                             for (int b=position+x_size-1; b<position+x_size+2; b++) {
-                                count += my_grid[b];
+                                count += (my_grid[b] >> shift) & 1;
                             }
 
                             if (count == 2 || count == 3) {
-                                my_grid[position] = 1;
+                                my_grid[position] |= alive;
                             } else {
-                                my_grid[position] = 0;
+                                my_grid[position] &= dead;
                             }
                         }
                     }
