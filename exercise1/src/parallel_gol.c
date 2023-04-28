@@ -509,6 +509,9 @@ int main(int argc, char **argv) {
                             error_control_1 = 1;   // to avoid a large number of error messages
                         }
 
+
+                        printf("communicating from %d\n", my_id);
+
                     } else if (proc == n_procs-1) {
 
                         if (my_id == n_procs-2) {
@@ -530,6 +533,9 @@ int main(int argc, char **argv) {
                             check = 0;
                             error_control_1 = 1;   // to avoid a large number of error messages
                         }
+
+
+                        pintf("\tcommunicating from %d\n", my_id);
 
                     } else {
 
@@ -553,13 +559,13 @@ int main(int argc, char **argv) {
                             error_control_1 = 1;   // to avoid a large number of error messages
                         }
 
+
+                        printf("\t\tcommunicating from %d\n", my_id);
+
                     }
 
 
                     if (my_id == proc) {
-
-
-                        printf("generation %d from %d\n", gen, my_id);
 
 
                         /* updating the cells' status */
