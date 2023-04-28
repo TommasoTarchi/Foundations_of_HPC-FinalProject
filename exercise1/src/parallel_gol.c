@@ -722,7 +722,7 @@ int main(int argc, char **argv) {
 
 
                         // test 
-                        printf("after writing:  %D\n", gen);
+                        printf("after writing:  %d\n", gen);
 
                         check += MPI_Barrier(MPI_COMM_WORLD);
 
