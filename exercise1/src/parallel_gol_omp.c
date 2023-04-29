@@ -1138,9 +1138,9 @@ int main(int argc, char **argv) {
                         }
 
                         if (count == 2 || count == 3) {
-                            my_grid[position] = 1;
+                            my_grid_aux[position] = 1;
                         } else {
-                            my_grid[position] = 0;
+                            my_grid_aux[position] = 0;
                         }
                 
                         position++;
@@ -1161,9 +1161,9 @@ int main(int argc, char **argv) {
                             }
 
                             if (count == 2 || count == 3) {
-                                my_grid[position] = 1;
+                                my_grid_aux[position] = 1;
                             } else {
-                                my_grid[position] = 0;
+                                my_grid_aux[position] = 0;
                             }
                         }
                     }
@@ -1356,7 +1356,7 @@ int main(int argc, char **argv) {
                     char count;
                     int position = my_thread_start;
 
-                    
+
                     /* updating cells preceding the first edge */
 
                     for ( ; position<first_edge; position++) {
@@ -1379,13 +1379,8 @@ int main(int argc, char **argv) {
                     }
 
 
-
-                    printf("at gen %d bit_control: %d\n", gen, bit_control);
-
-
-
                     /* updating first edge encountered */
-    
+                    
                     if (position == first_edge) {
 
                         count = 0;
@@ -1407,7 +1402,7 @@ int main(int argc, char **argv) {
 
                     }
 
-     
+                     
                     /* iteration on 'complete' rows */
 
                     for (int i=first_row; i<last_row; i++) {
@@ -1522,7 +1517,7 @@ int main(int argc, char **argv) {
                             }
                         }
                     }
-
+                   
 
                     /* updating the state signaling bit */
                    #pragma omp barrier
