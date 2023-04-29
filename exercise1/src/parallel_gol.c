@@ -489,7 +489,7 @@ int main(int argc, char **argv) {
 
                     if (proc == 0) {
 
-                        if (my_id == n_procs-1) {
+                        if (n_procs > 2 && my_id == n_procs-1) {
 
                             check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
  
@@ -521,7 +521,7 @@ int main(int argc, char **argv) {
 
                     } else if (proc == n_procs-1) {
 
-                        if (my_id == n_procs-2) {
+                        if (n_procs > 2 && my_id == n_procs-2) {
 
                             check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
 
