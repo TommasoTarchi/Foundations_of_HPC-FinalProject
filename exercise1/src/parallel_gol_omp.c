@@ -792,22 +792,22 @@ int main(int argc, char **argv) {
                                         /* updating first element after last row */ 
 
                                         count = 0;
-                                        count += my_grid[position-2*x_size+1];
-                                        for (int b=position-x_size-1; b<position-x_size+2; b++) {
+                                        for (int b=position-x_size; b<position-x_size+2; b++) {
                                             count += my_grid[b];
                                         }
                                         count += my_grid[position-1];
                                         count += my_grid[position+1];
-                                        for (int b=position+x_size-1; b<position+x_size+1; b++) {
+                                        for (int b=position+x_size-1; b<position+x_size+2; b++) {
                                             count += my_grid[b];
                                         }
+                                        count += my_grid[position+2*x_size-1];
 
                                         if (count == 2 || count == 3) {
-                                            my_grid[position] = 1;
+                                            my_grid_aux[position] = 1;
                                         } else {
-                                            my_grid[position] = 0;
+                                            my_grid_aux[position] = 0;
                                         }
-                                
+                               
                                         position++;
 
 
@@ -1476,22 +1476,22 @@ int main(int argc, char **argv) {
                         /* updating first element after last row */ 
 
                         count = 0;
-                        count += (my_grid[position-2*x_size+1] >> shift) & 1;
-                        for (int b=position-x_size-1; b<position-x_size+2; b++) {
+                        for (int b=position-x_size; b<position-x_size+2; b++) {
                             count += (my_grid[b] >> shift) & 1;
                         }
                         count += (my_grid[position-1] >> shift) & 1;
                         count += (my_grid[position+1] >> shift) & 1;
-                        for (int b=position+x_size-1; b<position+x_size+1; b++) {
+                        for (int b=position+x_size-1; b<position+x_size+2; b++) {
                             count += (my_grid[b] >> shift) & 1;
                         }
+                        count += (my_grid[position+2*x_size-1] >> shift) & 1;
 
                         if (count == 2 || count == 3) {
                             my_grid[position] |= alive;
                         } else {
                             my_grid[position] &= dead;
                         }
-                
+               
                         position++;
 
 
