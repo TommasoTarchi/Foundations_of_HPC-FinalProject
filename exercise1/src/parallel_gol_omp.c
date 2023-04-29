@@ -476,7 +476,7 @@ int main(int argc, char **argv) {
 
             // test 
             printf("x_size:   %d\n", x_size);
-            printf("from thread %d on process %d: start at %d, stop at %d, n_cells %d\nfirst row %d, last row %d, first edge %d\n\n", my_thread_start, my_thread_stop, my_thread_n_cells, first_row, last_row, first_edge);
+            printf("from thread %d on process %d: start at %d, stop at %d, n_cells %d\nfirst row %d, last row %d, first edge %d\n\n", my_thread_id, my_id, my_thread_start, my_thread_stop, my_thread_n_cells, first_row, last_row, first_edge);
             
 
 
