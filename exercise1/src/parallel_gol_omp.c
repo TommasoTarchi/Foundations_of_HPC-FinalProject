@@ -667,8 +667,34 @@ int main(int argc, char **argv) {
 
                                #pragma omp ordered
                                 {
+                                 
                                     char count;   // counter of alive neighbor cells
                                     int position = my_thread_start;   // position of the cell to update
+
+
+                                    /* updating first element if on the edge */
+                    
+                                    if (position % x_size == 0) {
+
+                                        count = 0;
+                                        for (int b=position-x_size; b<position-x_size+2; b++) {
+                                            count += my_grid[b];
+                                        }
+                                        count += my_grid[position-1];
+                                        count += my_grid[position+1];
+                                        for (int b=position+x_size-1; b<position+x_size+2; b++) {
+                                            count += my_grid[b];
+                                        }
+                                        count += my_grid[position+2*x_size-1];
+
+                                        if (count == 2 || count == 3) {
+                                            my_grid[position] = 1;
+                                        } else {
+                                            my_grid[position] = 0;
+                                        }
+
+                                        position++;
+                                    }
 
 
                                     /* updating cells preceding the first edge */
@@ -1005,6 +1031,31 @@ int main(int argc, char **argv) {
                     int position = my_thread_start;   // position of the cell to update
 
 
+                    /* updating first element if on the edge */
+                    
+                    if (position % x_size == 0) {
+
+                        count = 0;
+                        for (int b=position-x_size; b<position-x_size+2; b++) {
+                            count += my_grid[b];
+                        }
+                        count += my_grid[position-1];
+                        count += my_grid[position+1];
+                        for (int b=position+x_size-1; b<position+x_size+2; b++) {
+                            count += my_grid[b];
+                        }
+                        count += my_grid[position+2*x_size-1];
+
+                        if (count == 2 || count == 3) {
+                            my_grid_aux[position] = 1;
+                        } else {
+                            my_grid_aux[position] = 0;
+                        }
+
+                        position++;
+                    }
+
+
                     /* updating cells preceding the first edge */
 
                     for ( ; position<first_edge; position++) {
@@ -1120,7 +1171,7 @@ int main(int argc, char **argv) {
 
 
                     /* checking if all cells have been already updated */ 
-                    if (position != my_thread_stop) {
+                    if (position < my_thread_stop) {
 
                         /* updating first element after last row */ 
 
@@ -1354,6 +1405,30 @@ int main(int argc, char **argv) {
                     char count;
                     int position = my_thread_start;
 
+
+                    /* updating first element if on the edge */
+                    
+                    if (position % x_size == 0) {
+
+                        count = 0;
+                        for (int b=position-x_size; b<position-x_size+2; b++) {
+                            count += (my_grid[b] >> shift) & 1;
+                        }
+                        count += (my_grid[position-1] >> shift) & 1;
+                        count += (my_grid[position+1] >> shift) & 1;
+                        for (int b=position+x_size-1; b<position+x_size+2; b++) {
+                            count += (my_grid[b] >> shift) & 1;
+                        }
+                        count += (my_grid[position+2*x_size-1] >> shift) & 1;
+
+                        if (count == 2 || count == 3) {
+                            my_grid[position] |= alive;
+                        } else {
+                            my_grid[position] &= dead;
+                        }
+
+                        position++;
+                    }
 
                     /* updating cells preceding the first edge */
 
