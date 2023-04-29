@@ -461,7 +461,7 @@ int main(int argc, char **argv) {
 
             /* computing first and last (excluded) 'complete' rows */
             const int first_row = my_thread_start / x_size + (my_thread_start % x_size != 0);
-            const int last_row = my_thread_stop / x_size + 1;
+            const int last_row = my_thread_stop / x_size;
             
             /* computing first and last nearest edge's positions */ 
             int first_edge;
