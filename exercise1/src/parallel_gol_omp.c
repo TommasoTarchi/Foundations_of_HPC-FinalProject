@@ -1379,6 +1379,11 @@ int main(int argc, char **argv) {
                     }
 
 
+
+                    printf("at gen %d bit_control: %d\n", gen, bit_control);
+
+
+
                     /* updating first edge encountered */
     
                     if (position == first_edge) {
