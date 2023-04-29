@@ -9,7 +9,7 @@ The current directory contains:
 
 - This markdown file: an overview of the content of this folder and how to run it
 - `src/`: a folder containing game of life source codes:
-    - `serial_gol.c`: a serial (unoptimized) version of game of life, used as base code for parallelization
+    - `serial_gol.c`: a serial version of game of life, used as base code for parallelization
     - `parallel_gol.c`: ...
     -
 - `images/`: a folder containing images (system states) produced by game of life executables, in PGM format:
