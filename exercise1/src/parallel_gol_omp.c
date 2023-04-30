@@ -612,7 +612,7 @@ int main(int argc, char **argv) {
                                     error_control_1 = 1;   // to avoid a large number of error messages
                                 }
 
-                            } else if (proc == n_procs-1) {
+                            } else if (proc == n_procs-1 && n_procs != 1) {
     
                                 if (my_id == n_procs-2)
                                     check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
@@ -623,6 +623,7 @@ int main(int argc, char **argv) {
                                 if (my_id == n_procs-1) {
                                     check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
                                     check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+                                
                                 }
                         
                                 if (check != 0 && error_control_1 == 0) {
