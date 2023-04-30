@@ -485,64 +485,83 @@ int main(int argc, char **argv) {
                 for (int proc=0; proc<n_procs; proc++) {
 
 
-                    /* getting neighbor cells' status */
+                    /* getting neighbor cells' status */ 
 
-                    if (proc == 0) {
+                    if (n_procs > 1) {
 
-                        if (my_id == n_procs-1)
-                            check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
-              
-                        if (my_id == 1)
-                            check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
 
-                        if (my_id == 0) {
-                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
-                            check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+                        if (proc == 0) {
+
+                            if (my_id == n_procs-1)
+                                check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
+                  
+                            if (my_id == 1)
+                                check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
+
+                            if (my_id == 0) {
+                                check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
+                                check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+
+                            }
+                            
+                            if (check != 0 && error_control_1 == 0) {
+                                printf("\n--- AN ERROR OCCURRED WHILE COMMUNICATING NEIGHBOR CELLS' STATUS OF PROCESS %d ---\n\n", proc);
+                                check = 0;
+                                error_control_1 = 1;   // to avoid a large number of error messages
+                            }
+
+
+                        } else if (proc == n_procs-1) {
+
+                            if (my_id == n_procs-2)
+                                check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
+
+                            if (my_id == 0)
+                                check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
+
+                            if (my_id == n_procs-1) {
+                                check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
+                                check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+
+                            }
+                            
+                            if (check != 0 && error_control_1 == 0) {
+                                printf("\n--- AN ERROR OCCURRED WHILE COMMUNICATING NEIGHBOR CELLS' STATUS OF PROCESS %d ---\n\n", proc);
+                                check = 0;
+                                error_control_1 = 1;   // to avoid a large number of error messages
+                            }
+
+
+                        } else if (n_procs > 2) {
+
+                            if (my_id == proc-1) {
+                                check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
+                  
+                            } else if (my_id == proc+1) {
+                                check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
+
+                            } else if (my_id == proc) {
+                                check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
+                                check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+                           
+                            }
+                            
+                            if (check != 0 && error_control_1 == 0) {
+                                printf("\n--- AN ERROR OCCURRED WHILE COMMUNICATING NEIGHBOR CELLS' STATUS OF PROCESS %d ---\n\n", proc);
+                                check = 0;
+                                error_control_1 = 1;   // to avoid a large number of error messages
+                            }
 
                         }
-                        
-                        if (check != 0 && error_control_1 == 0) {
-                            printf("\n--- AN ERROR OCCURRED WHILE COMMUNICATING NEIGHBOR CELLS' STATUS OF PROCESS %d ---\n\n", proc);
-                            check = 0;
-                            error_control_1 = 1;   // to avoid a large number of error messages
-                        }
 
 
-                    } else if (proc == n_procs-1) {
+                    /* case of single MPI process */
+                    } else {
 
-                        if (my_id == n_procs-2)
-                            check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
-
-                        if (my_id == 0)
-                            check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
-
-                        if (my_id == n_procs-1) {
-                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
-                            check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
-
-                        }
-                        
-                        if (check != 0 && error_control_1 == 0) {
-                            printf("\n--- AN ERROR OCCURRED WHILE COMMUNICATING NEIGHBOR CELLS' STATUS OF PROCESS %d ---\n\n", proc);
-                            check = 0;
-                            error_control_1 = 1;   // to avoid a large number of error messages
-                        }
-
-
-                    } else if (n_procs > 2) {
-
-                        if (my_id == proc-1) {
-                            check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
-              
-                        } else if (my_id == proc+1) {
-                            check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
-
-                        } else if (my_id == proc) {
-                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
-                            check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
-                       
-                        }
-                        
+                        check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
+                        check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
+                        check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
+                        check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
                         if (check != 0 && error_control_1 == 0) {
                             printf("\n--- AN ERROR OCCURRED WHILE COMMUNICATING NEIGHBOR CELLS' STATUS OF PROCESS %d ---\n\n", proc);
                             check = 0;
