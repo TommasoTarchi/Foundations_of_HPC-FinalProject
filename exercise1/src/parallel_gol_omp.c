@@ -668,11 +668,6 @@ int main(int argc, char **argv) {
                                #pragma omp ordered
                                 {
 
-
-
-                                    printf("thread %d of process %d in iteration %d\n", my_thread_id, my_id, th);
-
-
                                  
                                     char count;   // counter of alive neighbor cells
                                     int position = my_thread_start;   // position of the cell to update
@@ -701,7 +696,7 @@ int main(int argc, char **argv) {
 
 
                                     /* updating first edge encountered */
-                    
+                                    
                                     if (position == first_edge) {
 
                                         count = 0;
@@ -723,11 +718,11 @@ int main(int argc, char **argv) {
 
                                     }
 
-                     
+                                     
                                     /* iteration on 'complete' rows */
-                
+
                                     for (int i=first_row; i<last_row; i++) {
-        
+
                                         /* updating first element of the row */ 
                                         position = i*x_size;
                                         count = 0;
@@ -750,7 +745,7 @@ int main(int argc, char **argv) {
                                         /* iteration on internal columns (updating internal elements
                                         * of te row) */
                                         for (int j=1; j<x_size-1; j++) {
-    
+
                                             count = 0;
                                             position = i*x_size+j;
                                             for (int b=position-x_size-1; b<position-x_size+2; b++) {
@@ -793,7 +788,7 @@ int main(int argc, char **argv) {
 
 
                                     /* checking if all cells have been already updated */ 
-                                    if (position != my_thread_stop) {
+                                    if (position < my_thread_stop) {
 
                                         /* updating first element after last row */ 
 
@@ -809,11 +804,11 @@ int main(int argc, char **argv) {
                                         count += my_grid[position+2*x_size-1];
 
                                         if (count == 2 || count == 3) {
-                                            my_grid_aux[position] = 1;
+                                            my_grid[position] = 1;
                                         } else {
-                                            my_grid_aux[position] = 0;
+                                            my_grid[position] = 0;
                                         }
-                               
+                                
                                         position++;
 
 
