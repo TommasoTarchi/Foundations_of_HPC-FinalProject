@@ -298,8 +298,6 @@ int main(int argc, char **argv) {
                         count += grid[b];
                     }
                     count += grid[(i+2)*x_size-1]; 
-                    if (grid[i*x_size] == 1)
-                        count--;
 
                     if (count == 2 || count == 3) {
                         grid[i*x_size] = 1;
