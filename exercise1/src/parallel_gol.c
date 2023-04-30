@@ -624,9 +624,6 @@ int main(int argc, char **argv) {
                             }
                         }
 
-
-                        printf("\tI'm %d on gen %d\n", my_id, gen);
-
                     }
 
                     MPI_Barrier(MPI_COMM_WORLD);
