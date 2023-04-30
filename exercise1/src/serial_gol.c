@@ -202,7 +202,7 @@ int main(int argc, char **argv) {
 
         
         /* string to store the name of the snapshot files */
-        char* snap_name = (char*) malloc(29*sizeof(char));
+        char* snap_name = (char*) malloc(50*sizeof(char));
 
 
 
