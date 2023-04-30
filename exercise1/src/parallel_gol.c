@@ -555,7 +555,7 @@ int main(int argc, char **argv) {
                         } else if (my_id == proc+1) {
                             check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
 
-                            printf("sending backward from %d\n");
+                            printf("sending backward from %d\n", my_id);
 
                         } else if (my_id == proc) {
                             check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
