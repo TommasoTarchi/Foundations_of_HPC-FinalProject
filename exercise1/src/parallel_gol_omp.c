@@ -667,6 +667,12 @@ int main(int argc, char **argv) {
 
                                #pragma omp ordered
                                 {
+
+
+
+                                    printf("thread %d of process %d in iteration %d\n", my_thread_id, my_id, th);
+
+
                                  
                                     char count;   // counter of alive neighbor cells
                                     int position = my_thread_start;   // position of the cell to update
