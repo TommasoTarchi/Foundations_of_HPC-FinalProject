@@ -489,15 +489,23 @@ int main(int argc, char **argv) {
 
                     if (proc == 0) {
 
-                        if (my_id == n_procs-1)
+                        if (my_id == n_procs-1) {
                             check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
+                            
+                            printf("sending forward from %d\n", my_id);
+                        }
                
-                        if (my_id == 1)
+                        if (my_id == 1) {
                             check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
+
+                            printf("sending backward from %d\n", my_id);
+                        }
 
                         if (my_id == 0) {
                             check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
                             check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+
+                            printf("receiving from %d\n", my_id);
 
                         }
                         
@@ -510,15 +518,23 @@ int main(int argc, char **argv) {
 
                     } else if (proc == n_procs-1) {
 
-                        if (my_id == n_procs-2)
+                        if (my_id == n_procs-2) {
                             check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
 
-                        if (my_id == 0)
+                            printf("sending forward from %d\n", my_id);
+                        }
+
+                        if (my_id == 0) {
                             check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
+
+                            printf("sending backward from %d\n", my_id);
+                        }
 
                         if (my_id == n_procs-1) {
                             check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
                             check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+
+                            printf("receiving from %d\n", my_id);
  
                         }
                         
@@ -533,13 +549,19 @@ int main(int argc, char **argv) {
 
                         if (my_id == proc-1) {
                             check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
+
+                            printf("sending forward from %d\n", my_id);
                
                         } else if (my_id == proc+1) {
                             check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
 
+                            printf("sending backward from %d\n");
+
                         } else if (my_id == proc) {
                             check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
                             check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+
+                            printf("receiving from %d\n", my_id);
                         
                         }
                         
