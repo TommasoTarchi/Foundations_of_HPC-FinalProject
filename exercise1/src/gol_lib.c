@@ -77,7 +77,7 @@ int read_pgm_header(unsigned int* head, const char* fname) {
 
 
 
-void ordered_evo(int n, int s, BOOL* my_grid, int my_id, const int my_n_cells, const int header_size, const int x_size, const int y_size, const int y_size_rmd, const int color_maxval, int offset, int n_threads, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop, int n_procs, int my_thread_id, MPI_Status status, const int prev, const int succ, const int tag_send, const int tag_recv_p, const int tag_recv_s)  {
+void ordered_evo(int n, int s, BOOL* my_grid, int my_id, const int my_n_cells, const int header_size, const int x_size, const int y_size, const int y_size_rmd, const int color_maxval, int offset, int n_threads, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop, int n_procs, int my_thread_id, MPI_Status* status, const int prev, const int succ, const int tag_send, const int tag_recv_p, const int tag_recv_s)  {
 
 
     char* snap_name = (char*) malloc(50*sizeof(char));   // string to store name of snapshot files 
@@ -115,7 +115,7 @@ void ordered_evo(int n, int s, BOOL* my_grid, int my_id, const int my_n_cells, c
                         /* writing the header */
                         access_mode = MPI_MODE_CREATE | MPI_MODE_WRONLY;
                         check += MPI_File_open(MPI_COMM_SELF, snap_name, access_mode, MPI_INFO_NULL, &f_handle);
-                        check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, &status);
+                        check += MPI_File_write_at(f_handle, 0, header, header_size, MPI_CHAR, status);
                         check += MPI_File_close(&f_handle);
             
                         if (check != 0) {
@@ -183,8 +183,8 @@ void ordered_evo(int n, int s, BOOL* my_grid, int my_id, const int my_n_cells, c
                             check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
 
                         if (my_id == 0) {
-                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
-                            check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, status);
+                            check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, status);
                         }
                     
                         if (check != 0) {
@@ -201,8 +201,8 @@ void ordered_evo(int n, int s, BOOL* my_grid, int my_id, const int my_n_cells, c
                             check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
 
                         if (my_id == n_procs-1) {
-                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
-                            check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, status);
+                            check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, status);
 
                         }
                 
@@ -220,8 +220,8 @@ void ordered_evo(int n, int s, BOOL* my_grid, int my_id, const int my_n_cells, c
                             check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
 
                         } else if (my_id == proc) {
-                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
-                            check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+                            check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, status);
+                            check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, status);
                         }
                 
                         if (check != 0) {
@@ -236,7 +236,7 @@ void ordered_evo(int n, int s, BOOL* my_grid, int my_id, const int my_n_cells, c
                 } else {
 
                     check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
-                    check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
+                    check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, status);
 
                     if (check != 0) {
                         printf("\n--- AN ERROR OCCURRED WHILE COMMUNICATING NEIGHBOR CELLS' STATUS OF PROCESS %d ---\n\n", proc);
@@ -379,7 +379,7 @@ void ordered_evo(int n, int s, BOOL* my_grid, int my_id, const int my_n_cells, c
                         if (my_thread_id == 0) {
 
                             check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
-                            check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+                            check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, status);
                         }
                     }
 
