@@ -5,7 +5,7 @@
 #include <time.h>
 #include <mpi.h>
 #include <omp.h>
-#include <gol_lib.h>
+#include "gol_lib.h"
 
 
 
