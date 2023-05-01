@@ -380,12 +380,14 @@ int main(int argc, char **argv) {
             my_y_size++;
         const unsigned int my_n_cells = x_size*my_y_size;   // number of cells assigned to the process
 
+
         /* grid to store cells status and two more rows for neighbor cells */ 
         BOOL* my_grid = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
         /* auxiliary grid to store cells' status */
         BOOL* my_grid_aux = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
         /* temporary pointer used for grid switching */
         void* temp=NULL;
+
 
         MPI_File f_handle;   // pointer to file
 
