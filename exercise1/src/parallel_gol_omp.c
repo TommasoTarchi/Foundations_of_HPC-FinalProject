@@ -42,7 +42,7 @@ char *fname  = NULL;
 
 /* functions' signatures */
 int read_pgm_header(unsigned int*, const char*);
-void ordered_evo(BOOL*, const int, int, int, const int, const int, const int, int, int); 
+int ordered_evo(BOOL*, const int, int, int, const int, const int, const int, int, int, const int, const int, const int, const int);
 void static_evo(BOOL*, BOOL*, const int, int, int, const int, const int, const int);
 void static_evo_in_place(BOOL*, const int, int, int, const int, const int, const int, int);
 
@@ -690,9 +690,17 @@ int main(int argc, char **argv) {
 
 
                                #pragma omp ordered 
-                                ordered_evo(my_grid, x_size, my_thread_start, first_edge, first_row, last_row, my_thread_stop, n_procs, my_thread_id);                                 
+                                check += ordered_evo(my_grid, x_size, my_thread_start, first_edge, first_row, last_row, my_thread_stop, n_procs, my_thread_id, prev, succ, tag_send, tag_recv_s);                                 
 
                             }
+
+
+                            if (check != 0 && error_control_1 == 0) {
+                                printf("\n--- AN I/O ERROR OCCURRED WHILE EVOLVING PLAYGROUND ON PROCESS %d ---\n\n", proc);
+                                check = 0;
+                                error_control_2 = 1;   // to avoid a large number of error messages
+                            }
+
 
                         }
 
@@ -1244,11 +1252,12 @@ int read_pgm_header(unsigned int* head, const char* fname) {
 
 
 /* function for ordered evolution */
-void ordered_evo(BOOL* my_grid, const int x_size, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop, int n_procs, int my_thread_id) {
+void ordered_evo(BOOL* my_grid, const int x_size, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop, int n_procs, int my_thread_id, const int prev, const int succ, const int tag_send, const int tag_recv_s) {
 
 
     char count;   // counter of alive neighbor cells
-    int position = my_thread_start;   // position of the cell to update
+    int position = my_thread_start;   // position of the cell to be updated 
+    int check = 0;
 
 
     /* updating cells preceding the first edge */
@@ -1488,7 +1497,7 @@ void ordered_evo(BOOL* my_grid, const int x_size, int my_thread_start, int first
     }
 
 
-    return;
+    return check;
 }
 
 
