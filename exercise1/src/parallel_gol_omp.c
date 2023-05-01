@@ -742,7 +742,7 @@ int main(int argc, char **argv) {
                                     
                                     /* updating first element of the row */
                                     position = first_row*x_size;
-                                    count = 0
+                                    count = 0;
 
                                     for (int b=position-x_size; b<position-x_size+2; b++) {
                                         count += my_grid[b];
