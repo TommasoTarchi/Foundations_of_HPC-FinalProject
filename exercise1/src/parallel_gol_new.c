@@ -779,7 +779,7 @@ void static_evo(int n, int s, BOOL* my_grid, BOOL* my_grid_aux, int my_n_cells, 
     char* snap_name = (char*) malloc(50*sizeof(char));   // string to store name of snapshot files 
 
     MPI_File f_handle;   // pointer to file for MPI I/O
-    MPI_status;   // needed for MPI communications
+    MPI_Status status;   // needed for MPI communications
     int access_mode;   // variable to store access mode in MPI I/O
     int check = 0;   // error checker for MPI I/O and communications
 
