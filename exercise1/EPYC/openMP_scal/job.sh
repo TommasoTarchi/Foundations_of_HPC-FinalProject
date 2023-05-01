@@ -24,7 +24,8 @@ echo COMPILING EXECUTABLES...
 echo
 cd ../..
 datafolder=$(pwd)
-make parallel_gol data=datafolder
+srun -n 1 make clean_images
+srun -n 1 make parallel_gol data_folder=datafolder
 cd datafolder
 
 
@@ -37,10 +38,10 @@ echo
 ### setting variables for executables and csv file
 node=EPYC
 scal=openMP
-mat_x_size=1000
-mat_y_size=1000
-n_gen=100
-procs= #NUMERO DI SOCKET SU UN NODO
+mat_x_size=20000
+mat_y_size=20000
+n_gen=50
+procs=2
 
 
 echo CREATING/OVERWRITING CSV FILE...
@@ -55,17 +56,17 @@ echo "#playground_y_size:,${mat_y_size},," >> data.csv
 echo "#generations:,${n_gen},," >> data.csv
 echo "#,,," >> data.csv
 echo "#,,," >> data.csv
-echo "threads,dynamic_evolution,static_evolution,static_evolution_in_place" >> data.csv
+echo "threads,ordered,static,static_in_place" >> data.csv
 
 
 echo PERFORMING MEASURES...
 echo
-for n_threads in $(seq 1 1 #NUMERO DI CORE SU OGNI SOCKET)
+for n_threads in $(seq 1 1 64)
 do
     for count in $(seq 1 1 10)
     do 
-        ### generating a random playground
-        export OMP_NUM_THREADS= #NUMERO DI CORE SU OGNI SOCKET
+        ### generating random playgrounds
+        export OMP_NUM_THREADS=64
         mpirun -np $procs --map-by socket parallel_gol.x -i -m $mat_x_size -k $mat_y_size
 
         ### running the evolution
@@ -92,3 +93,4 @@ echo RELEASING LOADED MODULES AND CLEANING FROM EXECUTABLES AND IMAGES...
 cd ../..
 make clean data=datafolder
 Module purge
+cd datafolder
