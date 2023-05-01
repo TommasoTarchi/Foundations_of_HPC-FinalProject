@@ -1099,7 +1099,7 @@ int main(int argc, char **argv) {
 
                     /* updating cells' status */
 
-                    static_evo(my_grid, my_grid_aux, my_thread_start, first_edge, first_row, last_row, my_thread_stop);
+                    static_evo(my_grid, my_grid_aux, x_size, my_thread_start, first_edge, first_row, last_row, my_thread_stop);
 
 
                     /* switching pointers to grid and grid_aux */
@@ -1281,7 +1281,7 @@ int main(int argc, char **argv) {
 
                     /* updating the cells' status */
 
-                    static_evo_in_place(my_grid, my_thread_start, first_edge, first_row, last_row, my_thread_stop, bit_control);
+                    static_evo_in_place(my_grid, my_thread_start, x_size, first_edge, first_row, last_row, my_thread_stop, bit_control);
                    
 
                     /* updating the state signaling bit */
