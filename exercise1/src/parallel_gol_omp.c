@@ -42,7 +42,7 @@ char *fname  = NULL;
 
 /* functions' signatures */
 int read_pgm_header(unsigned int*, const char*);
-int ordered_evo(BOOL*, const int, int, int, const int, const int, const int, int, int, const int, const int, const int, const int);
+int ordered_evo(BOOL*, const int, const int, int, int, const int, const int, const int, int, int, MPI_Status, const int, const int, const int, const int);
 void static_evo(BOOL*, BOOL*, const int, int, int, const int, const int, const int);
 void static_evo_in_place(BOOL*, const int, int, int, const int, const int, const int, int);
 
@@ -477,14 +477,6 @@ int main(int argc, char **argv) {
 
 
 
-
-            // test 
-            //printf("x_size:   %d\n", x_size);
-            //printf("from thread %d on process %d: start at %d, stop at %d, n_cells %d\nfirst row %d, last row %d, first edge %d\n\n", my_thread_id, my_id, my_thread_start, my_thread_stop, my_thread_n_cells, first_row, last_row, first_edge);
-            
-
-
-
             /* ordered evolution */
 
             if (e == ORDERED) {
@@ -690,7 +682,7 @@ int main(int argc, char **argv) {
 
 
                                #pragma omp ordered 
-                                check += ordered_evo(my_grid, x_size, my_thread_start, first_edge, first_row, last_row, my_thread_stop, n_procs, my_thread_id, prev, succ, tag_send, tag_recv_s);                                 
+                                check += ordered_evo(my_grid, my_n_cells, x_size, my_thread_start, first_edge, first_row, last_row, my_thread_stop, n_procs, my_thread_id, status, prev, succ, tag_send, tag_recv_s);                                 
 
                             }
 
@@ -1252,7 +1244,7 @@ int read_pgm_header(unsigned int* head, const char* fname) {
 
 
 /* function for ordered evolution */
-int ordered_evo(BOOL* my_grid, const int x_size, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop, int n_procs, int my_thread_id, const int prev, const int succ, const int tag_send, const int tag_recv_s) {
+int ordered_evo(BOOL* my_grid, const int my_n_cells, const int x_size, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop, int n_procs, int my_thread_id, MPI_Status status, const int prev, const int succ, const int tag_send, const int tag_recv_s) {
 
 
     char count;   // counter of alive neighbor cells
