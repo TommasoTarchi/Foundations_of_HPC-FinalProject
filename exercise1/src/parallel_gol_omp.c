@@ -662,8 +662,7 @@ int main(int argc, char **argv) {
 
                                 check += MPI_Send(my_grid+my_n_cells, x_size, MPI_CHAR, succ, tag_send, MPI_COMM_WORLD);
                                 check += MPI_Recv(my_grid, x_size, MPI_CHAR, prev, tag_recv_p, MPI_COMM_WORLD, &status);
-                                check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
-                                check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+
                                 if (check != 0 && error_control_1 == 0) {
                                     printf("\n--- AN ERROR OCCURRED WHILE COMMUNICATING NEIGHBOR CELLS' STATUS OF PROCESS %d ---\n\n", proc);
                                     check = 0;
@@ -738,10 +737,87 @@ int main(int argc, char **argv) {
 
                                     }
 
-                                     
-                                    /* iteration on 'complete' rows */
 
-                                    for (int i=first_row; i<last_row; i++) {
+                                    /* iteration on first complete row */ 
+                                    
+                                    /* updating first element of the row */
+                                    position = first_row*x_size;
+                                    count = 0
+
+                                    for (int b=position-x_size; b<position-x_size+2; b++) {
+                                        count += my_grid[b];
+                                    }
+                                    count += my_grid[position-1];
+                                    count += my_grid[position+1];
+                                    for (int b=position+x_size-1; b<position+x_size+2; b++) {
+                                        count += my_grid[b];
+                                    }
+                                    count += my_grid[position+2*x_size-1];
+
+                                    if (count == 2 || count == 3) {
+                                        my_grid[position] = 1;
+                                    } else {
+                                        my_grid[position] = 0;
+                                    }
+
+                                    /* iteration on internal columns (updating internal elements
+                                    * of te row) */
+                                    for (int j=1; j<x_size-1; j++) {
+
+                                        count = 0;
+                                        position = first_row*x_size+j;
+                                        for (int b=position-x_size-1; b<position-x_size+2; b++) {
+                                            count += my_grid[b];
+                                        }
+                                        count += my_grid[position-1];
+                                        count += my_grid[position+1];
+                                        for (int b=position+x_size-1; b<position+x_size+2; b++) {
+                                            count += my_grid[b];
+                                        }
+
+                                        if (count == 2 || count == 3) {
+                                            my_grid[position] = 1;
+                                        } else {
+                                            my_grid[position] = 0;
+                                        }
+                                    }
+
+                                    /* updating last element of the row */
+                                    count = 0;
+                                    position = (first_row+1)*x_size-1;
+                                    count += my_grid[position-2*x_size+1];
+                                    for (int b=position-x_size-1; b<position-x_size+2; b++) {
+                                        count += my_grid[b];
+                                    }
+                                    count += my_grid[position-1];
+                                    count += my_grid[position+1];
+                                    for (int b=position+x_size-1; b<position+x_size+1; b++) {
+                                        count += my_grid[b];
+                                    }
+
+                                    if (count == 2 || count == 3) {
+                                        my_grid[position] = 1;
+                                    } else {
+                                        my_grid[position] = 0;
+                                    }
+
+
+                                    /* communicating updated first row in case of single MPI process */ 
+                                    if (n_procs == 1) {
+
+                                       #pragma omp barrier
+                                       #pragma omp master
+                                        {
+
+                                            check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
+                                            check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+                                        }
+                                       #pragma omp barrier
+
+                                     
+                                    /* iteration on other 'complete' rows */
+
+                                    for (int i=first_row+1; i<last_row; i++) {
 
                                         /* updating first element of the row */ 
                                         position = i*x_size;
