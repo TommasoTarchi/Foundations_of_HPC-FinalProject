@@ -42,7 +42,7 @@ char *fname  = NULL;
 
 int read_pgm_header(unsigned int*, const char*);
 void static_evo(BOOL*, BOOL*, const int, int, int, const int, const int, const int);
-void static_evo_in_place(BOOL*, const int, int, int, const int, const int, const int, int*);
+void static_evo_in_place(BOOL*, const int, int, int, const int, const int, const int, int);
 
 
 
@@ -1281,7 +1281,7 @@ int main(int argc, char **argv) {
 
                     /* updating the cells' status */
 
-                    static_evo_in_place(my_grid, my_thread_start, x_size, first_edge, first_row, last_row, my_thread_stop, &bit_control);
+                    static_evo_in_place(my_grid, x_size, my_thread_start, first_edge, first_row, last_row, my_thread_stop, bit_control);
                    
 
                     /* updating the state signaling bit */
@@ -1659,12 +1659,12 @@ void static_evo(BOOL* my_grid, BOOL* my_grid_aux, const int x_size, int my_threa
 
 
 
-void static_evo_in_place(BOOL* my_grid, const int x_size, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop, int* bit_control) {
+void static_evo_in_place(BOOL* my_grid, const int x_size, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop, int bit_control) {
 
 
-    char alive = 2 - *bit_control % 2;
-    char dead = 1 + *bit_control % 2;
-    char shift = *bit_control % 2;
+    char alive = 2 - bit_control % 2;
+    char dead = 1 + bit_control % 2;
+    char shift = bit_control % 2;
 
     char count;
     int position = my_thread_start;
