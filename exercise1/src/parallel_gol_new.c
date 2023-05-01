@@ -491,7 +491,7 @@ int main(int argc, char **argv) {
 
                     /* evolution */
 
-                    ordered_evo(n, s, my_grid, my_id,my_n_cells, header_size, x_size, y_size, my_thread_start, first_edge, first_row,last_row, my_thread_stop, n_procs, my_thread_id, status, prev, succ, tag_send, tag_recv_s) 
+                    ordered_evo(n, s, my_grid, my_id, my_n_cells, header_size, x_size, y_size, y_size_rmd, color_maxval, n_threads, my_thread_start, first_edge, first_row, last_row, my_thread_stop, n_procs, my_thread_id, status, prev, succ, tag_send, tag_recv_p, tag_recv_s) 
 
 
 #pragma omp barrier
