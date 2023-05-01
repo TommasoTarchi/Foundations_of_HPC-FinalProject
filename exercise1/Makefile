@@ -1,5 +1,5 @@
 ### variables passed from command line
-target_path=${data}
+target_path=${data_folder}
 
 
 
@@ -13,7 +13,9 @@ $(target_path)/serial_gol.x: src/serial_gol.c
 parallel_gol: $(target_path)/parallel_gol.x
 
 $(target_path)/parallel_gol.x: src/parallel_gol.c
-	mpicc -DTIME $^ -o $@ -fopenmp
+	mpicc -fopenmp src/parallel_gol.c src/gol_lib.c -c
+	ar -rc src/libgol.a src/*.o
+	mpicc -fopenmp src/parallel_gol.c -Lsrc -lsrc/gol -o ${target_path}/parallel_gol.x
 
 
 
