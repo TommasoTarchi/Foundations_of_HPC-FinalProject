@@ -41,8 +41,8 @@ char *fname  = NULL;
 
 
 int read_pgm_header(unsigned int*, const char*);
-void static_evo(BOOL*, BOOL*, int, int, const int, const int, const int);
-void static_evo_in_place(BOOL*, int, int, const int, const int, const int, int);
+void static_evo(BOOL*, BOOL*, const int, int, int, const int, const int, const int);
+void static_evo_in_place(BOOL*, const int, int, int, const int, const int, const int, int);
 
 
 
@@ -1485,7 +1485,7 @@ int read_pgm_header(unsigned int* head, const char* fname) {
 
 
 /* function for static evolution with auxiliary grid */
-void static_evo(BOOL* my_grid, BOOL* my_grid_aux, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop) {
+void static_evo(BOOL* my_grid, BOOL* my_grid_aux, const int x_size, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop) {
 
 
     char count;   // counter of alive neighbor cells
@@ -1659,7 +1659,7 @@ void static_evo(BOOL* my_grid, BOOL* my_grid_aux, int my_thread_start, int first
 
 
 
-void static_evo_in_place(BOOL* my_grid, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop, int bit_control) {
+void static_evo_in_place(BOOL* my_grid, const int x_size, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop, int bit_control) {
 
 
     char alive = 2 - bit_control % 2;
