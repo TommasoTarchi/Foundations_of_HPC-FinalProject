@@ -143,7 +143,7 @@ void ordered_evo(int n, int s, BOOL* my_grid, int my_id, const int my_n_cells, c
                     }
 
                     /* writing in parallel */
-                    check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, &status);
+                    check += MPI_File_write_at_all(f_handle, offset, my_grid+x_size, my_n_cells, MPI_CHAR, status);
 
                     check += MPI_Barrier(MPI_COMM_WORLD);
 
