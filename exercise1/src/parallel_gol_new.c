@@ -42,7 +42,7 @@ char *fname  = NULL;
 
 
 int read_pgm_header(unsigned int*, const char*);
-void static_evo(int, int, BOOL*, BOOL*, int, const int, const int, const int, const int, const int, int, const int, const int, const int, const int, const int, const int, int, int, int, const int, const int, const int);
+void static_evo(int, int, BOOL*, BOOL*, const int, const int, const int, const int, const int, int, const int, const int, const int, const int, const int, const int, int, int, int, const int, const int, const int);
 
 
 
@@ -537,7 +537,7 @@ int main(int argc, char **argv) {
 
             /* evolution */ 
 
-            static_evo(n, s, my_grid, my_grid_aux, my_n_cells, header_size, x_size, y_size, y_size_rmd, color_maxval, my_id, prev, succ, tag_send, tag_recv_p, tag_recv_s, my_n_cells, n_threads, my_thread_start, first_edge, first_row, last_row, my_thread_stop); 
+            static_evo(n, s, my_grid, my_grid_aux, header_size, x_size, y_size, y_size_rmd, color_maxval, my_id, prev, succ, tag_send, tag_recv_p, tag_recv_s, my_n_cells, n_threads, my_thread_start, first_edge, first_row, last_row, my_thread_stop); 
 
 
 
@@ -773,7 +773,7 @@ int read_pgm_header(unsigned int* head, const char* fname) {
 
 
 
-void static_evo(int n, int s, BOOL* my_grid, BOOL* my_grid_aux, int my_n_cells, const int header_size, const int x_size, const int y_size, const int y_size_rmd, const int color_maxval, int my_id, const int prev, const int succ, const int tag_send, const int tag_recv_p, const int tag_recv_s, const int my_n_cells, int n_threads, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop) {
+void static_evo(int n, int s, BOOL* my_grid, BOOL* my_grid_aux,, const int header_size, const int x_size, const int y_size, const int y_size_rmd, const int color_maxval, int my_id, const int prev, const int succ, const int tag_send, const int tag_recv_p, const int tag_recv_s, const int my_n_cells, int n_threads, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop) {
 
 
     char* snap_name = (char*) malloc(50*sizeof(char));   // string to store name of snapshot files 
