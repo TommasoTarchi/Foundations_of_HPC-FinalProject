@@ -13,7 +13,7 @@ $(target_path)/serial_gol.x: src/serial_gol.c
 parallel_gol: $(target_path)/parallel_gol.x
 
 $(target_path)/parallel_gol.x: src/parallel_gol.c
-	mpicc -fopenmp src/parallel_gol.c src/gol_lib.c -c
+	mpicc -fopenmp src/parallel_gol.c src/gol_lib.c -c src/parallel_gol.o src/gol_lib.o
 	ar -rc src/libgol.a src/*.o
 	mpicc -fopenmp src/parallel_gol.c -Lsrc -lsrc/gol -o ${target_path}/parallel_gol.x
 
