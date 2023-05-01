@@ -15,7 +15,7 @@
 
 
 
-/* 'actual' code definitions */
+/* default definitions */
 #define INIT 1
 #define RUN  2
 
@@ -40,7 +40,9 @@ char *fname  = NULL;
 
 
 
+/* functions' signatures */
 int read_pgm_header(unsigned int*, const char*);
+void ordered_evo(BOOL*, const int, int, int, const int, const int, const int, int, int); 
 void static_evo(BOOL*, BOOL*, const int, int, int, const int, const int, const int);
 void static_evo_in_place(BOOL*, const int, int, int, const int, const int, const int, int);
 
@@ -686,253 +688,10 @@ int main(int argc, char **argv) {
                            #pragma omp for ordered
                             for (int th=0; th<n_threads; th++) {
 
-                               #pragma omp ordered
-                                {
 
-                                 
-                                    char count;   // counter of alive neighbor cells
-                                    int position = my_thread_start;   // position of the cell to update
+                               #pragma omp ordered 
+                                ordered_evo(my_grid, x_size, my_thread_start, first_edge, first_row, last_row, my_thread_stop, n_procs, my_thread_id);                                 
 
-
-                                    /* updating cells preceding the first edge */
-
-                                    for ( ; position<first_edge; position++) {
-
-                                        count = 0;
-                                        for (int b=position-x_size-1; b<position-x_size+2; b++) {
-                                            count += my_grid[b];
-                                        }
-                                        count += my_grid[position-1];
-                                        count += my_grid[position+1];
-                                        for (int b=position+x_size-1; b<position+x_size+2; b++) {
-                                            count += my_grid[b];
-                                        }
-
-                                        if (count == 2 || count == 3) {
-                                            my_grid[position] = 1;
-                                        } else {
-                                            my_grid[position] = 0;
-                                        }
-                                    }
-
-
-                                    /* updating first edge encountered */
-                                    
-                                    if (position == first_edge) {
-
-                                        count = 0;
-                                        count += my_grid[position-2*x_size+1];
-                                        for (int b=position-x_size-1; b<position-x_size+2; b++) {
-                                            count += my_grid[b];
-                                        }
-                                        count += my_grid[position-1];
-                                        count += my_grid[position+1];
-                                        for (int b=position+x_size-1; b<position+x_size+1; b++) {
-                                            count += my_grid[b];
-                                        }
-
-                                        if (count == 2 || count == 3) {
-                                            my_grid[position] = 1;
-                                        } else {
-                                            my_grid[position] = 0;
-                                        }
-
-                                    }
-
-
-                                    /* iteration on first complete row */ 
-                                    
-                                    /* updating first element of the row */
-                                    position = first_row*x_size;
-                                    count = 0;
-
-                                    for (int b=position-x_size; b<position-x_size+2; b++) {
-                                        count += my_grid[b];
-                                    }
-                                    count += my_grid[position-1];
-                                    count += my_grid[position+1];
-                                    for (int b=position+x_size-1; b<position+x_size+2; b++) {
-                                        count += my_grid[b];
-                                    }
-                                    count += my_grid[position+2*x_size-1];
-
-                                    if (count == 2 || count == 3) {
-                                        my_grid[position] = 1;
-                                    } else {
-                                        my_grid[position] = 0;
-                                    }
-
-                                    /* iteration on internal columns (updating internal elements
-                                    * of te row) */
-                                    for (int j=1; j<x_size-1; j++) {
-
-                                        count = 0;
-                                        position = first_row*x_size+j;
-                                        for (int b=position-x_size-1; b<position-x_size+2; b++) {
-                                            count += my_grid[b];
-                                        }
-                                        count += my_grid[position-1];
-                                        count += my_grid[position+1];
-                                        for (int b=position+x_size-1; b<position+x_size+2; b++) {
-                                            count += my_grid[b];
-                                        }
-
-                                        if (count == 2 || count == 3) {
-                                            my_grid[position] = 1;
-                                        } else {
-                                            my_grid[position] = 0;
-                                        }
-                                    }
-
-                                    /* updating last element of the row */
-                                    count = 0;
-                                    position = (first_row+1)*x_size-1;
-                                    count += my_grid[position-2*x_size+1];
-                                    for (int b=position-x_size-1; b<position-x_size+2; b++) {
-                                        count += my_grid[b];
-                                    }
-                                    count += my_grid[position-1];
-                                    count += my_grid[position+1];
-                                    for (int b=position+x_size-1; b<position+x_size+1; b++) {
-                                        count += my_grid[b];
-                                    }
-
-                                    if (count == 2 || count == 3) {
-                                        my_grid[position] = 1;
-                                    } else {
-                                        my_grid[position] = 0;
-                                    }
-
-
-                                    /* communicating updated first row in case of single MPI process */ 
-                                    if (n_procs == 1) {
-
-                                       
-                                        if (my_thread_id == 0) {
-
-                                            check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
-                                            check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
-                                        }
-                                    }
-
-                                     
-                                    /* iteration on other 'complete' rows */
-
-                                    for (int i=first_row+1; i<last_row; i++) {
-
-                                        /* updating first element of the row */ 
-                                        position = i*x_size;
-                                        count = 0;
-                                        for (int b=position-x_size; b<position-x_size+2; b++) {
-                                            count += my_grid[b];
-                                        }
-                                        count += my_grid[position-1];
-                                        count += my_grid[position+1];
-                                        for (int b=position+x_size-1; b<position+x_size+2; b++) {
-                                            count += my_grid[b];
-                                        }
-                                        count += my_grid[position+2*x_size-1];
-
-                                        if (count == 2 || count == 3) {
-                                            my_grid[position] = 1;
-                                        } else {
-                                            my_grid[position] = 0;
-                                        }
-
-                                        /* iteration on internal columns (updating internal elements
-                                        * of te row) */
-                                        for (int j=1; j<x_size-1; j++) {
-
-                                            count = 0;
-                                            position = i*x_size+j;
-                                            for (int b=position-x_size-1; b<position-x_size+2; b++) {
-                                                count += my_grid[b];
-                                            }
-                                            count += my_grid[position-1];
-                                            count += my_grid[position+1];
-                                            for (int b=position+x_size-1; b<position+x_size+2; b++) {
-                                                count += my_grid[b];
-                                            }
-
-                                            if (count == 2 || count == 3) {
-                                                my_grid[position] = 1;
-                                            } else {
-                                                my_grid[position] = 0;
-                                            }
-                                        }
-
-                                        /* updating last element of the row */
-                                        count = 0;
-                                        position = (i+1)*x_size-1;
-                                        count += my_grid[position-2*x_size+1];
-                                        for (int b=position-x_size-1; b<position-x_size+2; b++) {
-                                            count += my_grid[b];
-                                        }
-                                        count += my_grid[position-1];
-                                        count += my_grid[position+1];
-                                        for (int b=position+x_size-1; b<position+x_size+1; b++) {
-                                            count += my_grid[b];
-                                        }
-
-                                        if (count == 2 || count == 3) {
-                                            my_grid[position] = 1;
-                                        } else {
-                                            my_grid[position] = 0;
-                                        }
-                                    }
-
-                                    position++;
-
-
-                                    /* checking if all cells have been already updated */ 
-                                    if (position < my_thread_stop) {
-
-                                        /* updating first element after last row */ 
-
-                                        count = 0;
-                                        for (int b=position-x_size; b<position-x_size+2; b++) {
-                                            count += my_grid[b];
-                                        }
-                                        count += my_grid[position-1];
-                                        count += my_grid[position+1];
-                                        for (int b=position+x_size-1; b<position+x_size+2; b++) {
-                                            count += my_grid[b];
-                                        }
-                                        count += my_grid[position+2*x_size-1];
-
-                                        if (count == 2 || count == 3) {
-                                            my_grid[position] = 1;
-                                        } else {
-                                            my_grid[position] = 0;
-                                        }
-                                
-                                        position++;
-
-
-                                        /* updating remaining elements */ 
-
-                                        for ( ; position<my_thread_stop; position++) {
-
-                                            count = 0;
-                                            for (int b=position-x_size-1; b<position-x_size+2; b++) {
-                                                count += my_grid[b];
-                                            }
-                                            count += my_grid[position-1];
-                                            count += my_grid[position+1];
-                                            for (int b=position+x_size-1; b<position+x_size+2; b++) {
-                                                count += my_grid[b];
-                                            }
-
-                                            if (count == 2 || count == 3) {
-                                                my_grid[position] = 1;
-                                            } else {
-                                                my_grid[position] = 0;
-                                            }
-                                        }
-                                    }
-
-
-                                }
                             }
 
                         }
@@ -1480,6 +1239,256 @@ int read_pgm_header(unsigned int* head, const char* fname) {
     fclose(image_file);
     free(line);
     return 0;
+}
+
+
+
+/* function for ordered evolution */
+void ordered_evo(BOOL* my_grid, const int x_size, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop, int n_procs, int my_thread_id) {
+
+
+    char count;   // counter of alive neighbor cells
+    int position = my_thread_start;   // position of the cell to update
+
+
+    /* updating cells preceding the first edge */
+
+    for ( ; position<first_edge; position++) {
+
+        count = 0;
+        for (int b=position-x_size-1; b<position-x_size+2; b++) {
+            count += my_grid[b];
+        }
+        count += my_grid[position-1];
+        count += my_grid[position+1];
+        for (int b=position+x_size-1; b<position+x_size+2; b++) {
+            count += my_grid[b];
+        }
+
+        if (count == 2 || count == 3) {
+            my_grid[position] = 1;
+        } else {
+            my_grid[position] = 0;
+        }
+    }
+
+
+    /* updating first edge encountered */
+    
+    if (position == first_edge) {
+
+        count = 0;
+        count += my_grid[position-2*x_size+1];
+        for (int b=position-x_size-1; b<position-x_size+2; b++) {
+            count += my_grid[b];
+        }
+        count += my_grid[position-1];
+        count += my_grid[position+1];
+        for (int b=position+x_size-1; b<position+x_size+1; b++) {
+            count += my_grid[b];
+        }
+
+        if (count == 2 || count == 3) {
+            my_grid[position] = 1;
+        } else {
+            my_grid[position] = 0;
+        }
+
+    }
+
+
+    /* iteration on first complete row */ 
+    
+    /* updating first element of the row */
+    position = first_row*x_size;
+    count = 0;
+
+    for (int b=position-x_size; b<position-x_size+2; b++) {
+        count += my_grid[b];
+    }
+    count += my_grid[position-1];
+    count += my_grid[position+1];
+    for (int b=position+x_size-1; b<position+x_size+2; b++) {
+        count += my_grid[b];
+    }
+    count += my_grid[position+2*x_size-1];
+
+    if (count == 2 || count == 3) {
+        my_grid[position] = 1;
+    } else {
+        my_grid[position] = 0;
+    }
+
+    /* iteration on internal columns (updating internal elements
+    * of te row) */
+    for (int j=1; j<x_size-1; j++) {
+
+        count = 0;
+        position = first_row*x_size+j;
+        for (int b=position-x_size-1; b<position-x_size+2; b++) {
+            count += my_grid[b];
+        }
+        count += my_grid[position-1];
+        count += my_grid[position+1];
+        for (int b=position+x_size-1; b<position+x_size+2; b++) {
+            count += my_grid[b];
+        }
+
+        if (count == 2 || count == 3) {
+            my_grid[position] = 1;
+        } else {
+            my_grid[position] = 0;
+        }
+    }
+
+    /* updating last element of the row */
+    count = 0;
+    position = (first_row+1)*x_size-1;
+    count += my_grid[position-2*x_size+1];
+    for (int b=position-x_size-1; b<position-x_size+2; b++) {
+        count += my_grid[b];
+    }
+    count += my_grid[position-1];
+    count += my_grid[position+1];
+    for (int b=position+x_size-1; b<position+x_size+1; b++) {
+        count += my_grid[b];
+    }
+
+    if (count == 2 || count == 3) {
+        my_grid[position] = 1;
+    } else {
+        my_grid[position] = 0;
+    }
+
+
+    /* communicating updated first row in case of single MPI process */ 
+    if (n_procs == 1) {
+       
+        if (my_thread_id == 0) {
+
+            check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
+            check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
+        }
+    }
+
+     
+    /* iteration on other 'complete' rows */
+
+    for (int i=first_row+1; i<last_row; i++) {
+
+        /* updating first element of the row */ 
+        position = i*x_size;
+        count = 0;
+        for (int b=position-x_size; b<position-x_size+2; b++) {
+            count += my_grid[b];
+        }
+        count += my_grid[position-1];
+        count += my_grid[position+1];
+        for (int b=position+x_size-1; b<position+x_size+2; b++) {
+            count += my_grid[b];
+        }
+        count += my_grid[position+2*x_size-1];
+
+        if (count == 2 || count == 3) {
+            my_grid[position] = 1;
+        } else {
+            my_grid[position] = 0;
+        }
+
+        /* iteration on internal columns (updating internal elements
+        * of te row) */
+        for (int j=1; j<x_size-1; j++) {
+
+            count = 0;
+            position = i*x_size+j;
+            for (int b=position-x_size-1; b<position-x_size+2; b++) {
+                count += my_grid[b];
+            }
+            count += my_grid[position-1];
+            count += my_grid[position+1];
+            for (int b=position+x_size-1; b<position+x_size+2; b++) {
+                count += my_grid[b];
+            }
+
+            if (count == 2 || count == 3) {
+                my_grid[position] = 1;
+            } else {
+                my_grid[position] = 0;
+            }
+        }
+
+        /* updating last element of the row */
+        count = 0;
+        position = (i+1)*x_size-1;
+        count += my_grid[position-2*x_size+1];
+        for (int b=position-x_size-1; b<position-x_size+2; b++) {
+            count += my_grid[b];
+        }
+        count += my_grid[position-1];
+        count += my_grid[position+1];
+        for (int b=position+x_size-1; b<position+x_size+1; b++) {
+            count += my_grid[b];
+        }
+
+        if (count == 2 || count == 3) {
+            my_grid[position] = 1;
+        } else {
+            my_grid[position] = 0;
+        }
+    }
+
+    position++;
+
+
+    /* checking if all cells have been already updated */ 
+    if (position < my_thread_stop) {
+
+        /* updating first element after last row */ 
+
+        count = 0;
+        for (int b=position-x_size; b<position-x_size+2; b++) {
+            count += my_grid[b];
+        }
+        count += my_grid[position-1];
+        count += my_grid[position+1];
+        for (int b=position+x_size-1; b<position+x_size+2; b++) {
+            count += my_grid[b];
+        }
+        count += my_grid[position+2*x_size-1];
+
+        if (count == 2 || count == 3) {
+            my_grid[position] = 1;
+        } else {
+            my_grid[position] = 0;
+        }
+
+        position++;
+
+
+        /* updating remaining elements */ 
+
+        for ( ; position<my_thread_stop; position++) {
+
+            count = 0;
+            for (int b=position-x_size-1; b<position-x_size+2; b++) {
+                count += my_grid[b];
+            }
+            count += my_grid[position-1];
+            count += my_grid[position+1];
+            for (int b=position+x_size-1; b<position+x_size+2; b++) {
+                count += my_grid[b];
+            }
+
+            if (count == 2 || count == 3) {
+                my_grid[position] = 1;
+            } else {
+                my_grid[position] = 0;
+            }
+        }
+    }
+
+
+    return;
 }
 
 
