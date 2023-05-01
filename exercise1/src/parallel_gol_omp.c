@@ -805,14 +805,13 @@ int main(int argc, char **argv) {
                                     /* communicating updated first row in case of single MPI process */ 
                                     if (n_procs == 1) {
 
-                                       #pragma omp barrier
                                        #pragma omp master
                                         {
 
                                             check += MPI_Send(my_grid+x_size, x_size, MPI_CHAR, prev, tag_send, MPI_COMM_WORLD);
                                             check += MPI_Recv(my_grid+x_size+my_n_cells, x_size, MPI_CHAR, succ, tag_recv_s, MPI_COMM_WORLD, &status);
                                         }
-                                       #pragma omp barrier
+                                    }
 
                                      
                                     /* iteration on other 'complete' rows */
