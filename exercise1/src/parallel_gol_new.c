@@ -773,7 +773,7 @@ int read_pgm_header(unsigned int* head, const char* fname) {
 
 
 
-void static_evo(int n, int s, BOOL* my_grid, BOOL* my_grid_aux,, const int header_size, const int x_size, const int y_size, const int y_size_rmd, const int color_maxval, int my_id, const int prev, const int succ, const int tag_send, const int tag_recv_p, const int tag_recv_s, const int my_n_cells, int n_threads, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop) {
+void static_evo(int n, int s, BOOL* my_grid, BOOL* my_grid_aux, const int header_size, const int x_size, const int y_size, const int y_size_rmd, const int color_maxval, int my_id, const int prev, const int succ, const int tag_send, const int tag_recv_p, const int tag_recv_s, const int my_n_cells, int n_threads, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop) {
 
 
     char* snap_name = (char*) malloc(50*sizeof(char));   // string to store name of snapshot files 
