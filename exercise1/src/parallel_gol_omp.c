@@ -1252,7 +1252,7 @@ int read_pgm_header(unsigned int* head, const char* fname) {
 
 
 /* function for ordered evolution */
-void ordered_evo(BOOL* my_grid, const int x_size, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop, int n_procs, int my_thread_id, const int prev, const int succ, const int tag_send, const int tag_recv_s) {
+int ordered_evo(BOOL* my_grid, const int x_size, int my_thread_start, int first_edge, const int first_row, const int last_row, const int my_thread_stop, int n_procs, int my_thread_id, const int prev, const int succ, const int tag_send, const int tag_recv_s) {
 
 
     char count;   // counter of alive neighbor cells
