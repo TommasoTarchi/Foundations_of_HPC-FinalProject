@@ -41,6 +41,10 @@ char *fname  = NULL;
 
 
 
+int read_pgm_header(unsigned int*, const char*);
+
+
+
 int main(int argc, char **argv) {
 
 
@@ -1716,3 +1720,68 @@ int main(int argc, char **argv) {
 
     return 0;
 }
+
+
+/* function to get content and length of the header of a pgm file (modified version of prof. Tornatore's
+ * function to read from pgm) */
+int read_pgm_header(unsigned int* head, const char* fname) {
+
+
+    FILE* image_file;
+    image_file = fopen(fname, "r"); 
+
+    head[0] = head[1] = head[2] = head[3] = 0;
+
+    char    MagicN[3];
+    char   *line = NULL;
+    size_t  k, n = 0;
+
+
+    /* getting the Magic Number */
+    k = fscanf(image_file, "%2s%*c", MagicN);
+
+    /* skipping all the comments */
+    k = getline(&line, &n, image_file);
+    while (k > 0 && line[0]=='#')
+        k = getline(&line, &n, image_file);
+
+    /* getting the parameters */
+    if (k > 0) {
+
+        k = sscanf(line, "%d%*c%d%*c%d%*c", &head[1], &head[2], &head[0]);
+        if (k < 3)
+            fscanf(image_file, "%d%*c", &head[0]);
+    
+    } else {
+
+        fclose(image_file);
+        free(line);
+        return 1;   /* error in reading the header */
+    }
+
+    /* getting header size */ 
+    //fseek(image_file, 0L, SEEK_END);
+    //long unsigned int total_size = ftell(image_file);
+    //head[3] = total_size - head[1]*head[2];
+
+
+    /* getting header size */
+    int size = 0;
+    for (int i=0; i<3; i++) {
+        int cipher = 9;
+        int power = 10;
+        size++;
+        while (head[i] > cipher) {
+            size++;
+            cipher += 9*power;
+            power *= 10;
+        }
+    }
+    head[3] = 6 + size;
+
+
+    fclose(image_file);
+    free(line);
+    return 0;
+}
+
