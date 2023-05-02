@@ -100,11 +100,7 @@ int ordered_evo(BOOL* my_grid, const int my_n_cells, const int x_size, int my_th
             count += my_grid[b];
         }
 
-        if (count == 2 || count == 3) {
-            my_grid[position] = 1;
-        } else {
-            my_grid[position] = 0;
-        }
+        my_grid[position] = (count == 2 || count == 3);     
     }
 
 
@@ -123,12 +119,7 @@ int ordered_evo(BOOL* my_grid, const int my_n_cells, const int x_size, int my_th
             count += my_grid[b];
         }
 
-        if (count == 2 || count == 3) {
-            my_grid[position] = 1;
-        } else {
-            my_grid[position] = 0;
-        }
-
+        my_grid[position] = (count == 2 || count == 3);
     }
 
 
@@ -148,11 +139,8 @@ int ordered_evo(BOOL* my_grid, const int my_n_cells, const int x_size, int my_th
     }
     count += my_grid[position+2*x_size-1];
 
-    if (count == 2 || count == 3) {
-        my_grid[position] = 1;
-    } else {
-        my_grid[position] = 0;
-    }
+    my_grid[position] = (count == 2 || count == 3);
+
 
     /* iteration on internal columns (updating internal elements
     * of te row) */
@@ -169,11 +157,8 @@ int ordered_evo(BOOL* my_grid, const int my_n_cells, const int x_size, int my_th
             count += my_grid[b];
         }
 
-        if (count == 2 || count == 3) {
-            my_grid[position] = 1;
-        } else {
-            my_grid[position] = 0;
-        }
+        my_grid[position] = (count == 2 || count == 3);
+        
     }
 
     /* updating last element of the row */
@@ -189,11 +174,7 @@ int ordered_evo(BOOL* my_grid, const int my_n_cells, const int x_size, int my_th
         count += my_grid[b];
     }
 
-    if (count == 2 || count == 3) {
-        my_grid[position] = 1;
-    } else {
-        my_grid[position] = 0;
-    }
+    my_grid[position] = (count == 2 || count == 3);
 
 
     /* communicating updated first row in case of single MPI process */ 
@@ -224,11 +205,7 @@ int ordered_evo(BOOL* my_grid, const int my_n_cells, const int x_size, int my_th
         }
         count += my_grid[position+2*x_size-1];
 
-        if (count == 2 || count == 3) {
-            my_grid[position] = 1;
-        } else {
-            my_grid[position] = 0;
-        }
+        my_grid[position] = (count == 2 || count == 3);
 
         /* iteration on internal columns (updating internal elements
         * of te row) */
@@ -245,11 +222,7 @@ int ordered_evo(BOOL* my_grid, const int my_n_cells, const int x_size, int my_th
                 count += my_grid[b];
             }
 
-            if (count == 2 || count == 3) {
-                my_grid[position] = 1;
-            } else {
-                my_grid[position] = 0;
-            }
+            my_grid[position] = (count == 2 || count == 3);
         }
 
         /* updating last element of the row */
@@ -265,11 +238,7 @@ int ordered_evo(BOOL* my_grid, const int my_n_cells, const int x_size, int my_th
             count += my_grid[b];
         }
 
-        if (count == 2 || count == 3) {
-            my_grid[position] = 1;
-        } else {
-            my_grid[position] = 0;
-        }
+        my_grid[position] = (count == 2 || count == 3);
     }
 
     position++;
@@ -291,11 +260,7 @@ int ordered_evo(BOOL* my_grid, const int my_n_cells, const int x_size, int my_th
         }
         count += my_grid[position+2*x_size-1];
 
-        if (count == 2 || count == 3) {
-            my_grid[position] = 1;
-        } else {
-            my_grid[position] = 0;
-        }
+        my_grid[position] = (count == 2 || count == 3);
 
         position++;
 
@@ -314,11 +279,7 @@ int ordered_evo(BOOL* my_grid, const int my_n_cells, const int x_size, int my_th
                 count += my_grid[b];
             }
 
-            if (count == 2 || count == 3) {
-                my_grid[position] = 1;
-            } else {
-                my_grid[position] = 0;
-            }
+            my_grid[position] = (count == 2 || count == 3);
         }
     }
 
@@ -350,11 +311,7 @@ void static_evo(BOOL* my_grid, BOOL* my_grid_aux, const int x_size, int my_threa
             count += my_grid[b];
         }
 
-        if (count == 2 || count == 3) {
-            my_grid_aux[position] = 1;
-        } else {
-            my_grid_aux[position] = 0;
-        }
+        my_grid_aux[position] = (count == 2 || count == 3);
     }
 
 
@@ -373,11 +330,7 @@ void static_evo(BOOL* my_grid, BOOL* my_grid_aux, const int x_size, int my_threa
             count += my_grid[b];
         }
 
-        if (count == 2 || count == 3) {
-            my_grid_aux[position] = 1;
-        } else {
-            my_grid_aux[position] = 0;
-        }
+        my_grid_aux[position] = (count == 2 || count == 3);
 
     }
 
@@ -399,11 +352,7 @@ void static_evo(BOOL* my_grid, BOOL* my_grid_aux, const int x_size, int my_threa
         }
         count += my_grid[position+2*x_size-1];
 
-        if (count == 2 || count == 3) {
-            my_grid_aux[position] = 1;
-        } else {
-            my_grid_aux[position] = 0;
-        }
+        my_grid_aux[position] = (count == 2 || count == 3);
 
         /* iteration on internal columns (updating internal elements
         * of te row) */
@@ -420,11 +369,7 @@ void static_evo(BOOL* my_grid, BOOL* my_grid_aux, const int x_size, int my_threa
                 count += my_grid[b];
             }
 
-            if (count == 2 || count == 3) {
-                my_grid_aux[position] = 1;
-            } else {
-                my_grid_aux[position] = 0;
-            }
+            my_grid_aux[position] = (count == 2 || count == 3);
         }
 
         /* updating last element of the row */
@@ -440,11 +385,7 @@ void static_evo(BOOL* my_grid, BOOL* my_grid_aux, const int x_size, int my_threa
             count += my_grid[b];
         }
 
-        if (count == 2 || count == 3) {
-            my_grid_aux[position] = 1;
-        } else {
-            my_grid_aux[position] = 0;
-        }
+        my_grid_aux[position] = (count == 2 || count == 3);
     }
 
     position++;
@@ -466,11 +407,7 @@ void static_evo(BOOL* my_grid, BOOL* my_grid_aux, const int x_size, int my_threa
         }
         count += my_grid[position+2*x_size-1];
 
-        if (count == 2 || count == 3) {
-            my_grid_aux[position] = 1;
-        } else {
-            my_grid_aux[position] = 0;
-        }
+        my_grid_aux[position] = (count == 2 || count == 3);
 
         position++;
 
@@ -489,11 +426,7 @@ void static_evo(BOOL* my_grid, BOOL* my_grid_aux, const int x_size, int my_threa
                 count += my_grid[b];
             }
 
-            if (count == 2 || count == 3) {
-                my_grid_aux[position] = 1;
-            } else {
-                my_grid_aux[position] = 0;
-            }
+            my_grid_aux[position] = (count == 2 || count == 3);
         }
     }
 
