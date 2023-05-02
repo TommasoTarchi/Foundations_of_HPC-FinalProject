@@ -72,12 +72,13 @@ do
 
             ### running the evolution
             export OMP_NUM_THREADS=$n_threads
-            echo "${mat_size}x${mat_size}" >> $datafile
+            echo -n "${mat_size}x${mat_size}" >> $datafile
             echo -n "${n_procs}" >> $datafile
             mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 0 -n $n_gen -s 0
             mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 1 -n $n_gen -s 0
             mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 2 -n $n_gen -s 0
-            
+            echo
+
             echo
             echo -----------
             echo
