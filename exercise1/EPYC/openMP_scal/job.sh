@@ -37,8 +37,8 @@ echo
 ### setting variables for executables and csv file
 node=EPYC
 scal=openMP
-mat_x_size=10000
-mat_y_size=10000
+mat_x_size=200000
+mat_y_size=20000
 n_gen=5
 n_procs=2
 
@@ -61,29 +61,29 @@ echo "threads,ordered,static,static_in_place" >> $datafile
 
 echo PERFORMING MEASURES...
 echo
-for count in $(seq 1 1 5)
-do
 
-    ### generating random playground
-    export OMP_NUM_THREADS=10
-    mpirun -np 5 parallel_gol.x -i -m $mat_x_size -k $mat_y_size
+### MAGARI AGGIUNGERE STATISTICA
 
-    for n_threads in $(seq 1 1 64)
-    do 
+### generating random playground
+export OMP_NUM_THREADS=10
+mpirun -np 5 parallel_gol.x -i -m $mat_x_size -k $mat_y_size
 
-	### running the evolution
-        export OMP_NUM_THREADS=$n_threads
-        echo -n "${n_threads}" >> $datafile
-        mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 0 -n $n_gen -s 0
-        mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 1 -n $n_gen -s 0
-        mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 2 -n $n_gen -s 0
-        echo >> $datafile
+for n_threads in $(seq 1 1 64)
+do 
 
-        echo
-        echo -----------
-        echo
-    done
+    ### running the evolution
+    export OMP_NUM_THREADS=$n_threads
+    echo -n "${n_threads}" >> $datafile
+    mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 0 -n $n_gen -s 0
+    mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 1 -n $n_gen -s 0
+    mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 2 -n $n_gen -s 0
+    echo >> $datafile
+
+    echo
+    echo -----------
+    echo
 done
+
 
 
 echo
