@@ -693,27 +693,6 @@ int main(int argc, char **argv) {
 
 
 
-#pragma omp barrier
-#pragma omp master
- {
-
-#ifdef TIME
-    MPI_Barrier(MPI_COMM_WORLD);
-
-    if (my_id == 0) {
-        double time = CPU_TIME - t_start;
-        printf("elapsed time for ordered evolution: %f sec\n\n", time);
-
-        FILE* datafile;
-        datafile = fopen("data.csv", "a");
-        fprintf(datafile, ",%lf", time);
-        fclose(datafile);
-    }
-#endif
-
- }
-
-
 
             } else if (e == STATIC) {
 
@@ -854,26 +833,6 @@ int main(int argc, char **argv) {
                     }
 
                 }
-
-
-#pragma omp barrier
-#pragma omp master
- {
-
-#ifdef TIME
-    MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0) {
-        double time = CPU_TIME - t_start;
-        printf("elapsed time for static evolution: %f sec\n\n", time);
- 
-        FILE* datafile;
-        datafile = fopen("data.csv", "a");
-        fprintf(datafile, ",%lf", time);
-        fclose(datafile);
-   }
-#endif
-
- }
 
 
 
@@ -1031,32 +990,38 @@ int main(int argc, char **argv) {
                 }
 
 
-
-#pragma omp barrier
-#pragma omp master
- {
-
-#ifdef TIME
-    MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0) {
-        double time = CPU_TIME - t_start;
-        printf("elapsed time for static evolution with one grid: %f sec\n\n", time);
- 
-        FILE* datafile;
-        datafile = fopen("data.csv", "a");
-        fprintf(datafile, ",%lf", time);
-        fclose(datafile);
-   }
-#endif
-
- }
-
-
             }
 
 
 
+
+           #pragma omp barrier
+
         }   // end of the openMP parallel region
+
+
+
+
+#ifdef TIME
+MPI_Barrier(MPI_COMM_WORLD);
+if (my_id == 0) {
+    double time = CPU_TIME - t_start;
+
+    if (e == ORDERED) {
+        printf("elapsed time for ordered evolution: %f sec\n\n", time);
+    } else if (e == STATIC) {
+        printf("elapsed time for static evolution with auxiliary grid: %f sec\n\n", time);
+    } else if (e == STATIC_IN_PLACE) {
+        printf("elapsed time for static evolution with one grid: %f sec\n\n", time);
+    }
+
+    FILE* datafile;
+    datafile = fopen("data.csv", "a");
+    fprintf(datafile, ",%lf", time);
+    fclose(datafile);
+}
+#endif
+
 
 
 
