@@ -142,6 +142,8 @@ int main(int argc, char **argv) {
     }
 
 
+    printf("prima di run\n");
+
 
     /* running game of life */
     if (action == RUN) {
@@ -998,12 +1000,9 @@ void read_pgm_image(BOOL **image, int *maxval, int *xsize, int *ysize, const cha
         return;
     }
 
-    printf("prima free(line)\n");
-    
     free( line );
 
-    printf("dopo free(line)\n");
-    
+   
     unsigned int size = *xsize * *ysize;
   
     if ( (*image = (char*)malloc( size )) == NULL ) {
