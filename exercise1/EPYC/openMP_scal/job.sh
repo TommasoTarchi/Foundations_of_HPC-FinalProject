@@ -39,8 +39,8 @@ node=EPYC
 scal=openMP
 mat_x_size=10000
 mat_y_size=10000
-n_gen=10
-procs=2
+n_gen=5
+n_procs=2
 
 
 echo CREATING/OVERWRITING CSV FILE...
@@ -65,20 +65,19 @@ for count in $(seq 1 1 11)
 do
 
     ### generating random playground
-    export OMP_NUM_THREADS=20
-    mpirun -np 5 --map-by socket parallel_gol.x -i -m $mat_x_size -k $mat_y_size
+    export OMP_NUM_THREADS=10
+    mpirun -np 5 parallel_gol.x -i -m $mat_x_size -k $mat_y_size
 
     for n_threads in $(seq 1 1 64)
     do 
 
 	### running the evolution
         export OMP_NUM_THREADS=$n_threads
-        echo -n "${n_threads}" >> $datafile
-        mpirun -np $procs --map-by socket parallel_gol.x -r -e 0 -n $n_gen -s 0
-        mpirun -np $procs --map-by socket parallel_gol.x -r -e 1 -n $n_gen -s 0
-        mpirun -np $procs --map-by socket parallel_gol.x -r -e 2 -n $n_gen -s 0
-	echo >> $datafile
-        
+        echo "${n_threads}" >> $datafile
+        mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 0 -n $n_gen -s 0
+        mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 1 -n $n_gen -s 0
+        mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 2 -n $n_gen -s 0
+ 
         echo
         echo -----------
         echo
