@@ -87,7 +87,7 @@ int main(int argc, char **argv) {
                 break;
             
             case 'f':
-                fname = (char*) malloc(30);
+                fname = (char*) malloc(50);
                 sprintf(fname, "%s", optarg);
                 break;
             
