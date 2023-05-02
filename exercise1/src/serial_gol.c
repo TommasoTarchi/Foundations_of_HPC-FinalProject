@@ -142,8 +142,6 @@ int main(int argc, char **argv) {
     }
 
 
-    printf("prima di run\n");
-
 
     /* running game of life */
     if (action == RUN) {
