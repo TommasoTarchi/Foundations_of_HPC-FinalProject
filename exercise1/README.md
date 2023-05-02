@@ -8,14 +8,13 @@ For a quick overview of the aim of this exercise see [`README.md`](../README.md)
 ## What you will find in this directory
 
 The current directory contains:
-
 - This markdown file: an overview of the content of this folder and how to run it
 - `src/`: a folder containing GOL source codes:
     - `serial_gol.c`: the serial version of GOL
     - `parallel_gol.c`: the main of the parallelized version of GOL
     - `gol_lib.c`: a file containing the definition of the functions used for parallel GOL
     - `gol_lib.h`: a header file containing the signatures of these functions
-    - `parallel_gol_unique.c`: a version of parallelized GOL in which the evolution is directly performed inside the main (for details see RIFERIMENTO AL REPORT)
+    - `parallel_gol_unique.c`: a version of parallelized GOL in which the evolution is directly performed inside the main (i.e. without using the functions defined in `gol_lib.c`)
 - `images/`: a folder containing images of the system states produced by executables, in PGM format:
     - `snapshots/`: a folder containing dumps of the system taken with a variable frequency
     - other possible system states (e.g. initial conditions)
