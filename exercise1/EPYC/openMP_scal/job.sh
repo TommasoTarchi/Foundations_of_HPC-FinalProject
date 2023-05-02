@@ -61,7 +61,7 @@ echo "threads,ordered,static,static_in_place" >> $datafile
 
 echo PERFORMING MEASURES...
 echo
-for count in $(seq 1 1 11)
+for count in $(seq 1 1 5)
 do
 
     ### generating random playground

@@ -66,12 +66,12 @@ do
     do 
         ### generating random playground
         export OMP_NUM_THREADS=20
-        mat_y_size=$((unit_mat_size*n_procs))
-        mpirun -np 5 --map-by socket parallel_gol.x -i -m $unit_mat_size -k $mat_y_size
+        mat_x_size=$((unit_mat_size*n_procs))
+        mpirun -np 5 --map-by socket parallel_gol.x -i -m $mat_x_size -k $unit_mat_size
 
         ### running the evolution
         export OMP_NUM_THREADS=$n_threads
-        echo "${unit_mat_size}x${mat_y_size}" >> $datafile
+        echo "${mat_x_size}x${unit_mat_size}" >> $datafile
         echo -n "${n_procs}" >> $datafile
         mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 0 -n $n_gen -s 0
         mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 1 -n $n_gen -s 0
