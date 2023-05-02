@@ -997,8 +997,12 @@ void read_pgm_image(BOOL **image, int *maxval, int *xsize, int *ysize, const cha
         free( line );
         return;
     }
+
+    printf("prima free(line)\n");
     
     free( line );
+
+    printf("dopo free(line)\n");
     
     unsigned int size = *xsize * *ysize;
   
