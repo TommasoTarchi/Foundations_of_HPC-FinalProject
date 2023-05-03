@@ -17,8 +17,9 @@ module load openMPI/4.1.4/gnu/12.2.1
 
 echo SETTING THREADS AFFINITY POLICY...
 echo
+alloc=close
 export OMP_PLACES=cores
-export OMP_PROC_BIND=close   # PROVARE ANCHE SPREAD (MAGARI FUNZIONA MEGLIO PER FALSE SHARING)
+export OMP_PROC_BIND=$alloc
 
 echo COMPILING EXECUTABLES...
 echo
@@ -50,13 +51,14 @@ echo "#,,," > ${datafile}
 echo "#node:,${node},," >> $datafile
 echo "#scalability:,${scal},," >> $datafile
 echo "#performance_measure:,time(s),," >> $datafile
-echo "#,,," >> $datafile
+echo "#threads_affinity_policy:,${alloc},," >> $datafile
 echo "#playground_x_size:,${mat_x_size},," >> $datafile
 echo "#playground_y_size:,${mat_y_size},," >> $datafile
 echo "#generations:,${n_gen},," >> $datafile
+echo "#sockets:,2,," >> $datafile
 echo "#,,," >> $datafile
 echo "#,,," >> $datafile
-echo "threads,ordered,static,static_in_place" >> $datafile
+echo "threads_per_socket,ordered,static,static_in_place" >> $datafile
 
 
 echo PERFORMING MEASURES...
