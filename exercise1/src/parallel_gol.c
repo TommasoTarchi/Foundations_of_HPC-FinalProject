@@ -351,10 +351,9 @@ int main(int argc, char **argv) {
         BOOL* my_grid = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
         /* auxiliary grid to store cells' status */
         BOOL* my_grid_aux = NULL;
-        void* temp = NULL
-        if (e == STATIC) {
+        void* temp = NULL;
+        if (e == STATIC)
             my_grid_aux = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
-        }
 
 
         MPI_File f_handle;   // pointer to file
