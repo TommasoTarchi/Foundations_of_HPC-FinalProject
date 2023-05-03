@@ -355,10 +355,10 @@ int main(int argc, char **argv) {
         /* grid to store cells status and two more rows for neighbor cells */ 
         BOOL* my_grid = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
         /* auxiliary grid to store cells' status */
+        BOOL* my_grid_aux = NULL;
+        void* temp = NULL;
         if (e == STATIC) {
-            BOOL* my_grid_aux = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
-            /* temporary pointer used for grid switching */
-            void* temp=NULL;
+            my_grid_aux = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
         }
 
 
