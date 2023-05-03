@@ -9,13 +9,6 @@
 
 
 
-/* time definition */
-#ifdef TIME
-#define CPU_TIME (clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts), (double) ts.tv_sec + (double) ts.tv_nsec * 1e-9)
-#endif
-
-
-
 /* default definitions */
 #define INIT 1
 #define RUN  2
@@ -149,26 +142,11 @@ int main(int argc, char **argv) {
 
 
 
-    /* needed for timing */
-#ifdef TIME
-    struct timespec ts;
-    double t_start;
-#endif
-
-
 
     /* initialising a playground */
 
     if (action == INIT) {
 
-
-
-#ifdef TIME
-    MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0) {
-        t_start = CPU_TIME;
-    }
-#endif
 
 
         if (my_id == 0)
@@ -295,17 +273,6 @@ int main(int argc, char **argv) {
         free(my_grid);
 
 
-
-#ifdef TIME
-    MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0) {
-        double time = CPU_TIME - t_start;
-        printf("elapsed time for initialisation: %f sec\n\n", time);
-    }
-#endif
-
-
-
     }
 
 
@@ -313,6 +280,13 @@ int main(int argc, char **argv) {
 
     /* running game of life */
     if (action == RUN) {
+
+
+
+/* needed for timing */
+#ifdef TIME
+    double t_start;
+#endif
 
 
         /* assigning default name to file in case none was passed */
@@ -487,11 +461,12 @@ int main(int argc, char **argv) {
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_id == 0) {
-        t_start = CPU_TIME;
+        t_start = omp_get_wtime();
     }
 #endif
 
  }
+#pragma omp barrier
 
         
                 /* evolution */
@@ -934,28 +909,6 @@ int main(int argc, char **argv) {
 
 
 
-#pragma omp barrier
-#pragma omp master
- {
-
-#ifdef TIME
-    MPI_Barrier(MPI_COMM_WORLD);
-
-    if (my_id == 0) {
-        double time = CPU_TIME - t_start;
-        printf("elapsed time for ordered evolution: %f sec\n\n", time);
-
-        FILE* datafile;
-        datafile = fopen("data.csv", "a");
-        fprintf(datafile, ",%lf", time);
-        fclose(datafile);
-    }
-#endif
-
- }
-
-
-
             } else if (e == STATIC) {
 
 
@@ -971,11 +924,12 @@ int main(int argc, char **argv) {
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_id == 0) {
-        t_start = CPU_TIME;
+        t_start =omp_get_wtime();
     }
 #endif
  
  }
+#pragma omp barrier
 
 
 
@@ -1257,28 +1211,7 @@ int main(int argc, char **argv) {
 
                     }
 
-                }
-
-
-#pragma omp barrier
-#pragma omp master
- {
-
-#ifdef TIME
-    MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0) {
-        double time = CPU_TIME - t_start;
-        printf("elapsed time for static evolution: %f sec\n\n", time);
- 
-        FILE* datafile;
-        datafile = fopen("data.csv", "a");
-        fprintf(datafile, ",%lf", time);
-        fclose(datafile);
-   }
-#endif
-
- }
-
+                } 
 
 
 
@@ -1297,11 +1230,12 @@ int main(int argc, char **argv) {
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_id == 0) {
-        double t_start = CPU_TIME;
+        t_start = omp_get_wtime();
     }
 #endif
 
  }
+#pragma omp barrier
 
           
                 /* evolution */
@@ -1602,27 +1536,33 @@ int main(int argc, char **argv) {
 
 
 
+            }
+
+
+
 #pragma omp barrier
 #pragma omp master
  {
-
 #ifdef TIME
-    MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0) {
-        double time = CPU_TIME - t_start;
-        printf("elapsed time for static evolution with one grid: %f sec\n\n", time);
- 
-        FILE* datafile;
-        datafile = fopen("data.csv", "a");
-        fprintf(datafile, ",%lf", time);
-        fclose(datafile);
-   }
+MPI_Barrier(MPI_COMM_WORLD);
+if (my_id == 0) {
+    double time = omp_get_wtime() - t_start;
+
+    if (e == ORDERED) {
+        printf("elapsed time for ordered evolution: %lf sec\n\n", time);
+    } else if (e == STATIC) {
+        printf("elapsed time for static evolution with auxiliary grid: %lf sec\n\n", time);
+    } else if (e == STATIC_IN_PLACE) {
+        printf("elapsed time for static evolution in place: %lf sec\n\n", time);
+    }
+
+    FILE* datafile;
+    datafile = fopen("data.csv", "a");
+    fprintf(datafile, ",%lf", time);
+    fclose(datafile);
+}
 #endif
-
  }
-
-
-            }
 
 
 

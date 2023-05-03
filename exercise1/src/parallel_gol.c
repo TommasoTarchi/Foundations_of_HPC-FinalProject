@@ -138,25 +138,9 @@ int main(int argc, char **argv) {
 
 
 
-    /* needed for timing */
-#ifdef TIME
-    double t_start;
-#endif
-
-
-
     /* initialising a playground */
 
     if (action == INIT) {
-
-
-
-#ifdef TIME
-    MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0) {
-        t_start = omp_get_wtime();
-    }
-#endif
 
 
         if (my_id == 0)
@@ -283,17 +267,6 @@ int main(int argc, char **argv) {
         free(my_grid);
 
 
-
-#ifdef TIME
-    MPI_Barrier(MPI_COMM_WORLD);
-    if (my_id == 0) {
-        double time = omp_get_wtime() - t_start;
-        printf("elapsed time for initialisation: %f sec\n\n", time);
-    }
-#endif
-
-
-
     }
 
 
@@ -301,6 +274,14 @@ int main(int argc, char **argv) {
 
     /* running game of life */
     if (action == RUN) {
+
+
+
+/* needed for timing */
+#ifdef TIME
+    double t_start;
+#endif
+
 
 
         /* assigning default name to file in case none was passed */
