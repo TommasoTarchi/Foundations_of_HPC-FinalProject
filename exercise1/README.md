@@ -48,7 +48,7 @@ For a description of the requested purpose of these codes see RIFERIMENTO AL PDF
 
 ### Serial GOL
 
-`serial_gol.c` is the first version of GOL we wrote. It is a simple serial C code which can be used to perform ordered, static and static in place evolution; static in place is the same as static but without using an auxiliary grid, therefore saving half of the memory. The evolution can start from any initialized playground of any size (i.e. any rectangular "table" of squared cells which can assume two states: *dead* or *alive*) and for any number of steps (*generations*). The kind of evolution to be perfomed is passed by command line. The code is also able to output a dump of the system every chosen by the user number of generations. All input and output files representing a state of the system are in the PGM format.
+`serial_gol.c` is the first version of GOL we wrote. It is a simple serial C code which can be used to perform **ordered**, **static** and **static in place** evolution; static in place is the same as static but without using an auxiliary grid, therefore saving half of the memory. The evolution can start from any initialized playground of any size (i.e. any rectangular "table" of squared cells which can assume two states: *dead* or *alive*) and for any number of steps (*generations*). The kind of evolution to be perfomed is passed by command line. The code is also able to output a dump of the system every chosen by the user number of generations. All input and output files representing a state of the system are in the PGM format.
 
 The code can also be used to initialise a random playground (with equal probability for dead and alive cell's initial status) with any name assigned. In both intialisation and evolution, if a specific name for the playground is not passed the default `game_of_life.pgm` is used.
 
@@ -180,66 +180,39 @@ check += MPI_File_close(&f_handle);
 
 ### Evolution
 
-Independently from the chosen kind of evolution, in the first part of this code block the header of the initial playground's PGM file is read by the 0-th process using the following function (obtained by modifying the function we were already given to read PGM files):
+Independently from the chosen kind of evolution, in the first part of this code block the header of the initial playground's PGM file is read by the 0-th process using the function, obtained by modifying the function we were already given to read PGM files, called `read_pgm_header` in `gol_lib.c` (AGGIUNGERE RIFERIMENTO AL FILE).
+
+The content of the header (in particular the header size, the maximum color value and the size of the playground) is then broadcasted to all processes using `MPI_Bcast`, and the workload (i.e. the playground) is divided among processes in the same way it was in RIFERIMENTO A SEZIONE PRECEDENTE. The only difference is that this time each process's allocated grid has two more rows to store the bordering rows of neighbor processes. The parallel reading from PGM is carried out in a way similar to parallel writing: for each process an offset is computed summing the header size and all the previous processes' grid's sizes, and starting from that position cells' states are read and stored in the process's own grid. In case of static non in place evolution an auxiliary grid (called `my_grid_aux`) is allocated and a pointer `temp` to switch he grids is defined.
+
+The evolution is then carried out dividing equally the number of cells among threads, and letting each thread evolve its own "assigned" cells. After the parallel region is opened, useful quantities for threads are computed, for instance the number of cells that it has to evolve, the position of the first **edge cell** (meaning that it is on the edge of the grid) the thread will meet while evolving the cells and the first and last rows it will have to evolve completely from edge to edge:
 
 ````
-int read_pgm_header(unsigned int* head, const char* fname) {
+/* computing number of cells for each thread */
+int my_thread_n_cells = my_n_cells / n_threads;
+const int thread_n_cells_rmd = my_n_cells % n_threads;
+if (my_thread_id < thread_n_cells_rmd)
+    my_thread_n_cells++;
 
+/* computing beginning and end of threads' portion of grid */
+int my_thread_start = x_size + my_thread_id * my_thread_n_cells;
+if (my_thread_id >= thread_n_cells_rmd)
+    my_thread_start += thread_n_cells_rmd;
+const int my_thread_stop = my_thread_start + my_thread_n_cells;
 
-    FILE* image_file;
-    image_file = fopen(fname, "r"); 
-
-    head[0] = head[1] = head[2] = head[3] = 0;
-
-    char    MagicN[3];
-    char   *line = NULL;
-    size_t  k, n = 0;
-
-
-    /* getting the Magic Number */
-    k = fscanf(image_file, "%2s%*c", MagicN);
-
-    /* skipping all the comments */
-    k = getline(&line, &n, image_file);
-    while (k > 0 && line[0]=='#')
-        k = getline(&line, &n, image_file);
-
-    /* getting the parameters */
-    if (k > 0) {
-
-        k = sscanf(line, "%d%*c%d%*c%d%*c", &head[1], &head[2], &head[0]);
-        if (k < 3)
-            fscanf(image_file, "%d%*c", &head[0]);
-    
-    } else {
-
-        fclose(image_file);
-        free(line);
-        return 1;   /* error in reading the header */
-    }
-
-
-    /* getting header size */
-    int size = 0;
-    for (int i=0; i<3; i++) {
-        int cipher = 9;
-        int power = 10;
-        size++;
-        while (head[i] > cipher) {
-            size++;
-            cipher += 9*power;
-            power *= 10;
-        }
-    }
-    head[3] = 6 + size;
-
-
-    fclose(image_file);
-    free(line);
-    return 0;
+/* computing first and last (excluded) 'complete' rows */
+const int first_row = my_thread_start / x_size + (my_thread_start % x_size != 0);
+const int last_row = my_thread_stop / x_size;
+            
+/* computing first and last nearest edge's positions */ 
+int first_edge;
+if (my_thread_start % x_size == 0) {   // first edge position
+    first_edge = my_thread_start - 1;
+} else {
+    first_edge = first_row * x_size - 1;
 }
 ````
 
-The content of the header (in particular the header size, the maximum color value and the size of the playground) is then broadcasted to all processes using `MPI_Bcast`, and the workload (i.e. the grid) is divided among processes in the same way it was in RIFERIMENTO A SEZIONE PRECEDENTE. The only difference is hat this time all grids have two more rows to store the bordering rows of neighbor processes. The parallel reading from PGM is carried out in a way similar to parallel writing: for each process an offset is computed summing the header size and all the previous processes' grid's sizes, and starting from that position cells' states are read and stored in the process's own grid. In
-
-The evolution is then carried out dividing equally the number of cells among threads, and letting each thread evolve its "assigned" cells. 
+At this point the code to be executed changes depending on the chosen kind of evolution. In any case it follows roughly these steps:
+1. (Optional) system's dump writing
+2. Communication of bordering cells among neighbor processes
+3. Proper evolution
