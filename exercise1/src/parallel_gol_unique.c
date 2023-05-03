@@ -24,7 +24,7 @@
 
 char fname_deflt[] = "../../images/game_of_life.pgm";
 
-int   action = ORDERED;
+int   action = RUN;
 int   m      = M_DFLT;
 int   k      = K_DFLT;
 int   e      = ORDERED;
@@ -355,10 +355,11 @@ int main(int argc, char **argv) {
         /* grid to store cells status and two more rows for neighbor cells */ 
         BOOL* my_grid = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
         /* auxiliary grid to store cells' status */
-        if (e == STATIC)
+        if (e == STATIC) {
             BOOL* my_grid_aux = (BOOL*) malloc((my_n_cells+2*x_size)*sizeof(BOOL));
-        /* temporary pointer used for grid switching */
-        void* temp=NULL;
+            /* temporary pointer used for grid switching */
+            void* temp=NULL;
+        }
 
 
         MPI_File f_handle;   // pointer to file
