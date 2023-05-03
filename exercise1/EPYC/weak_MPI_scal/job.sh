@@ -18,7 +18,6 @@ module load openMPI/4.1.4/gnu/12.2.1
 echo SETTING THREADS AFFINITY POLICY...
 echo
 export OMP_PLACES=cores
-export OMP_PROC_BIND=close   # PROVARE ANCHE SPREAD (MAGARI FUNZIONA MEGLIO PER FALSE SHARING)
 
 echo COMPILING EXECUTABLES...
 echo
@@ -46,12 +45,12 @@ echo CREATING/OVERWRITING CSV FILE...
 echo
 datafile=$datafolder/data.csv
 echo "#,,,," > ${datafile}
-echo "#node:,${node},,," >> $datafile
+echo "#node_part:,${node},,," >> $datafile
 echo "#scalability:,${scal},,," >> $datafile
 echo "#performance_measure:,time(s),,," >> $datafile
-echo "#,,,," >> $datafile
 echo "#generations:,${n_gen},,," >> $datafile
 echo "#starting_mat_size,${unit_mat_size}x${unit_mat_size},,," >> $datafile
+echo "#sockets:,4,,"
 echo "#threads_per_socket:,${n_threads},,," >> $datafile
 echo "#,,,," >> $datafile
 echo "#,,,," >> $datafile
