@@ -19,6 +19,7 @@ $(target_path)/parallel_gol.x: src/parallel_gol.c
 	#mpicc -fopenmp -DTIME src/parallel_gol_unique.c -o ${target_path}/parallel_gol.x
 
 
+
 clean_all: clean_exe clean_images
 
 clean_exe:

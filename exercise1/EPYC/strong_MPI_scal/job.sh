@@ -36,7 +36,7 @@ echo
 ### setting variables for executables and csv file
 node=EPYC
 scal=strong_MPI
-n_gen=10
+n_gen=5
 n_threads=64
 
 
@@ -57,25 +57,26 @@ echo "mat_size,processes,ordered,static,static_in_place" >> $datafile
 
 echo PERFORMING MEASURES...
 echo
+
+export OMP_NUM_THREADS=$n_threads
+
 for mat_size in $(seq 10000 10000 50000)
 do
     for count in $(seq 1 1 5)
     do
 
         ### generating random playground
-        export OMP_NUM_THREADS=20
-        mpirun -np 5 --map-by socket parallel_gol.x -i -m $mat_size -k $mat_size
+        mpirun -np 4 -N 2 --map-by socket parallel_gol.x -i -m $mat_size -k $mat_size
 
         for n_procs in $(seq 1 1 4)
         do 
 
             ### running the evolution
-            export OMP_NUM_THREADS=$n_threads
             echo -n "${mat_size}x${mat_size}" >> $datafile
             echo -n "${n_procs}" >> $datafile
-            mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 0 -n $n_gen -s 0
-            mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 1 -n $n_gen -s 0
-            mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 2 -n $n_gen -s 0
+            mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 0 -n $n_gen -s 0
+            mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 1 -n $n_gen -s 0
+            mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 2 -n $n_gen -s 0
             echo >> $datafile
 
             echo

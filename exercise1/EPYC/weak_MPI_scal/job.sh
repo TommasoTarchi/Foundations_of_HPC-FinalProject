@@ -37,7 +37,7 @@ echo
 node=EPYC
 scal=weak_MPI
 unit_mat_size=10000
-n_gen=10
+n_gen=5
 n_threads=64
 
 
@@ -59,22 +59,23 @@ echo "mat_size,processes,ordered,static,static_in_place" >> $datafile
 
 echo PERFORMING MEASURES...
 echo
+
+export OMP_NUM_THREADS=$n_threads
+
 for count in $(seq 1 1 5)
 do 
     for n_procs in $(seq 1 1 4)
     do 
         ### generating random playground
-        export OMP_NUM_THREADS=20
         mat_x_size=$((unit_mat_size*n_procs))
-        mpirun -np 5 --map-by socket parallel_gol.x -i -m $mat_x_size -k $unit_mat_size
+        mpirun -np 4 -N 2 --map-by socket parallel_gol.x -i -m $mat_x_size -k $unit_mat_size
 
         ### running the evolution
-        export OMP_NUM_THREADS=$n_threads
         echo -n "${mat_x_size}x${unit_mat_size}" >> $datafile
         echo -n "${n_procs}" >> $datafile
-        mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 0 -n $n_gen -s 0
-        mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 1 -n $n_gen -s 0
-        mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 2 -n $n_gen -s 0
+        mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 0 -n $n_gen -s 0
+        mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 1 -n $n_gen -s 0
+        mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 2 -n $n_gen -s 0
         echo >> $datafile
         
         echo
