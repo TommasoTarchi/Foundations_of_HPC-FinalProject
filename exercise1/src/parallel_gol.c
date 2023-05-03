@@ -475,7 +475,7 @@ int main(int argc, char **argv) {
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_id == 0) {
-        t_start = CPU_TIME;
+        t_start = omp_get_wtime();
     }
 #endif
 
@@ -702,7 +702,7 @@ int main(int argc, char **argv) {
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_id == 0) {
-        t_start = CPU_TIME;
+        t_start = omp_get_wtime();
     }
 #endif
  
@@ -845,7 +845,7 @@ int main(int argc, char **argv) {
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_id == 0) {
-        double t_start = CPU_TIME;
+        double t_start = omp_get_wtime();
     }
 #endif
 
