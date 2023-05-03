@@ -37,8 +37,8 @@ echo
 ### setting variables for executables and csv file
 node=EPYC
 scal=openMP
-mat_x_size=200000
-mat_y_size=20000
+mat_x_size=30000
+mat_y_size=30000
 n_gen=5
 n_procs=2
 
@@ -65,8 +65,8 @@ echo
 ### MAGARI AGGIUNGERE STATISTICA
 
 ### generating random playground
-export OMP_NUM_THREADS=10
-mpirun -np 5 parallel_gol.x -i -m $mat_x_size -k $mat_y_size
+export OMP_NUM_THREADS=64
+mpirun -np 2 --map-by socket parallel_gol.x -i -m $mat_x_size -k $mat_y_size
 
 for n_threads in $(seq 1 1 64)
 do 
