@@ -845,7 +845,7 @@ int main(int argc, char **argv) {
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_id == 0) {
-        double t_start = omp_get_wtime();
+        t_start = omp_get_wtime();
     }
 #endif
 
@@ -987,11 +987,10 @@ int main(int argc, char **argv) {
             }
 
 
-        }   // end of the openMP parallel region
 
-
-
-
+#pragma omp barrier
+#pragma omp master
+ {
 #ifdef TIME
 MPI_Barrier(MPI_COMM_WORLD);
 if (my_id == 0) {
@@ -1011,7 +1010,10 @@ if (my_id == 0) {
     fclose(datafile);
 }
 #endif
+ }
 
+
+        }   // end of the openMP parallel region
 
 
 
