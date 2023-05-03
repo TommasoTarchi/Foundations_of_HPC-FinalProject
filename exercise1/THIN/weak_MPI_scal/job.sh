@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --no-requeue
-#SBATCH --job-name="strong_MPI_scal"
-#SBATCH --partition=EPYC
+#SBATCH --job-name="weak_MPI_scal"
+#SBATCH --partition=THIN
 #SBATCH -N 2
-#SBATCH -n 256
+#SBATCH -n 24
 #SBATCH --exclusive
 #SBATCH --time=02:00:00
 #SBATCH --output="summary.out"
@@ -12,7 +12,7 @@
 
 echo LOADING MODULES...
 echo
-module load architecture/AMD
+module load architecture/Intel
 module load openMPI/4.1.4/gnu/12.2.1
 
 echo SETTING THREADS AFFINITY POLICY...
@@ -34,10 +34,11 @@ echo
 
 
 ### setting variables for executables and csv file
-node=EPYC
-scal=strong_MPI
+node=THIN
+scal=weak_MPI
+unit_mat_size=10000
 n_gen=5
-n_threads=64
+n_threads=12
 
 
 echo CREATING/OVERWRITING CSV FILE...
@@ -48,7 +49,8 @@ echo "#node_part:,${node},,," >> $datafile
 echo "#scalability:,${scal},,," >> $datafile
 echo "#performance_measure:,time(s),,," >> $datafile
 echo "#generations:,${n_gen},,," >> $datafile
-echo "#sockets:,4,,,"
+echo "#starting_mat_size,${unit_mat_size}x${unit_mat_size},,," >> $datafile
+echo "#sockets:,4,,"
 echo "#threads_per_socket:,${n_threads},,," >> $datafile
 echo "#,,,," >> $datafile
 echo "#,,,," >> $datafile
@@ -60,29 +62,25 @@ echo
 
 export OMP_NUM_THREADS=$n_threads
 
-for mat_size in $(seq 10000 10000 50000)
-do
-    for count in $(seq 1 1 5)
-    do
-
+for count in $(seq 1 1 5)
+do 
+    for n_procs in $(seq 1 1 4)
+    do 
         ### generating random playground
-        mpirun -np 4 -N 2 --map-by socket parallel_gol.x -i -m $mat_size -k $mat_size
+        mat_x_size=$((unit_mat_size*n_procs))
+        mpirun -np 4 -N 2 --map-by socket parallel_gol.x -i -m $mat_x_size -k $unit_mat_size
 
-        for n_procs in $(seq 1 1 4)
-        do 
-
-            ### running the evolution
-            echo -n "${mat_size}x${mat_size}" >> $datafile
-            echo -n "${n_procs}" >> $datafile
-            mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 0 -n $n_gen -s 0
-            mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 1 -n $n_gen -s 0
-            mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 2 -n $n_gen -s 0
-            echo >> $datafile
-
-            echo
-            echo -----------
-            echo
-        done
+        ### running the evolution
+        echo -n "${mat_x_size}x${unit_mat_size}" >> $datafile
+        echo -n "${n_procs}" >> $datafile
+        mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 0 -n $n_gen -s 0
+        mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 1 -n $n_gen -s 0
+        mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 2 -n $n_gen -s 0
+        echo >> $datafile
+        
+        echo
+        echo -----------
+        echo
     done
 done
 

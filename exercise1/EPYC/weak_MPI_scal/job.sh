@@ -93,6 +93,6 @@ echo
 
 echo RELEASING LOADED MODULES AND CLEANING FROM EXECUTABLES AND IMAGES...
 cd ../..
-make clean data_folder=$datafolder
+make clean_all data_folder=$datafolder
 module purge
 cd $datafolder

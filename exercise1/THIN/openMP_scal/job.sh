@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --no-requeue
 #SBATCH --job-name="openMP_scal"
-#SBATCH --partition=EPYC
+#SBATCH --partition=THIN
 #SBATCH -N 1
-#SBATCH -n 128
+#SBATCH -n 24
 #SBATCH --exclusive
 #SBATCH --time=02:00:00
 #SBATCH --output="summary.out"
@@ -12,7 +12,7 @@
 
 echo LOADING MODULES...
 echo
-module load architecture/AMD
+module load architecture/Intel
 module load openMPI/4.1.4/gnu/12.2.1
 
 echo SETTING THREADS AFFINITY POLICY...
@@ -36,7 +36,7 @@ echo
 
 
 ### setting variables for executables and csv file
-node=EPYC
+node=THIN
 scal=openMP
 mat_x_size=25000
 mat_y_size=25000
@@ -65,10 +65,10 @@ echo PERFORMING MEASURES...
 echo
 
 ### generating random playground
-export OMP_NUM_THREADS=64
+export OMP_NUM_THREADS=12
 mpirun -np 2 --map-by socket parallel_gol.x -i -m $mat_x_size -k $mat_y_size
 
-for n_threads in $(seq 1 1 64)
+for n_threads in $(seq 1 1 12)
 do 
 
     ### running the evolution

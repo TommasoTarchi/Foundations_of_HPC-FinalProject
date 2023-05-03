@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --no-requeue
 #SBATCH --job-name="strong_MPI_scal"
-#SBATCH --partition=EPYC
+#SBATCH --partition=THIN
 #SBATCH -N 2
-#SBATCH -n 256
+#SBATCH -n 24
 #SBATCH --exclusive
 #SBATCH --time=02:00:00
 #SBATCH --output="summary.out"
@@ -12,7 +12,7 @@
 
 echo LOADING MODULES...
 echo
-module load architecture/AMD
+module load architecture/Intel
 module load openMPI/4.1.4/gnu/12.2.1
 
 echo SETTING THREADS AFFINITY POLICY...
@@ -34,10 +34,10 @@ echo
 
 
 ### setting variables for executables and csv file
-node=EPYC
+node=THIN
 scal=strong_MPI
 n_gen=5
-n_threads=64
+n_threads=12
 
 
 echo CREATING/OVERWRITING CSV FILE...
