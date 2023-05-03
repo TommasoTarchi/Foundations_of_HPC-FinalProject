@@ -42,25 +42,28 @@ All `EPYC/` and `THIN/`'s subdirectories have themselves the very same structure
 
 For a description of the requested purpose of these codes see RIFERIMENTO AL PDF DI TORNATORE, while for a detailed description of these codes themselves see RIFERIMENTO AL REPORT.
 
-**NOTE**: command-line arguments are passed to the following codes in the same way that is described in RIFERIMENTO AL PDF DI TORNATORE CON PAGINA, exept for the playground size, which in these codes can be passed using `-m` for the vertical size (y) and `-k` for the horizontal one (x).
+**NOTE**: command-line arguments are passed to the following codes in the same way that is described in RIFERIMENTO AL PDF DI TORNATORE CON PAGINA, exept for the playground size, which can be passed using `-m` for the vertical size (y) and `-k` for the horizontal one (x).
 
-### `serial_gol.c`
+### Serial GOL
 
-This is the first version of GOL we wrote. It is a simple serial C code which can be used to perform static, ordered and ordered in place evolution (see RIFERIMENTO AL REPORT CON PAGINA for details), starting from any initialized playground of any size (i.e. any rectangular "table" of squared cells that can assume two states: *dead* or *alive*) and for any number of steps (*generations*). The kind of evolution to be perfomed is passed by command line as well. The code is also able to output a dump of the system every chosen by the user number of steps of the evolution. All input and output files representing a state of the system must be in the PGM format.
+`serial_gol.c` is the first version of GOL we wrote. It is a simple serial C code which can be used to perform ordered, static and static in place evolution; static in place is the same as static but without using an auxiliary grid, therefore saving half of the memory. The evolution can start from any initialized playground of any size (i.e. any rectangular "table" of squared cells that can assume two states: *dead* or *alive*) and for any number of steps (*generations*). The kind of evolution to be perfomed is passed by command line as well. The code is also able to output a dump of the system every chosen by the user number of generations. All input and output files representing a state of the system must be in the PGM format.
 
-The code can also be used to initialise a random playground (with equal probability for dead and alive cell's initial status) with any name assigned.
+The code can also be used to initialise a random playground (with equal probability for dead and alive cell's initial status) with any name assigned. In both intialisation and evolution, if a specific name for the playground is not passed the default `game_of_life.pgm` is used.
 
-If compiled with `-DTIME` the code prints to standard output the time it took to perform the initialisation or the evolution in seconds. In case of evolution the time measured is the total time, not a single step's one.
+If compiled with `-DTIME` the code prints to standard output the time it took to perform the evolution in seconds. The time measured is the total time, not a single step's one, and its measure excludes the time spent to read the initial playgorund and the time spent to write the final system's state; in other words it includes only the evolution and the system dumping. It is measured using the function `clock_gettime`. 
 
 We avoid showing code snippets related to evolution here, since they will be treated extensively in the RIFERIMENTO ALLA SEZIONE SU GOL_LIB.C section: they are very similar in serial and parallel versions.
 
-To read/write to/from PGM in this code we used the functions already prepared for us, which can be found here RIFERIMENTO.
+To read/write to/from PGM in this code we used a slightly modified version of the functions already prepared for us, which can be found here RIFERIMENTO.
 
-In any case, if a specific name for the playground is not passed the defult `game_of_life.pgm` is used.
+### Parallel GOL
 
-### `parallel_gol.c`
+Starting from `serial_gol.c`, we used MPI to parallelize both I/O to PGM files and evolution, and openMP to further parallelize evolution. To mix MPI and openMP we chose the **funneled approach**, in which MPI calls can be done from within openMP parallel regions, but only by the master thread. This allowed us to write the system's dumps and to communicate among mpi processes whithout having to get out of the parallel region, and therefore avoiding the parallel region's "management" overhead.
 
-This is the final parallel version of GOL. It uses MPI to parallelize both I/O to PGM files and evolution, and openMP to further parallelize evolution.
+As we said previously, the code is presented in two forms: one `parallel_gol.c` that uses functions defined in `gol_lib.c` for PGM header reading and evolution, and one `parallel_gol_unique.c` that has the very same functions for evolution "embedded". We present both versions because we cannot exclude the overheads caused at each generation by function calls to be not negligible on some systems. We did some tests on ORFEO and it seemed to be irrelevant (at least for small numbers of generations). In the following we will refer to `parallel_gol.c`, but, a part from the separation of evolution functions, the code is identical to `parallel_gol_unique.c`.
 
+For time measurements we use the function `omp_get_wtime`, called by the master thread from within the parallel region. The use of `#pragma omp barrier` makes sure that the one measured is the actual time between the beginning and the end of evolution.
 
-## How to actually run jobs
+What follows is a brief sketch of the code:
+
+1. 
