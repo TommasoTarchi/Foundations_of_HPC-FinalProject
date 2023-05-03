@@ -9,13 +9,6 @@
 
 
 
-/* time definition */
-#ifdef TIME
-#define CPU_TIME (clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts), (double) ts.tv_sec + (double) ts.tv_nsec * 1e-9)
-#endif
-
-
-
 /* default definitions */
 #define INIT 1
 #define RUN  2
@@ -114,10 +107,10 @@ int main(int argc, char **argv) {
     int mpi_provided_thread_level;
     MPI_Init_thread(&argc, &argv, MPI_THREAD_FUNNELED, &mpi_provided_thread_level);
     
-    if ( mpi_provided_thread_level < MPI_THREAD_FUNNELED ) {
+    if (mpi_provided_thread_level < MPI_THREAD_FUNNELED) {
         printf("\n--- A PROBLEM ARISE WHEN ASKING FOR MPI_THREAD_FUNNELED LEVEL\n\n");
         MPI_Finalize();
-        exit( 1 );
+        exit(1);
     }
     MPI_Status status;
 
@@ -136,7 +129,7 @@ int main(int argc, char **argv) {
     }
 
 
-    // test
+    /* displaying number of threads per process */
    #pragma omp parallel
     {
 	    int my_thread_id = omp_get_thread_num();
@@ -147,7 +140,6 @@ int main(int argc, char **argv) {
 
     /* needed for timing */
 #ifdef TIME
-    struct timespec ts;
     double t_start;
 #endif
 
@@ -162,7 +154,7 @@ int main(int argc, char **argv) {
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_id == 0) {
-        t_start = CPU_TIME;
+        t_start = omp_get_wtime();
     }
 #endif
 
@@ -295,7 +287,7 @@ int main(int argc, char **argv) {
 #ifdef TIME
     MPI_Barrier(MPI_COMM_WORLD);
     if (my_id == 0) {
-        double time = CPU_TIME - t_start;
+        double time = omp_get_wtime() - t_start;
         printf("elapsed time for initialisation: %f sec\n\n", time);
     }
 #endif
@@ -488,8 +480,9 @@ int main(int argc, char **argv) {
 #endif
 
  }
-
+#pragma omp barrier
         
+ 
                 /* evolution */
 
                 for (int gen=0; gen<n; gen++) {
@@ -714,7 +707,7 @@ int main(int argc, char **argv) {
 #endif
  
  }
-
+#pragma omp barrier
 
 
                 /* evolution */
@@ -857,8 +850,9 @@ int main(int argc, char **argv) {
 #endif
 
  }
+#pragma omp barrier
+         
 
-          
                 /* evolution */
 
                 for (int gen=0; gen<n; gen++) {
@@ -993,10 +987,6 @@ int main(int argc, char **argv) {
             }
 
 
-
-
-           #pragma omp barrier
-
         }   // end of the openMP parallel region
 
 
@@ -1005,14 +995,14 @@ int main(int argc, char **argv) {
 #ifdef TIME
 MPI_Barrier(MPI_COMM_WORLD);
 if (my_id == 0) {
-    double time = CPU_TIME - t_start;
+    double time = omp_get_wtime() - t_start;
 
     if (e == ORDERED) {
-        printf("elapsed time for ordered evolution: %f sec\n\n", time);
+        printf("elapsed time for ordered evolution: %lf sec\n\n", time);
     } else if (e == STATIC) {
-        printf("elapsed time for static evolution with auxiliary grid: %f sec\n\n", time);
+        printf("elapsed time for static evolution with auxiliary grid: %lf sec\n\n", time);
     } else if (e == STATIC_IN_PLACE) {
-        printf("elapsed time for static evolution with one grid: %f sec\n\n", time);
+        printf("elapsed time for static evolution in place: %lf sec\n\n", time);
     }
 
     FILE* datafile;
