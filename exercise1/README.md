@@ -622,9 +622,9 @@ To make it easier to consult data, here you can find a table with direct access 
 
 | node | scalability | file |
 | ---- | ----------- | ---- |
-| EPYC | openMP      | 1 |
-| EPYC | strong MPI  | 2 |
-| EPYC | weak MPI    | 3 |
-| THIN | openMP      | 4 |
-| THIN | strong MPI  | 5 |
-| THIN | weak MPI    | 6 |
+| EPYC | openMP      | [1](EPYC/openMP_scal/data.csv) |
+| EPYC | strong MPI  | [2](EPYC/strong_MPI_scal/data.csv) |
+| EPYC | weak MPI    | [3](EPYC/weak_MPI_scal/data.csv) |
+| THIN | openMP      | [4](THIN/openMP_scal/data.csv) |
+| THIN | strong MPI  | [5](THIN/strong_MPI_scal/data.csv) |
+| THIN | weak MPI    | [6](THIN/weak_MPI_scal/data.csv) |
