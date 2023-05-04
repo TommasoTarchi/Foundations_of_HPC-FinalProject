@@ -14,8 +14,8 @@ parallel_gol: $(target_path)/parallel_gol.x
 
 $(target_path)/parallel_gol.x: src/parallel_gol.c src/parallel_gol_unique.c src/gol_lib.c
 	mpicc -fopenmp -DTIME src/parallel_gol.c src/gol_lib.c -c
-	ar -rc libgol.a *.o
-	mpicc -fopenmp -DTIME src/parallel_gol.c -L. -lgol -o $@
+	ar -rc $(target_path)/libgol.a $(target_path)/*.o
+	mpicc -fopenmp -DTIME src/parallel_gol.c -L$(target_path) -l$(target_path)/gol -o $@
 	#mpicc -fopenmp -DTIME src/parallel_gol_unique.c -o $@
 
 
