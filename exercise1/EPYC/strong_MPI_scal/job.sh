@@ -17,7 +17,9 @@ module load openMPI/4.1.4/gnu/12.2.1
 
 echo SETTING THREADS AFFINITY POLICY...
 echo
+alloc=close
 export OMP_PLACES=cores
+export OMP_PROC_BIND=$alloc
 
 echo COMPILING EXECUTABLES...
 echo
@@ -47,6 +49,7 @@ echo "#,,,," > ${datafile}
 echo "#node_part:,${node},,," >> $datafile
 echo "#scalability:,${scal},,," >> $datafile
 echo "#performance_measure:,time(s),,," >> $datafile
+echo "#threads_affinity_policy:,${alloc},," >> $datafile
 echo "#generations:,${n_gen},,," >> $datafile
 echo "#sockets:,4,,,"
 echo "#threads_per_socket:,${n_threads},,," >> $datafile
