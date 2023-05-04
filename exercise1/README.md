@@ -599,7 +599,7 @@ Assuming you have already cloned the repository, to reproduce on ORFEO some of t
 
 ### Drawing graphs
 
-Here we just briefly expose the data we got. For their analysis we invite you to read report.pdf (INSERIRE RIFERIMENTO AL REPORT) in this directory's parent directory.
+AGGIUNGERE ROBA
 
 ### Changing parameters
 
