@@ -36,7 +36,7 @@ As you can see, `EPYC/` and `THIN/` have the very same structure: `openMP_scal/`
 
 All `EPYC/` and `THIN/`'s subdirectories have themselves the very same structure:
 - `job.sh`: a bash script used to collect data on the cluster; the script is made to be run as a SLURM sbatch job on ORFEO
-- `data.csv`: a CSV file containing the collected data for all kinds of evolution
+- `data.csv`: a CSV file containing data collected for all kinds of evolution
 - `summary.out`: an output file produced while running the job, which can be inspected to check whether it was run correctly
 
 
@@ -48,25 +48,25 @@ For a description of the requested purpose of these codes see RIFERIMENTO AL PDF
 
 ### Serial GOL
 
-`serial_gol.c` is the first version of GOL we wrote. It is a simple serial C code which can be used to perform **ordered**, **static** and **static in place** evolution; static in place is the same as static but without using an auxiliary grid, therefore saving half of the memory, and using two different bits of the char representing the cell to store the old and the new status. The evolution can start from any initialized playground of any size (i.e. any rectangular "table" of squared cells which can assume two states: *dead* or *alive*) and for any number of steps (*generations*). The kind of evolution to be perfomed is passed by command line. The code is also able to output a dump of the system every chosen by the user number of generations, and it always outputs the final state of the system under the name of `final_state.pgm`. All input and output files representing a state of the system are in the PGM format.
+`serial_gol.c` is the first version of GOL we wrote. It is a simple serial C code which can be used to perform **ordered**, **static** and **static in place** evolution; static in place is the same as static but without using an auxiliary grid, therefore saving half of the memory, and using two different bits of the char representing each cell to store the old and the new status. The evolution can start from any initialized playground of any size (i.e. any rectangular "table" of squared cells which can assume two states: *dead* or *alive*) and for any number of steps (*generations*). The kind of evolution to be perfomed is passed by command line. The code is also able to output a dump of the system every chosen by the user number of generations, and it always outputs the final state of the system under the name of `final_state.pgm`. All input and output files representing a state of the system are in the PGM format.
 
 The code can also be used to initialise a random playground (with equal probability for dead and alive cell's initial status) with any name assigned. In both intialisation and evolution, if a specific name for the playground is not passed the default `game_of_life.pgm` is used.
 
 If compiled with `-DTIME` the code prints to standard output the time it took to perform the evolution in seconds. The time measured is the total time of evolution, not a single generation's one, and its measure excludes time spent to read the initial playgorund and time spent to write the final system's state; in other words it includes only the evolution and the system dumping. It is measured using the function `clock_gettime`. 
 
-Here we avoid speaking in details about initialisation and evolution, since they will be treated extensively in the RIFERIMENTO ALLA SEZIONE SU GOL_LIB.C section: they are similar in serial and parallel versions.
+Here we avoid speaking in details about initialisation and evolution, since they will be treated extensively in the RIFERIMENTO ALLA SEZIONE SU GOL_LIB.C section: their serial version is just a simplified one of the parallel.
 
 To read/write to/from PGM we used the functions already prepared for us, which can be found here RIFERIMENTO.
 
 ### Parallel GOL
 
-Starting from `serial_gol.c`, we used MPI to parallelize both I/O and evolution, and openMP to further parallelize evolution, letting each procees spawn a number of threads. To mix MPI and openMP we chose the **funneled approach**, in which MPI calls can be done from within openMP parallel regions, but only by the master thread. This allowed us to write the system's dumps and to communicate among mpi processes whithout having to get out of the parallel region, and therefore avoiding the parallel regions "management" overhead.
+Starting from `serial_gol.c`, we used MPI to parallelize I/O, initialisation and evolution, and openMP to further parallelize initialisation and evolution, letting each process spawn a number of threads. To mix MPI and openMP we chose the **funneled approach**, in which MPI calls can be done from within openMP parallel regions, but only by the master thread. This allowed us to write the system's dumps and to communicate among mpi processes whithout having to get out of the parallel region, and therefore avoiding the parallel regions "management" overhead.
 
 As we said previously, the code is presented in two forms: one `parallel_gol.c` that uses functions defined in `gol_lib.c` for PGM header reading and evolution, and one `parallel_gol_unique.c` that has the very same functions for evolution "embedded". We present both versions because we cannot exclude the overhead caused by function calls to be not negligible on some systems. We did some tests on ORFEO and it seemed to be irrelevant, at least for small numbers of generations. In the following we will refer to `parallel_gol.c`, but, a part from the separation of evolution functions, the code is identical to `parallel_gol_unique.c`.
 
-For time measurements we use the function `omp_get_wtime`, called by the master thread from within the parallel region. The use of `#pragma omp barrier` statements makes sure that the time measured is the actual one between the beginning and the end of the evolution, and not some kind of average among threads' times. If compliled with `-DTIME`, in addition to be printed to standard output the measured time is printed to a file called `data.csv`.
+For time measurements we use the function `omp_get_wtime`, called by the master thread from within the parallel region. The use of `#pragma omp barrier` statements makes sure that the time measured is the actual one between the beginning and the end of the evolution, and not some kind of average among threads' times. If compliled with `-DTIME`, in addition to be printed to standard output the measured time is also printed to a file called `data.csv`.
 
-What follows is a brief exposition of the key points in the code. We removed some superfluous lines of code (like error checker stuff) and comments to make everything more readable.
+What follows is a brief exposition of the key points in the code. We removed some superfluous lines of code (like error checker stuff) and some comments to make everything more readable.
 
 ### Initialisation
 
@@ -180,9 +180,9 @@ check += MPI_File_close(&f_handle);
 
 ### Evolution
 
-Independently from the chosen kind of evolution, in the first part of this code block the header of the initial playground's PGM file is read by the 0-th process using the function called `read_pgm_header` in `gol_lib.c` (AGGIUNGERE RIFERIMENTO AL FILE), obtained by modifying the function we were already given to read PGM files.
+Independently from the chosen kind of evolution, first of all the header of the initial playground's PGM file is read by the 0-th process using the function called `read_pgm_header` in `gol_lib.c` (AGGIUNGERE RIFERIMENTO AL FILE), obtained by modifying the function we were already given to read PGM files.
 
-The content of the header (in particular the header size, the maximum color value and the size of the playground) is then broadcasted to all processes using `MPI_Bcast`, and the workload (i.e. the playground) is divided among processes in the same way it was in RIFERIMENTO A SEZIONE PRECEDENTE. The only difference is that this time each process's allocated grid has two more rows to store the bordering rows of neighbor processes. The parallel reading from PGM is carried out in a way similar to parallel writing: for each process an offset is computed summing the header size and all the previous processes' grid's sizes, and starting from that position cells' states are read and stored in the process's own grid. In case of static non in place evolution an auxiliary grid (called `my_grid_aux`) is allocated and a pointer `temp` to switch he grids is defined.
+The content of the header (in particular the header size, the maximum color value and the size of the playground) is then broadcasted to all processes using `MPI_Bcast`, and the workload (i.e. the playground) is divided among processes in the same way it was in RIFERIMENTO A SEZIONE PRECEDENTE. The only difference is that this time each process's allocated grid has two more rows to store the bordering rows of neighbor processes. The parallel reading from PGM is carried out in a way similar to parallel writing: for each process an offset is computed summing the header size and all the previous processes' grid's sizes, and starting from that position cells' states are read and stored in the process's own grid. In case of static non in place evolution an auxiliary grid (called `my_grid_aux`) is allocated and a pointer `temp` to switch the two grids is defined.
 
 The evolution is then carried out dividing equally the number of cells among threads, and letting each thread evolve its own "assigned" cells. After the parallel region is opened, useful quantities for threads are computed, for instance the number of cells that it has to evolve, the position of the first **edge cell** (i.e. on the edge of the grid) the thread will meet while evolving the cells and the first and last rows it will have to evolve completely from edge to edge:
 
@@ -310,24 +310,176 @@ On the other hand, static and static in place evolutions can be done in parallel
     }
     ````
 
-    Basically, even processes first send and then receive, while odd processes first receive and then send. This is, in our opinion, the quickest way to carry out the communications, since it minimizes the time each process waits for data (especially if the number of processes is even).
+    Basically, even processes first send and then receive, while odd processes first receive and then send. This is, in our opinion, the best way to carry out the communications, since it minimizes the time the "slowest" process waits for data (especially if the number of processes is even).
 
-- For each process (operating in parallel) the spawned threads update cells' status in parallel using the functions `static_evo` and `static_evo_in_place` of `gol_lib.c` RIFERIMENTO, depending on the chosen kind of evolution. After the status is updated for all cells, in case of simple static evolution the two grids (one storing the old and and one stoing the new status) are switched using the `temp` pointer:
+- For each process (operating in parallel) the spawned threads update cells' status in parallel using the functions `static_evo` and `static_evo_in_place` of `gol_lib.c` RIFERIMENTO, depending on the chosen kind of evolution. After the status is updated for all cells, in case of simple static evolution the two grids (one storing the old and and one storing the new status) are switched using `temp`:
+    
+    ````
+    #pragma omp barrier
+    #pragma omp master
+     {                 
+        temp = my_grid;
+        my_grid = my_grid_aux;
+        my_grid_aux = temp;
+        temp = NULL;
+     }
+    ````
+    
+    while in case of static in place evolution we simply increment the "state signaling bit", which tracks whether the new state is stored in the first or in the second bit (starting from the end of the BOOL):
+    
+    ````
+    #pragma omp barrier
+    #pragma omp master
+     {
+        bit_control++;
+     }
+    ````
+    
+    
+## Makefile
+   
+It is a very simple file that can be used to compile both the serial and the parallel versions of GOL, in a target directory whose path can be passed as a variable called `$data_folder`, which is actually renamed `$target_path` inside the file. The source codes will be looked for in the `src/` folder.
+
+The file contains four rules:
+- `serial_gol`, to compile `serial_gol.c`:
+
+    ````
+    serial_gol: $(target_path)/serial_gol.x
+
+    $(target_path)/serial_gol.x: src/serial_gol.c
+	    gcc -DTIME $^ -o $@
+    ````
+
+- `parallel_gol`, to compile `parallel_gol.c` or `parallel_gol_unique.c`:
+
+    ````
+    parallel_gol: $(target_path)/parallel_gol.x
+
+    $(target_path)/parallel_gol.x: src/parallel_gol.c src/parallel_gol_unique.c src/gol_lib.c
+	mpicc -fopenmp -DTIME src/parallel_gol.c src/gol_lib.c -c
+	ar -rc libgol.a *.o
+	mpicc -fopenmp -DTIME src/parallel_gol.c -L. -lgol -o $@
+	#mpicc -fopenmp -DTIME src/parallel_gol_unique.c -o $@
+    ````
+    
+    (to compile `parallel_gol_unique.c` you have to uncomment the bottom line and comment the previous three).
+
+- `clean_exe`, to clean the `target_path` and the current directory from executables, libraries and object files:
+
+    ````
+    clean_exe:
+	    rm $(target_path)/*.x *.o *.a
+    ````
+
+- `clean_images`, to clean `images/` from all PGM files:
+
+    ````
+    clean_images:
+	    rm images/snapshots/*.pgm
+	    rm images/*.pgm
+    ````
+
+The first two rules can be called together using `gol_all` and the last two using `clean_all`.
+
+
+## Job files
+
+All job files have a similar structure.
+
+The first block of istructions is ignored by bash and constitutes the resource request addressed to SLURM. For example let's look at EPYC/openMP_scal/job.sh:
+
 ````
-#pragma omp barrier
-#pragma omp master
- {                 
-    temp = my_grid;
-    my_grid = my_grid_aux;
-    my_grid_aux = temp;
-    temp = NULL;
- }
+#!/bin/bash
+#SBATCH --no-requeue
+#SBATCH --job-name="openMP_scal"
+#SBATCH --partition=EPYC
+#SBATCH -N 1
+#SBATCH -n 128
+#SBATCH --exclusive
+#SBATCH --time=02:00:00
+#SBATCH --output="summary.out"
 ````
-while in case of static in place evolution we simply increment the "state signaling bit", which determines whether the new state is stored in the first or in the second bit (starting from the end of the BOOL):
+
+Here, for instance, we are requesting an entire (all of its 128 cores) EPYC node (-N 1, -n 128, --partition=EPYC) for a maximum amount of time of two hours (--time=02:00:00). We are also asking SLURM to save the outputs of the job in a file called `summary.out`. This file can later be read to check that the program was actually run correctly, using the correct amount of cores and without raising any errors.
+
+This part is different in `strong_MPI_scal/job.sh` and `weak_MPI_scal/job.sh` only in the requested resources: in that case we ask for two entire nodes. Also, when running on THIN nodes you have to change resource requests remembering that each node has 24 cores.
+
+The following part is identical for all job files, a part from the architecture which is Intel for THIN nodes. In order we:
+1. load the needed modules (architecture and openMPI)
+2. set the threads affinity policy, using the environment variables `OMP_PLACES` and `OMP_PROC_BIND`
+3. compile `parallel_gol.c` in the current directory (referred as `$datafolder`)
+
 ````
-#pragma omp barrier
-#pragma omp master
- {
-    bit_control++;
- }
+echo LOADING MODULES...
+echo
+module load architecture/AMD
+module load openMPI/4.1.4/gnu/12.2.1
+
+echo SETTING THREADS AFFINITY POLICY...
+echo
+alloc=close
+export OMP_PLACES=cores
+export OMP_PROC_BIND=$alloc
+
+echo COMPILING EXECUTABLES...
+echo
+datafolder=$(pwd)
+cd ../..
+make parallel_gol data_folder=$datafolder
+cd $datafolder
+````
+
+The messages printed to screen via echo are there only to make `summary.out` more readable.
+
+In the following we will show examples from EPYC, but they are similar for THIN, basically the only thing that changes is the number of maximum cores from 64 to 12.
+
+Then we set other variables needed (some to run the computation, others to write a sort of "header" of the data files), and we create/overwrite the data file called `data.csv` (but here addressed as `$datafolder`). For exemple here is again `openMP_scal/job.sh`:
+
+````
+### setting variables for executables and csv file
+node=EPYC
+scal=openMP
+mat_x_size=25000
+mat_y_size=25000
+n_gen=5
+n_procs=2
+````
+
+As you can see, here we fix the matrix size but not the number of threads, while in `strong_MPI_scal/job.sh`it is the other way around (and the number of threads is fixed in such a way that the sockets are saturated):
+
+````
+node=EPYC
+scal=strong_MPI
+n_gen=5
+n_threads=64
+````
+
+while in `weak_MPI_scal/job.sh` we fix the number of threads and we define a "unit" matrix size used to obtain at each iteration a workload proportional to the number of sockets involved:
+
+````
+node=EPYC
+scal=weak_MPI
+unit_mat_size=10000
+n_gen=5
+n_threads=64
+````
+
+At this point we create/overwrite the file to store data, called `data.csv` but referred here using the variable `$datafile`. We initialise it by writing few lines summing up the conditions in which measures are performed, for example in `openMP_scal/job.sh`:
+
+````
+echo CREATING/OVERWRITING CSV FILE...
+echo
+datafile=$datafolder/data.csv
+echo "#,,," > ${datafile}
+echo "#node:,${node},," >> $datafile
+echo "#scalability:,${scal},," >> $datafile
+echo "#performance_measure:,time(s),," >> $datafile
+echo "#threads_affinity_policy:,${alloc},," >> $datafile
+echo "#playground_x_size:,${mat_x_size},," >> $datafile
+echo "#playground_y_size:,${mat_y_size},," >> $datafile
+echo "#generations:,${n_gen},," >> $datafile
+echo "#sockets:,2,," >> $datafile
+echo "#,,," >> $datafile
+echo "#,,," >> $datafile
+echo "threads_per_socket,ordered,static,static_in_place" >> $datafile
 ````
