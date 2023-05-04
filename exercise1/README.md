@@ -620,4 +620,11 @@ Here we just briefly expose the data we got. For their analysis we invite you to
 
 To make it easier to consult data, here you can find a table with direct access to all CSV files:
 
-AGIUNGERE TABELLA
+| node | scalability | file |
+| ---- | ----------- | ---- |
+| EPYC | openMP      | 1 |
+| EPYC | strong MPI  | 2 |
+| EPYC | weak MPI    | 3 |
+| THIN | openMP      | 4 |
+| THIN | strong MPI  | 5 |
+| THIN | weak MPI    | 6 |
