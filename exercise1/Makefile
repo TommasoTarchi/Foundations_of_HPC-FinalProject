@@ -12,11 +12,11 @@ $(target_path)/serial_gol.x: src/serial_gol.c
 
 parallel_gol: $(target_path)/parallel_gol.x
 
-$(target_path)/parallel_gol.x: src/parallel_gol.c
+$(target_path)/parallel_gol.x: src/parallel_gol.c src/parallel_gol_unique.c src/gol_lib.c
 	mpicc -fopenmp -DTIME src/parallel_gol.c src/gol_lib.c -c
 	ar -rc libgol.a *.o
-	mpicc -fopenmp -DTIME src/parallel_gol.c -L. -lgol -o ${target_path}/parallel_gol.x
-	#mpicc -fopenmp -DTIME src/parallel_gol_unique.c -o ${target_path}/parallel_gol.x
+	mpicc -fopenmp -DTIME src/parallel_gol.c -L. -lgol -o $@
+	#mpicc -fopenmp -DTIME src/parallel_gol_unique.c -o $@
 
 
 
