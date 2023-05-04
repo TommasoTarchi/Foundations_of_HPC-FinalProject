@@ -483,3 +483,105 @@ echo "#,,," >> $datafile
 echo "#,,," >> $datafile
 echo "threads_per_socket,ordered,static,static_in_place" >> $datafile
 ````
+
+At this point we can execute the proper computation.
+
+For openMP scalability we have:
+
+````
+### generating random playground
+export OMP_NUM_THREADS=64
+mpirun -np 2 --map-by socket parallel_gol.x -i -m $mat_x_size -k $mat_y_size
+
+for n_threads in $(seq 1 1 64)
+do 
+
+    ### running the evolution
+    export OMP_NUM_THREADS=$n_threads
+    echo -n "${n_threads}" >> $datafile
+    mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 0 -n $n_gen -s 0
+    mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 1 -n $n_gen -s 0
+    mpirun -np $n_procs --map-by socket parallel_gol.x -r -e 2 -n $n_gen -s 0
+    echo >> $datafile
+
+    echo
+    echo -----------
+    echo
+done
+````
+
+where we first generate a random playgorund using all available resources, and then perform the measurement incrementing the number of cores per socket from 1 up to saturation.
+
+For strong MPI scalability, instead, we have:
+
+````
+export OMP_NUM_THREADS=$n_threads
+
+for mat_size in $(seq 10000 10000 30000)
+do
+    for count in $(seq 1 1 5)
+    do
+
+        ### generating random playground
+        mpirun -np 4 -N 2 --map-by socket parallel_gol.x -i -m $mat_size -k $mat_size
+
+        for n_procs in $(seq 1 1 4)
+        do 
+
+            ### running the evolution
+            echo -n "${mat_size}x${mat_size}," >> $datafile
+            echo -n "${n_procs}" >> $datafile
+            mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 0 -n $n_gen -s 0
+            mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 1 -n $n_gen -s 0
+            mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 2 -n $n_gen -s 0
+            echo >> $datafile
+
+            echo
+            echo -----------
+            echo
+        done
+    done
+done
+````
+
+In this case, given the small amount of computation we have to perform, we have time to do some statistics. In fact, each time measure with number of sockets from 1 to 4 is executed for three different matrix sizes and for five times, in order to have some statistics. Notice that each different measure is taken using a different random matrix, so that the average over all measures is more representative.
+
+For weak MPI scalability we have:
+
+````
+export OMP_NUM_THREADS=$n_threads
+
+for count in $(seq 1 1 5)
+do 
+    for n_procs in $(seq 1 1 4)
+    do 
+        ### generating random playground
+        mat_x_size=$((unit_mat_size*n_procs))
+        mpirun -np 4 -N 2 --map-by socket parallel_gol.x -i -m $mat_x_size -k $unit_mat_size
+
+        ### running the evolution
+        echo -n "${mat_x_size}x${unit_mat_size}," >> $datafile
+        echo -n "${n_procs}" >> $datafile
+        mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 0 -n $n_gen -s 0
+        mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 1 -n $n_gen -s 0
+        mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 2 -n $n_gen -s 0
+        echo >> $datafile
+        
+        echo
+        echo -----------
+        echo
+    done
+done
+````
+
+where again we did some statistics on each measure generating a new matrix at each iteration.
+
+Finally, we unload all modules and clean from executables and PGM files:
+
+````
+echo RELEASING LOADED MODULES AND CLEANING FROM EXECUTABLES AND IMAGES...
+cd ../..
+make clean_all data_folder=$datafolder
+module purge
+cd $datafolder
+````
