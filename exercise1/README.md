@@ -585,3 +585,39 @@ make clean_all data_folder=$datafolder
 module purge
 cd $datafolder
 ````
+
+
+## How to actually run jobs
+
+**Note**: this job files are written to be run on facilities using SLURM as the resource manager, in particular the requested resources are compatible with ORFEO (cluster hosted at Area Science Park (Trieste)).
+
+Assuming you have already cloned the repository, to reproduce on ORFEO some of the results here exposed, you can follow these simple steps:
+1. Navigate to the directory corresponding to the nodes partition you are interested to test on (either `EPYC/` or `THIN/`)
+2. Navigate to the directory corresponding to the kind of scalability you want to test (either `openMP_scal/`, `strong_MPI_scal/` or `weak_MPI_scal/`)
+3. Change the commented lines in `parallel_gol` rule in `job.sh` if you want to compile parallel GOL using `parallel_gol_unique.c`
+3. Call `sbatch job.sh` from inside the directory
+
+### Drawing graphs
+
+Here we just briefly expose the data we got. For their analysis we invite you to read report.pdf (INSERIRE RIFERIMENTO AL REPORT) in this directory's parent directory.
+
+### Changing parameters
+
+Of course, there are a lot of parameters that you can change in the job files, for example: number of generations, thread affinity policy, matrix size, number of iterations for statistics, etc...
+
+Obviously the time needed for execution can increase a lot changing even just one parameter. The combinations of parameters presented here are assured to run in a time smaller than two hours on ORFEO.
+
+### Running on other clusters
+
+To run these jobs on a cluster different from ORFEO (given that it has SLURM as the resource manager), you will have to make a couple of changes to `job.sh`. In particular you will have to change the resource requests (i.e. the first block of instructions) according to the partitions and the number of cores per node available and the maximum time allowed.
+
+Also the module loading/unloading parts will probably need to be changed, depending on the modules organization on the cluster.
+
+
+## Results
+
+Here we just briefly expose the data we got. For their analysis we invite you to read report.pdf (INSERIRE RIFERIMENTO AL REPORT) in this directory's parent directory.
+
+To make it easier to consult data, here you can find a table with direct access to all CSV files:
+
+AGIUNGERE TABELLA
