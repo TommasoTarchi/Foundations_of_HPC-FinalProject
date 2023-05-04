@@ -386,7 +386,7 @@ The first two rules can be called together using `gol_all` and the last two usin
 
 All job files have a similar structure.
 
-The first block of istructions is ignored by bash and constitutes the resource request addressed to SLURM. For example let's look at EPYC/openMP_scal/job.sh:
+The first block of istructions is ignored by bash and constitutes the resource request addressed to SLURM. For example let's look at `EPYC/openMP_scal/job.sh`:
 
 ````
 #!/bin/bash
