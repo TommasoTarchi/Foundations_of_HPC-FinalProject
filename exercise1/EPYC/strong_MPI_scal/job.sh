@@ -60,7 +60,7 @@ echo
 
 export OMP_NUM_THREADS=$n_threads
 
-for mat_size in $(seq 10000 10000 50000)
+for mat_size in $(seq 10000 10000 30000)
 do
     for count in $(seq 1 1 5)
     do
