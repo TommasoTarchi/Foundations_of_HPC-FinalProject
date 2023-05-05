@@ -310,7 +310,7 @@ With a time limit of at least two hours, we can guarantee jobs to be completed *
 
 To run these jobs on a cluster different from ORFEO (**given that it has SLURM as the resource manager**), you will have to make a couple of changes to `job.sh`. In particular you will have to change the resource requests (i.e. the first block of instructions) according to the partitions and the number of cores per node available and the maximum time allowed.
 
-Also the module loading/unloading parts will probably need to be changed, depending on the modules organization on the cluster.
+Also the module loading/unloading parts will probably need to be changed, depending on the module system on the cluster.
 
 
 ## Results
