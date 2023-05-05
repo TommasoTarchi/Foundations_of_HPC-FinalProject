@@ -16,7 +16,7 @@ The current directory contains:
     - `parallel_gol.c`: the main of the parallelized version of GOL
     - `gol_lib.c`: a file containing the definition of the functions used for parallel GOL
     - `gol_lib.h`: a header file containing the signatures of these functions
-    - `parallel_gol_unique.c`: a version of parallelized GOL in which the evolution is directly performed inside the main (i.e. without using the functions defined in `gol_lib.c`)
+    - `parallel_gol_unique.c`: a version of parallel GOL in which the evolution is directly performed inside the main (i.e. without using the functions defined in `gol_lib.c`)
 - `images/`: a folder containing images of the system states produced by executables, in PGM format:
     - `snapshots/`: a folder containing dumps of the system taken with a variable frequency
     - other possible system states (e.g. initial conditions)
@@ -32,7 +32,7 @@ The current directory contains:
 - `analysis/`:
     - `analysis.ipynb`: a jupyter notebook used to carry out the analysis of the results
 
-As you can see, `EPYC/` and `THIN/` have the very same structure: `openMP_scal/`, `strong_MPI_scal/` and `weak_MPI_scal/` contain, respectively, data collected for **openMP scalability**, **strong MPI scalability** and **weak MPI scalability** (for details see RIFERIMENTO AL PDF DI TORNATORE CON PAGINA).
+As you can see, `EPYC/` and `THIN/` have the very same structure: `openMP_scal/`, `strong_MPI_scal/` and `weak_MPI_scal/` contain, respectively, data collected for **openMP scalability**, **strong MPI scalability** and **weak MPI scalability** (for details see RIFERIMENTO AL README FILE).
 
 All `EPYC/` and `THIN/`'s subdirectories have themselves the very same structure:
 - `job.sh`: a bash script used to collect data on the cluster; the script is made to be run as a SLURM sbatch job on ORFEO
@@ -42,13 +42,13 @@ All `EPYC/` and `THIN/`'s subdirectories have themselves the very same structure
 
 ## Source codes
 
-For a description of the requested purpose of these codes see RIFERIMENTO AL PDF DI TORNATORE, while for a detailed description of these codes themselves see RIFERIMENTO AL REPORT.
+For a description of the expected functionalities of these codes see RIFERIMENTO AL PDF DI TORNATORE, while for a detailed description of these codes themselves see RIFERIMENTO AL REPORT.
 
 **NOTE**: command-line arguments are passed to the following codes in the same way as described in RIFERIMENTO AL PDF DI TORNATORE CON PAGINA, exept for the playground size, which can be passed using `-m` for the vertical size (y) and `-k` for the horizontal one (x).
 
 ### Serial GOL
 
-`serial_gol.c` is the first version of GOL we wrote. It is a simple serial C code which can be used to perform **ordered**, **static** and **static in place** evolution; static in place is the same as static but without using an auxiliary grid, therefore saving half of the memory, and using two different bits of the char representing each cell to store the old and the new status. The evolution can start from any initialized playground of any size (i.e. any rectangular "table" of squared cells which can assume two states: *dead* or *alive*) and for any number of steps (*generations*). The kind of evolution to be perfomed is passed by command line. The code is also able to output a dump of the system every chosen by the user number of generations, and it always outputs the final state of the system under the name of `final_state.pgm`. All input and output files representing a state of the system are in the PGM format.
+`serial_gol.c` is the first version of GOL we wrote. It is a simple serial C code which can be used to perform **ordered**, **static** and **static in place** evolution; static in place is the same as static but without using an auxiliary grid, therefore saving half of the memory, and using two different bits of the char representing each cell to store the old and the new status. The evolution can start from any initialized playground of any size (i.e. any rectangular "table" of squared cells which can assume two states: *dead* or *alive*) and for any number of steps (*generations*). The kind of evolution to be performed is passed by command line. The code is also able to output a dump of the system every chosen by the user number of generations, and it always outputs the final state of the system under the name of `final_state.pgm`. All input and output files representing a state of the system are in the PGM format.
 
 The code can also be used to initialise a random playground (with equal probability for dead and alive cell's initial status) with any name assigned. In both intialisation and evolution, if a specific name for the playground is not passed the default `game_of_life.pgm` is used.
 
@@ -279,7 +279,7 @@ Ordered evolution is intrinsically serial, therefore evolution and communication
     }
     ````
     
-    (We Skip the explanation of tags and targets in communications, since it is actually superfluous).
+    (The way we defined tags and targets in communications is not relevant here, so it was skipped).
     
 - Using an `omp for` loop with `ordered` attribute (meaning that the iteration will be performed sequentially over threads) each thread carries out the evolution of its own cells using the function `ordered_evo`, which can be found in `gol_lib.c` RIFERIMENTO.
 
@@ -325,7 +325,7 @@ On the other hand, static and static in place evolutions can be done in parallel
      }
     ````
     
-    while in case of static in place evolution we simply increment the "state signaling bit", which tracks whether the new state is stored in the first or in the second bit (starting from the end of the BOOL):
+    while in case of static in place evolution we simply increment the "state signaling bit", which keeps track of whether the new state is stored in the first or in the second bit (starting from the end of the BOOL):
     
     ````
     #pragma omp barrier
@@ -431,7 +431,7 @@ cd $datafolder
 
 The messages printed to screen via echo are there only to make `summary.out` more readable.
 
-In the following we will show examples from EPYC, but they are similar for THIN, basically the only thing that changes is the number of maximum cores from 64 to 12.
+In the following we will show examples from EPYC, but they are similar for THIN: basically, the only thing that changes is the maximum number of cores per socket from 64 to 12.
 
 Then we set other variables needed (some to run the computation, others to write a sort of "header" of the data files), and we create/overwrite the data file called `data.csv` (but here addressed as `$datafolder`). For exemple here is again `openMP_scal/job.sh`:
 
@@ -464,7 +464,7 @@ n_gen=5
 n_threads=64
 ````
 
-At this point we create/overwrite the file to store data, called `data.csv` but referred here using the variable `$datafile`. We initialise it by writing few lines summing up the conditions in which measures are performed, for example in `openMP_scal/job.sh`:
+Now we create/overwrite the file to store data, called `data.csv` but referred here using the variable `$datafile`. We initialise it by writing few lines summing up the conditions in which measures are performed, for example in `openMP_scal/job.sh`:
 
 ````
 echo CREATING/OVERWRITING CSV FILE...
@@ -609,9 +609,9 @@ Obviously the time needed for execution can increase a lot changing even just on
 
 ### Running on other clusters
 
-To run these jobs on a cluster different from ORFEO (given that it has SLURM as the resource manager), you will have to make a couple of changes to `job.sh`. In particular you will have to change the resource requests (i.e. the first block of instructions) according to the partitions and the number of cores per node available and the maximum time allowed.
+To run these jobs on a cluster different from ORFEO (given that it has SLURM as the resource manager), you will have to make a couple of changes to `job.sh`. In particular you will have to change the resource requests (i.e. the first block of instructions) according to the partitions, the number of cores per node available and the maximum time allowed.
 
-Also the module loading/unloading parts will probably need to be changed, depending on the modules organization on the cluster.
+Also the module loading/unloading parts will probably need to be changed, depending on the module system on the cluster.
 
 
 ## Results
