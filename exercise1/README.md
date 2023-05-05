@@ -63,7 +63,7 @@ To read/write to/from PGM we used the functions already prepared for us, which c
 
 Starting from `serial_gol.c`, we used MPI to parallelize I/O, initialisation and evolution, and openMP to further parallelize initialisation and evolution, letting each process spawn a number of threads. To mix MPI and openMP we chose the **funneled approach**, in which MPI calls can be done from within openMP parallel regions, but only by the master thread. This allowed us to write the system's dumps and to communicate among mpi processes whithout having to get out of the parallel region, and therefore avoiding the parallel regions "management" overhead.
 
-As we said previously, the code is presented in two forms: one `parallel_gol.c` that uses functions defined in [`gol_lib.c`](./gol_lib.c) for PGM header reading and evolution, and one `parallel_gol_unique.c` that has the very same functions for evolution "embedded". We present both versions because we cannot exclude the overhead caused by function calls to be not negligible on some systems. We did some tests on ORFEO and it seemed to be irrelevant, at least for small numbers of generations. In the following we will refer to `parallel_gol.c`, but, a part from the separation of evolution functions, the code is identical to `parallel_gol_unique.c`.
+As we said previously, the code is presented in two forms: one `parallel_gol.c` that uses functions defined in [`gol_lib.c`](src/gol_lib.c) for PGM header reading and evolution, and one `parallel_gol_unique.c` that has the very same functions for evolution "embedded". We present both versions because we cannot exclude the overhead caused by function calls to be not negligible on some systems. We did some tests on ORFEO and it seemed to be irrelevant, at least for small numbers of generations. In the following we will refer to `parallel_gol.c`, but, a part from the separation of evolution functions, the code is identical to `parallel_gol_unique.c`.
 
 For time measurements we use the function `omp_get_wtime`, called by the master thread from within the parallel region. The use of `#pragma omp barrier` statements makes sure that the time measured is the actual one between the beginning and the end of the evolution, and not some kind of average among threads' times. If compliled with `-DTIME`, in addition to be printed to standard output the measured time is also printed to a file called `data.csv`.
 
@@ -223,7 +223,7 @@ The following part of the code, independetly from the chosen kind of evolution, 
 2. Communication of bordering cells among neighbour processes
 3. Proper evolution
 
-Step 1. is identical for all evolutions and it is basically the same as parallel writing in Initialisation RIFERIMENTO.
+Step 1. is identical for all evolutions and it is basically the same as parallel writing described in the [section](#ref1) about initialisation.
 
 For what concerns steps 2. and 3., they change depending on the chosen kind of evolution:
 
@@ -287,7 +287,7 @@ Ordered evolution is intrinsically serial, therefore evolution and communication
     
     (The way we defined tags and targets in communications is not relevant here, so it was skipped).
     
-- Using an `omp for` loop with `ordered` attribute (meaning that the iteration will be performed sequentially over threads) each thread carries out the evolution of its own cells using the function `ordered_evo`, which can be found in [`gol_lib.c`](gol_lib.c).
+- Using an `omp for` loop with `ordered` attribute (meaning that the iteration will be performed sequentially over threads) each thread carries out the evolution of its own cells using the function `ordered_evo`, which can be found in [`gol_lib.c`](src/gol_lib.c).
 
 Note that in case of a single process, the communication is done halfway through the evolution (inside `ordered_evo`). That is because in this case the first row of the grid must be updated considering the "old" state of the last row, while the last one must be updated considering the "new" state of the first row.
 
@@ -318,7 +318,7 @@ On the other hand, static and static in place evolutions can be done in parallel
 
     Basically, even processes first send and then receive, while odd processes first receive and then send. This is, in our opinion, the best way to carry out the communications, since it minimizes the time the "slowest" process waits for data (especially if the number of processes is even).
 
-- For each process (operating in parallel) the spawned threads update cells' status in parallel using the functions `static_evo` and `static_evo_in_place` of [`gol_lib.c`](gol_lib.c), depending on the chosen kind of evolution. After the status is updated for all cells, in case of simple static evolution the two grids (one storing the old and and one storing the new status) are switched using `temp`:
+- For each process (operating in parallel) the spawned threads update cells' status in parallel using the functions `static_evo` and `static_evo_in_place` of [`gol_lib.c`](src/gol_lib.c), depending on the chosen kind of evolution. After the status is updated for all cells, in case of simple static evolution the two grids (one storing the old and and one storing the new status) are switched using `temp`:
     
     ````
     #pragma omp barrier
