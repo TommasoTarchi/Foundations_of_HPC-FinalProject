@@ -75,7 +75,7 @@ do
         do 
 
             ### running the evolution
-            echo -n "${mat_size}x${mat_size}" >> $datafile
+            echo -n "${mat_size}x${mat_size}," >> $datafile
             echo -n "${n_procs}" >> $datafile
             mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 0 -n $n_gen -s 0
             mpirun -np $n_procs -N 2 --map-by socket parallel_gol.x -r -e 1 -n $n_gen -s 0
