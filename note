@@ -1,0 +1,49 @@
+# scrivere nel report che abbiamo scelto di fare le statistiche di benchmark dall'esterno in modo da evitare il problema che si aveva avuto con la cache nell'esercizio 2
+#
+# ricordare (magari scrivere nel report) che per stampare a schermo (o su file normale) la griglia bisogna sommare 48 a ciascun elemento della griglia
+#
+# scrivere nel report che tra i command line argument si è sostituito k con m e k
+#
+# fare presente nel report che si è usato parallel I/O perché si suppone che le dimensioni della griglia rispetto al numero di processi siano sufficientemente grandi da rendere ciò più efficiente dell'approccio read/write and scatter; se rimane tempo testare anche il secondo approccio per capire quale è più veloce
+#
+# fare presente che si è provato a cambiare la condizione su count negli if ma non si è guadagnato niente
+#
+# togliere fisso da snapshots
+#
+# sistemare tempi verbali nel report
+#
+# spiegare differenza tra close e spread threads affinity policy
+#
+# cercare di spiegare perché openBLAS fa tutta quella differenza tra spread e close
+#
+# cercare di spiegare perché c'è quel calo momentaneo di performance in size scalability
+#
+# sistemare immagini in report (farne entrare almeno due in una pagina)
+#
+# far notare che il false sharing non è un problema nell'initialisation di gol perché si accede una volta sola agli elementi della griglia
+#
+# specificare nel report che il false sharing in esercizio 2 avviene perché le matrici sono shared
+#
+# far notare nel report che le iterazioni nell'esercizio 1 si sono fatte ogni volta con un diverso playground iniziale (per avere una statistica migliore)
+#
+# fare presente sia nel README.md che nel report che il nome dei file deve essere passato preceduto da ../../ (cioè: si può anche passare solo il nome, ma in quel caso viene fatto tutto nella directory che contiene l'eseguibile)
+#
+# far notare che si è scritta anche una version _unique per evitare l'overhead dovuto alla call alle funzioni quando si usano tante generazioni
+#
+# far notare nel report che si è usato omp_get_wtime() perché dividere il CPU time per il numero di thread non darebbe realmente il tempo che c'è tra l'inizio del programma e la fine
+#
+# far notare nel report che avremmo potuto usare un #pragma omp for per le evoluzioni mettendo per ogni elemento un if statement, ma questo avrebbe creato tante if branches quanti sono gli elementi della griglia; avremmo potuto anche suddividere ogni riga con parallel for loops, ma questo avrebbe forse dato overhead dovuto alla gestione dello scheduling
+#
+# AGGIUNGERE TUTTI RIFERIMENTI A TUTTI REAMDE FILE E A REPORT
+#
+# scrivere nel report che la performance è tanto peggiore quanto il rapporto tra numero di colonne e numero di righe è grande, e anche che più sono i processi e meno è efficiente
+#
+# aggiungere a report un'appendice per la scrittura dei pgm heade report (non spiegare solo la funzione ma anche come si è usata nel main)
+#
+# elencare tutti test che si potrebbe aver fatto se si avesse avuto più tempo e spazio, per es.: scaling con dumping, threads affinity policy diversa, dimensioni delle matrici più strane (ad es. con rapporti tra x e y diversi o con numeri di righe divisibili per i processi e non)
+#
+# capire se dividendo la griglia in rettangoli le cache misses potevano essere ridotte (considerare che ogni thread deve accedere i vicini
+#
+# aggiungere appendice su come si sono settati seed diversi per ogni thread
+#
+# ricontrollare che tutte le variabili nei chunk of code siano spiegate
