@@ -605,7 +605,9 @@ Assuming you have already cloned the repository, to reproduce on ORFEO some of t
 
 ### Drawing graphs
 
-AGGIUNGERE ROBA
+To better analyse the results it is useful to put data into a chart. To do that, after having collected data, it is sufficient to run `analysis.ipynb` on any machine. The code will produce a series of graphs each one displaying the speedup (or the inverse speedup) for a certain scalability and a certain kind of evolution.
+
+**Note**: `analysis.ipynb` is written to work with this specific organization of the directory; if you decide to rearrange it in a different way, you will have to change `analysis.ipynb` as well.
 
 ### Changing parameters
 
