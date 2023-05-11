@@ -2,7 +2,7 @@
 #node_part:,EPYC,,,
 #scalability:,strong_MPI,,,
 #performance_measure:,time(s),,,
-#threads_affinity_policy:,close,,
+#threads_affinity_policy:,close,,,
 #generations:,5,,,
 #threads_per_socket:,64,,,
 #,,,,
