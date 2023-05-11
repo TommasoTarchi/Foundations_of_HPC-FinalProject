@@ -13,7 +13,7 @@ The current directory contains:
 - This markdown file: an overview of the content of this folder and how to run it
 - `src/`: a folder containing GOL source codes:
     - `serial_gol.c`: the serial version of GOL
-    - `parallel_gol.c`: the main of the parallelized version of GOL
+    - `parallel_gol.c`: the main of the parallel version of GOL
     - `gol_lib.c`: a file containing the definition of the functions used for parallel GOL
     - `gol_lib.h`: a header file containing the signatures of these functions
     - `parallel_gol_unique.c`: a version of parallel GOL in which the evolution is directly performed inside the main (i.e. without using the functions defined in `gol_lib.c`)
@@ -31,10 +31,11 @@ The current directory contains:
     - `weak_MPI_scal/`
 - `analysis/`:
     - `analysis.ipynb`: a jupyter notebook used to carry out the analysis of the results
+    - various plots obtained with this notebook
 
-As you can see, `EPYC/` and `THIN/` have the very same structure: `openMP_scal/`, `strong_MPI_scal/` and `weak_MPI_scal/` contain, respectively, data collected for **openMP scalability**, **strong MPI scalability** and **weak MPI scalability** (for details see the [readme file][link2]).
+As you can see, `EPYC/` and `THIN/` have the very same content: `openMP_scal/`, `strong_MPI_scal/` and `weak_MPI_scal/` contain, respectively, data collected for **openMP scalability**, **strong MPI scalability** and **weak MPI scalability** (for details see the [readme file][link2] in the original course directory).
 
-All `EPYC/` and `THIN/`'s subdirectories have themselves the very same structure:
+All `EPYC/` and `THIN/`'s subdirectories have themselves the very same content:
 - `job.sh`: a bash script used to collect data on the cluster; the script is made to be run as a SLURM sbatch job on ORFEO
 - `data.csv`: a CSV file containing data collected for all kinds of evolution
 - `summary.out`: an output file produced while running the job, which can be inspected to check whether it was run correctly
@@ -50,7 +51,7 @@ For a description of the expected functionalities of these codes see again the o
 
 `serial_gol.c` is the first version of GOL we wrote. It is a simple serial C code which can be used to perform **ordered**, **static** and **static in place** evolution; static in place is the same as static but without using an auxiliary grid, therefore saving half of the memory, and using two different bits of the char representing each cell to store the old and the new status. The evolution can start from any initialized playground of any size (i.e. any rectangular "table" of squared cells which can assume two states: *dead* or *alive*) and for any number of steps (*generations*). The kind of evolution to be performed is passed by command line. The code is also able to output a dump of the system every chosen by the user number of generations, and it always outputs the final state of the system under the name of `final_state.pgm`. All input and output files representing a state of the system are in the PGM format.
 
-The code can also be used to initialise a random playground (with equal probability for dead and alive cell's initial status) with any name assigned. In both intialisation and evolution, if a specific name for the playground is not passed the default `game_of_life.pgm` is used.
+The code can also be used to initialise a random playground (with equal probability for dead and alive initial state for each cell) with any name assigned. In both intialisation and evolution, if a specific name for the playground is not passed the default `game_of_life.pgm` is used.
 
 If compiled with `-DTIME` the code prints to standard output the time it took to perform the evolution in seconds. The time measured is the total time of evolution, not a single generation's one, and its measure excludes time spent to read the initial playgorund and time spent to write the final system's state; in other words it includes only the evolution and the system dumping. It is measured using the function `clock_gettime`. 
 
