@@ -2,7 +2,7 @@
 #node_part:,THIN,,,
 #scalability:,weak_MPI,,,
 #performance_measure:,time(s),,,
-#threads_affinity_policy:,close,,
+#threads_affinity_policy:,close,,,
 #generations:,5,,,
 #starting_mat_size,10000x10000,,,
 #threads_per_socket:,12,,,
