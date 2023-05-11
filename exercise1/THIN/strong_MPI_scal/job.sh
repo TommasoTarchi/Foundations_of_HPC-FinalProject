@@ -49,7 +49,7 @@ echo "#,,,," > ${datafile}
 echo "#node_part:,${node},,," >> $datafile
 echo "#scalability:,${scal},,," >> $datafile
 echo "#performance_measure:,time(s),,," >> $datafile
-echo "#threads_affinity_policy:,${alloc},," >> $datafile
+echo "#threads_affinity_policy:,${alloc},,," >> $datafile
 echo "#generations:,${n_gen},,," >> $datafile
 echo "#sockets:,4,,,"
 echo "#threads_per_socket:,${n_threads},,," >> $datafile
