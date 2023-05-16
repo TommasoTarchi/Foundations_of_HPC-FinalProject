@@ -13,12 +13,12 @@ The current directory contains:
 - This markdown file: an overview of the content of this folder and how to run it
 - `gemm.c`: a code to call the *gemm* function and to measure its performance
 - `Makefile`: a Makefile to compile `gemm.c` with different libraries and precisions
-- `EPYC/`: a folder containing results gathered on ORFEO's EPYC nodes, organized in four subdirectories:
+- `EPYC/`: a folder containing data collected on ORFEO's EPYC nodes, organized in four subdirectories:
     - `cores_w_close_cores/`
     - `cores_w_spread_cores/`
     - `size_w_close_cores/`
     - `size_w_spread_cores/`
-- `THIN/`: a folder containing results gathered on ORFEO's THIN nodes, organized in four subdirectories:
+- `THIN/`: a folder containing data collected on ORFEO's THIN nodes, organized in four subdirectories:
     - `cores_w_close_cores/`
     - `cores_w_spread_cores/`
     - `size_w_close_cores/`
@@ -203,15 +203,15 @@ module purge
 
 **Note**: this job files are written to be run on facilities using SLURM as the resource manager, in particular the requested resources are compatible with ORFEO (cluster hosted at Area Science Park (Trieste)).
 
-Let's suppose you have already cloned this repository and that you have already installed the BLIS library (if you do not know how to do that, you can find a [simple tutorial][link3] in the course material). **Note**: to gain the best performance out of BLIS you should compile the library on the machine (actually on any machine with the same architecture) on which you are going to run the code; therefore, in our case two compilations are ideally required, one for EPYC nodes (AMD architecture) and one for THIN nodes (Intel achitecture).
+Let's suppose you have already cloned this repository and that you have already installed the BLIS library (if you do not know how to do that, you can find a [simple tutorial][link3] in the course's material). **Note**: to gain the best performance out of BLIS you should compile the library on the machine (actually on any machine with the same architecture) on which you are going to run the code; therefore, in our case two compilations are ideally required, one for EPYC nodes (AMD architecture) and one for THIN nodes (Intel achitecture).
 
 To reproduce on ORFEO some of the results here exposed, you can follow these steps:
 
-1. change the BLIS library path in `Makefile` (i.e. change the variable `BLISROOT`'s value) to the one in which you installed the BLIS library
-2. navigate to the folder corresponding to the nodes partition you are interested to test on (either `EPYC/` or `THIN/`)
-3. navigate to the folder corresponding to the parameter you want to vary (either the matrix size or the number of cores) and the threads affinity policy you want to use (either close or spread cores)
-4. modify `job.sh` uncommenting the lines corresponding to the library and the precision you want to use (i.e. the four lines before the loop needed to overwrite the CSV file and the two lines inside the inner loop needed to run the executable and save results into the CSV)
-5. call `sbatch job.sh` from inside the directory contaning `job.sh`
+1. Change the BLIS library path in `Makefile` (i.e. change the variable `BLISROOT`'s value) to the one in which you installed the BLIS library
+2. Navigate to the folder corresponding to the nodes partition you are interested to test on (either `EPYC/` or `THIN/`)
+3. Navigate to the folder corresponding to the parameter you want to vary (either the matrix size or the number of cores) and the threads affinity policy you want to use (either close or spread cores)
+4. Modify `job.sh` uncommenting the lines corresponding to the library and the precision you want to use (i.e. the four lines before the loop needed to overwrite the CSV file and the two lines inside the inner loop needed to run the executable and save results into the CSV)
+5. Call `sbatch job.sh`
 
 To clarify point 4., let's see an example in which we want to gather data for openBLAS library with double point precision:
 
@@ -301,9 +301,9 @@ To better analyse the results it is useful to put into a chart data obtained in 
 
 ### Running more configurations at the same time
 
-Of course, we could think of uncommenting lines for more than one configuration at the same time inside the job file, but that is feasible only if we have a time limit large enough to do all the computation (to change the time limit you can just change the related command in the first block of instructions, but you need to be allowed to have a superior limit). In general, the time needed to run one of the configurations depends on several factors: which is the varying parameter, which nodes partition you are running one, what precision you are using, etc...
+Of course, we could think of uncommenting lines for more than one configuration at the same time inside the job file, but that is feasible only if we have a time limit large enough to do all the computation (to change the time limit you can just change the related command in the first block of instructions, but you need to be allowed to have a superior limit). In general, the time needed to run one of the configurations depends on several factors: which is the varying parameter, which node partition you are running on, what precision you are using, etc...
 
-With a time limit of at least two hours, we can guarantee jobs to be completed **only** in the case in which only one configuration at a time is run.
+With a time limit of two hours, we can guarantee jobs to be completed **only** in the case in which only one configuration at a time is run.
 
 
 ### Running on other clusters
