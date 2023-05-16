@@ -21,11 +21,11 @@ The current directory contains:
     - `snapshots/`: a folder containing dumps of the system taken with a variable frequency
     - other possible system states (e.g. initial conditions)
 - `Makefile`: a makefile to compile all codes in `src/`
-- `EPYC/`: a folder containing results gathered on ORFEO's EPYC nodes:
+- `EPYC/`: a folder containing data collected on ORFEO's EPYC nodes:
     - `openMP_scal/`
     - `strong_MPI_scal/`
     - `weak_MPI_scal/`
-- `THIN/`: a folder containing results gathered on ORFEO's THIN nodes
+- `THIN/`: a folder containing data collected on ORFEO's THIN nodes
     - `openMP_scal/`
     - `strong_MPI_scal/`
     - `weak_MPI_scal/`
@@ -601,7 +601,7 @@ cd $datafolder
 Assuming you have already cloned the repository, to reproduce on ORFEO some of the results here exposed, you can follow these simple steps:
 1. Navigate to the directory corresponding to the nodes partition you are interested to test on (either `EPYC/` or `THIN/`)
 2. Navigate to the directory corresponding to the kind of scalability you want to test (either `openMP_scal/`, `strong_MPI_scal/` or `weak_MPI_scal/`)
-3. Change the commented lines in `parallel_gol` rule in `job.sh` only if you want to compile parallel GOL using `parallel_gol_unique.c`
+3. (Optional) change the commented lines in `parallel_gol` rule in `job.sh` if you want to compile parallel GOL using `parallel_gol_unique.c`
 3. Call `sbatch job.sh` from inside the directory
 
 ### Drawing graphs
