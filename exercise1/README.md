@@ -187,6 +187,8 @@ check += MPI_File_close(&f_handle);
 
 ### Evolution
 
+In running mode, the kind of evolution can be chosen by setting the `-e` option to `0` for ordered evolution, `1` for static evolution and `2` for static in place evolution.
+
 Independently from the chosen kind of evolution, first of all the header of the initial playground's PGM file is read by the 0-th process using the function called `read_pgm_header` in `gol_lib.c`, obtained by modifying the function we were already given to read PGM files.
 
 The content of the header (in particular the header size, the maximum color value and the size of the playground) is then broadcasted to all processes using `MPI_Bcast`, and the workload (i.e. the playground) is divided among processes in the same way it was in the [previous section](#ref1). The only difference is that this time each process's allocated grid has two more rows to store the bordering rows of neighbor processes. The parallel reading from PGM is carried out in a way similar to parallel writing: for each process an offset is computed summing the header size and all the previous processes' grid's sizes, and starting from that position cells' states are read and stored in the process's own grid. In case of static non in place evolution an auxiliary grid (called `my_grid_aux`) is allocated and a pointer `temp` to switch the two grids is defined.
