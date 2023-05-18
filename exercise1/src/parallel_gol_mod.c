@@ -369,6 +369,10 @@ int main(int argc, char **argv) {
         char* snap_name = (char*) malloc(50*sizeof(char));   // string to store name of snapshot files
 
 
+        MPI_File f_handle;   // pointer to file for parallel I/O
+        int access_mode;   // variable for access mode in parallel I/O
+        int offset;   // variable for offset in parallel I/O
+
 
 	    int bit_control = 0;   // needed to control the state signaling bit
                                // in static evolution with only one grid
@@ -379,6 +383,9 @@ int main(int argc, char **argv) {
 
        #pragma omp parallel
         {
+
+
+            int my_thread_id = omp_get_thread_num();   // id of the openMP thread
 
 
             /* splitting process's portion of grid among threads and computing
@@ -417,21 +424,15 @@ int main(int argc, char **argv) {
                     my_grid_aux[i] = 0;
 
 
-            int my_thread_id = omp_get_thread_num();   // id of the openMP thread
-
-
 
             if (my_thread_id == 0) {
 
+                access_mode = MPI_MODE_RDONLY;
 
-                MPI_File f_handle;   // pointer to file
-
-                /* opening file in parallel */
-                int access_mode = MPI_MODE_RDONLY;
                 check += MPI_File_open(MPI_COMM_WORLD, fname, access_mode, MPI_INFO_NULL, &f_handle);
 
                 /* computing offsets */
-                int offset = header_size;
+                offset = header_size;
                 if (my_id < y_size_rmd) {
                     offset += my_id*my_n_cells;
                 } else {
