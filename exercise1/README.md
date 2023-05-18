@@ -35,7 +35,7 @@ The current directory contains:
     - `analysis.ipynb`: a jupyter notebook used to carry out the analysis of the results
     - various plots obtained with this notebook
 
-As you can see, `EPYC/` and `THIN/` have the very same content (a part from one directory): `openMP_scal/`, `strong_MPI_scal/` and `weak_MPI_scal/` contain, respectively, data collected for **openMP scalability**, **strong MPI scalability** and **weak MPI scalability** (for details see the [readme file][link2] in the original course directory). `EPYC/` contains an additional directory called `openMP_scal_mod/`, containing data collected using `parallel_gol_mod.c`.
+As you can see, `EPYC/` and `THIN/` have the very same content (a part from one directory): `openMP_scal/`, `strong_MPI_scal/` and `weak_MPI_scal/` contain, respectively, data collected for **openMP scalability**, **strong MPI scalability** and **weak MPI scalability** (for details see the [readme file][link2] in the original course directory). `EPYC/` contains an additional directory called `openMP_scal_mod/`, for data collected using `parallel_gol_mod.c`.
 
 All `EPYC/` and `THIN/`'s subdirectories have themselves the very same content:
 - `job.sh`: a bash script used to collect data on the cluster; the script is made to be run as a SLURM sbatch job on ORFEO
@@ -68,7 +68,7 @@ Starting from `serial_gol.c`, we used MPI to parallelize I/O, initialisation and
 
 As we said previously, the code is presented in two forms: one [`parallel_gol.c`](src/parallel_gol.c) that uses functions defined in [`gol_lib.c`](src/gol_lib.c) for PGM header reading and evolution, and one [`parallel_gol_unique.c`](src/parallel_gol_unique.c) that has the very same functions for evolution "embedded". We present both versions because we cannot exclude the overhead caused by function calls to be not negligible on some systems. We did some tests on ORFEO and it seemed to be irrelevant, at least for small numbers of generations. In the following we will refer to `parallel_gol.c`, but, a part from the separation of evolution functions, the code is identical to `parallel_gol_unique.c`.
 
-In `src/` you can also find a version od prallel GOL, called `parallel_gol_mod.c`, which is exactly the same as `parallel_gol.c`, but with array warm up to reduce false sharing. Basically: before reading the playground, each thread accesses its portion of grid, so that it is stored in a closer RAM bank to the core.
+In `src/` you can also find a version of parallel GOL, called `parallel_gol_mod.c`, which is exactly the same as `parallel_gol.c`, but with array warm up to reduce false sharing. Basically: before reading the playground, each thread accesses its portion of grid, so that it is stored in a closer RAM bank to the core.
 
 For time measurements we use the function `omp_get_wtime`, called by the master thread from within the parallel region. The use of `#pragma omp barrier` statements makes sure that the time measured is the actual one between the beginning and the end of the evolution, and not some kind of average among threads' times. If compliled with `-DTIME`, in addition to be printed to standard output, the measured time is also printed to a file called `data.csv`.
 
