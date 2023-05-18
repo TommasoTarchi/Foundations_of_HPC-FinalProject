@@ -18,6 +18,13 @@ $(target_path)/parallel_gol.x: src/parallel_gol.c src/parallel_gol_unique.c src/
 	mpicc -fopenmp -DTIME src/parallel_gol.c -L. -lgol -o $@
 	#mpicc -fopenmp -DTIME src/parallel_gol_unique.c -o $@
 
+parallel_gol_mod: $(target_path)/parallel_gol_mod.x
+
+$(target_path)/parallel_gol_mod.x: src/parallel_gol_mod.c src/gol_lib.c
+	mpicc -fopenmp -DTIME src/parallel_gol_mod.c src/gol_lib.c -c
+	ar -rc libgol.a *.o
+	mpicc -fopenmp -DTIME src/parallel_gol_mod.c -L. -lgol -o $@
+
 
 
 clean_all: clean_exe clean_images
