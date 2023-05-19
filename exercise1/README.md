@@ -68,7 +68,7 @@ Starting from `serial_gol.c`, we used MPI to parallelize I/O, initialisation and
 
 As we said previously, the code is presented in two forms: one [`parallel_gol.c`](src/parallel_gol.c) that uses functions defined in [`gol_lib.c`](src/gol_lib.c) for PGM header reading and evolution, and one [`parallel_gol_unique.c`](src/parallel_gol_unique.c) that has the very same functions for evolution "embedded". We present both versions because we cannot exclude the overhead caused by function calls to be not negligible on some systems. We did some tests on ORFEO and it seemed to be irrelevant, at least for small numbers of generations. In the following we will refer to `parallel_gol.c`, but, a part from the separation of evolution functions, the code is identical to `parallel_gol_unique.c`.
 
-In `src/` you can also find a version of parallel GOL, called `parallel_gol_mod.c`, which is exactly the same as `parallel_gol.c`, but with array warm up to reduce false sharing. Basically: before reading the playground, each thread accesses its portion of grid, so that it is stored in a closer RAM bank to the core.
+In `src/` you can also find a version of parallel GOL, called [`parallel_gol_mod.c`](src/parallel_gol_mod.c), which is exactly the same as `parallel_gol.c`, but with array warm up to reduce false sharing. Basically: before reading the playground, each thread accesses its portion of grid, so that it is stored in a closer RAM bank to the core.
 
 For time measurements we use the function `omp_get_wtime`, called by the master thread from within the parallel region. The use of `#pragma omp barrier` statements makes sure that the time measured is the actual one between the beginning and the end of the evolution, and not some kind of average among threads' times. If compliled with `-DTIME`, in addition to be printed to standard output, the measured time is also printed to a file called `data.csv`.
 
@@ -369,10 +369,10 @@ The file contains five rules:
     parallel_gol: $(target_path)/parallel_gol.x
 
     $(target_path)/parallel_gol.x: src/parallel_gol.c src/parallel_gol_unique.c src/gol_lib.c
-	mpicc -fopenmp -DTIME src/parallel_gol.c src/gol_lib.c -c
-	ar -rc libgol.a *.o
-	mpicc -fopenmp -DTIME src/parallel_gol.c -L. -lgol -o $@
-	#mpicc -fopenmp -DTIME src/parallel_gol_unique.c -o $@
+   	    mpicc -fopenmp -DTIME src/parallel_gol.c src/gol_lib.c -c
+	    ar -rc libgol.a *.o
+	    mpicc -fopenmp -DTIME src/parallel_gol.c -L. -lgol -o $@
+ 	    #mpicc -fopenmp -DTIME src/parallel_gol_unique.c -o $@
     ````
     
     (to compile `parallel_gol_unique.c` you have to uncomment the bottom line and comment the previous three).
@@ -383,9 +383,9 @@ The file contains five rules:
     parallel_gol_mod: $(target_path)/parallel_gol_mod.x
 
     $(target_path)/parallel_gol_mod.x: src/parallel_gol_mod.c src/gol_lib.c
-	mpicc -fopenmp -DTIME src/parallel_gol_mod.c src/gol_lib.c -c
-	ar -rc libgol.a *.o
-	mpicc -fopenmp -DTIME src/parallel_gol_mod.c -L. -lgol -o $@
+	    mpicc -fopenmp -DTIME src/parallel_gol_mod.c src/gol_lib.c -c
+	    ar -rc libgol.a *.o
+	    mpicc -fopenmp -DTIME src/parallel_gol_mod.c -L. -lgol -o $@
     ````
 
 - `clean_exe`, to clean the `target_path` and the current directory from executables, libraries and object files:
@@ -408,7 +408,7 @@ The first two rules can be called together using `gol_all` and the last two usin
 
 ## Job files
 
-All job files have a similar structure.
+All job files have a similar structure, and in particular those of `EPYC/openMP_scal/` and `EPYC/openMP_scal_mod/` are the exact same, a part from make commands to compile the required version of parallel GOL.
 
 The first block of istructions is ignored by bash and constitutes the resource request addressed to SLURM. For example let's look at `EPYC/openMP_scal/job.sh`:
 
@@ -617,7 +617,7 @@ cd $datafolder
 
 Assuming you have already cloned the repository, to reproduce on ORFEO some of the results here exposed, you can follow these simple steps:
 1. Navigate to the directory corresponding to the nodes partition you are interested to test on (either `EPYC/` or `THIN/`)
-2. Navigate to the directory corresponding to the kind of scalability you want to test (either `openMP_scal/`, `strong_MPI_scal/` or `weak_MPI_scal/`)
+2. Navigate to the directory corresponding to the kind of scalability you want to test (either `openMP_scal/`, `strong_MPI_scal/`, `weak_MPI_scal/` - if you are in `EPYC/` you can choose `openMP_scal_mod/` as well)
 3. (Optional) change the commented lines in `parallel_gol` rule in `job.sh` if you want to compile parallel GOL using `parallel_gol_unique.c`
 3. Call `sbatch job.sh` from inside the directory
 
@@ -649,11 +649,12 @@ To make it easier to consult data, here you can find a table with direct access 
 | node | scalability | file |
 | ---- | ----------- | ---- |
 | EPYC | openMP      | [1](EPYC/openMP_scal/data.csv) |
-| EPYC | strong MPI  | [2](EPYC/strong_MPI_scal/data.csv) |
-| EPYC | weak MPI    | [3](EPYC/weak_MPI_scal/data.csv) |
-| THIN | openMP      | [4](THIN/openMP_scal/data.csv) |
-| THIN | strong MPI  | [5](THIN/strong_MPI_scal/data.csv) |
-| THIN | weak MPI    | [6](THIN/weak_MPI_scal/data.csv) |
+| EPYC | openMP with warm up | [2](EPYC/openMP_scal_mod/data.csv) |
+| EPYC | strong MPI  | [3](EPYC/strong_MPI_scal/data.csv) |
+| EPYC | weak MPI    | [4](EPYC/weak_MPI_scal/data.csv) |
+| THIN | openMP      | [5](THIN/openMP_scal/data.csv) |
+| THIN | strong MPI  | [6](THIN/strong_MPI_scal/data.csv) |
+| THIN | weak MPI    | [7](THIN/weak_MPI_scal/data.csv) |
 
 
 
