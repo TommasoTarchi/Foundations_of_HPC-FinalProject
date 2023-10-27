@@ -6,6 +6,6 @@
 **/*.out
 
 # snapshots and graphs
-exercise1/images/**/*.pgm
-**/*.png
-!exercise1/images/snapshots/example.pgm
+#exercise1/images/**/*.pgm
+#**/*.png
+#!exercise1/images/snapshots/example.pgm
