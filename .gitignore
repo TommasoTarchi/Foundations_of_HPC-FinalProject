@@ -1,0 +1,11 @@
+# executables and object files
+**/*.x
+**/*.o
+
+# SLURM's output files
+**/*.out
+
+# snapshots and graphs
+images/**/*.pgm
+analysis/*.png
+!images/snapshots/example.pgm
