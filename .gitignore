@@ -7,5 +7,5 @@
 
 # snapshots and graphs
 exercise1/images/**/*.pgm
-**/*.png
 !exercise1/images/snapshots/example.pgm
+**/*.png
