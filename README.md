@@ -16,7 +16,7 @@ For an overview of the content of `exercise1/` and `exercise2/` (and to know how
 ## What was the assignment about
 
 
-### Exercise 1
+### Exercise 1 (Paralle game of life)
 
 In this exercise we were asked to implement a parallel version of the famous Conway's Game of Life ("GOL") and to measure its scalability in different conditions. The parallelism had to be a **hybrid MPI/openMP**, i.e. we had to work with a distributed memory approach and a shared memory approach on the same code.
 
@@ -25,7 +25,7 @@ In practice, we implemented an MPI version of GOL in which the workload was equa
 For details about this assignment see [this document][link1] in the original course repository. 
 
 
-### Exercise 2
+### Exercise 2 (Performance comparison of math libraries)
 
 In this second exercise we were asked to compare the performance of three HPC math libraries: **MKL**, **openBLAS** and **BLIS** (the last one had to be downloaded and compiled by the student on his own working area on ORFEO).
 
